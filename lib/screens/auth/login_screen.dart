@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
-import '../../services/storage_service.dart';
+import '../../service/storage_service.dart';
 import 'signup_screen.dart';
 import '../home/farmer_home_screen.dart';
 import '../home/consumer_home_screen.dart';

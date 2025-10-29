@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
 import '../../models/product_model.dart';
-import '../../services/storage_service.dart';
+import '../../service/storage_service.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -46,9 +46,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
       
       UserModel? user = await StorageService.getCurrentUser();
       
+      if (user == null) {
+        setState(() => _isLoading = false);
+        return;
+      }
+      
       ProductModel product = ProductModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        farmerId: user!.id,
+        farmerId: user.id,
         farmerName: user.name,
         name: _nameController.text,
         category: _selectedCategory,
@@ -93,17 +98,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   color: const Color(0xFFA5D6A7),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.add_photo_alternate, size: 50, color: Colors.white),
-                    const SizedBox(height: 8),
-                    const Text(
+                    Icon(Icons.add_photo_alternate, size: 50, color: Colors.white),
+                    SizedBox(height: 8),
+                    Text(
                       'Add Product Image',
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
+                    SizedBox(height: 4),
+                    Text(
                       '(Feature coming soon)',
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),

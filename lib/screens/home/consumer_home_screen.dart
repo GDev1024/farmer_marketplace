@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
 import '../../models/product_model.dart';
-import '../../services/storage_service.dart';
-import '../products/add_product_screen.dart';
-import '../products/product_details_screen.dart';
-import '../profile/profile_screen.dart';
-import '../messages/messages_list_screen.dart';
+import '../../service/storage_service.dart';
+import '../../products/add_product_screen.dart';
+import '../../products/product_details_screen.dart';
+import '../../profile/profile_screen.dart';
+import '../../messages/message_list_screen.dart';
 
-class FarmerHomeScreen extends StatefulWidget {
-  const FarmerHomeScreen({super.key});
+class ConsumerHomeScreen extends StatefulWidget {
+  const ConsumerHomeScreen({super.key});
 
   @override
-  State<FarmerHomeScreen> createState() => _FarmerHomeScreenState();
+  State<ConsumerHomeScreen> createState() => _ConsumerHomeScreenState();
 }
 
-class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
+class _ConsumerHomeScreenState extends State<ConsumerHomeScreen> {
   int _selectedIndex = 0;
   UserModel? _currentUser;
   List<ProductModel> _myProducts = [];
@@ -45,7 +45,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
         _loadData();
       },
     ),
-    const MessagesListScreen(),
+    const MessageListScreen(),
     ProfileScreen(user: _currentUser),
   ];
 

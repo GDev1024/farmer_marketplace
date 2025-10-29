@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
-import '../../services/storage_service.dart';
-import 'signup_screen.dart';
+import '../../service/storage_service.dart';
 import '../home/farmer_home_screen.dart';
 import '../home/consumer_home_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();

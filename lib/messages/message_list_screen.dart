@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MessagesListScreen extends StatelessWidget {
-  const MessagesListScreen({super.key});
+class MessageListScreen extends StatelessWidget {
+  const MessageListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +37,10 @@ class MessagesListScreen extends StatelessWidget {
           ),
           Expanded(
             child: mockConversations.isEmpty
-                ? Center(
+                ? const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(Icons.chat_bubble_outline, size: 80, color: Color(0xFFA5D6A7)),
                         SizedBox(height: 16),
                         Text(

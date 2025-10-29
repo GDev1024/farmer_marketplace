@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
-import '../../services/storage_service.dart';
-import '../auth/login_screen.dart';
+import '../../service/storage_service.dart';
+import '../../screens/auth/login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   final UserModel? user;

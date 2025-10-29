@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
 import '../../models/product_model.dart';
-import '../../services/storage_service.dart';
-import '../products/add_product_screen.dart';
-import '../products/product_details_screen.dart';
-import '../profile/profile_screen.dart';
-import '../messages/messages_list_screen.dart';
+import '../../service/storage_service.dart';
+import '../../products/add_product_screen.dart';
+import '../../products/product_details_screen.dart';
+import '../../profile/profile_screen.dart';
+import '../../messages/message_list_screen.dart';
 
 class FarmerHomeScreen extends StatefulWidget {
   const FarmerHomeScreen({super.key});
@@ -45,7 +45,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
         _loadData();
       },
     ),
-    const MessagesListScreen(),
+    const MessageListScreen(),
     ProfileScreen(user: _currentUser),
   ];
 

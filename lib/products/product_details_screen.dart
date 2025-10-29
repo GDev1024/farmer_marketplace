@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../models/product_model.dart';
 import '../../models/user_model.dart';
-import '../../services/storage_service.dart';
-import '../messages/chat_screen.dart';
+import '../../service/storage_service.dart';
+import '../../messages/chat_screen.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
