@@ -54,18 +54,30 @@ class LocalAuthService {
     try {
       final db = await LocalDatabaseService.database;
       
+      // Debug: Check if any users exist
+      List<Map<String, dynamic>> allUsers = await db.query(_table);
+      print('Total users in database: ${allUsers.length}');
+      for (var user in allUsers) {
+        print('User: ${user['email']} (${user['userType']})');
+      }
+      
       List<Map<String, dynamic>> results = await db.query(
         _table,
         where: 'email = ? AND password = ?',
         whereArgs: [email, password],
       );
       
+      print('Login attempt: $email / $password');
+      print('Query results: ${results.length}');
+      
       if (results.isNotEmpty) {
         Map<String, dynamic> userMap = Map<String, dynamic>.from(results.first);
         userMap.remove('password'); // Remove password from returned data
+        print('Login successful for: ${userMap['email']}');
         return UserModel.fromMap(userMap);
       }
       
+      print('Login failed: No matching user found');
       return null;
     } catch (e) {
       print('Login error: $e');

@@ -5,6 +5,7 @@ import '../../services/enhanced_storage_service.dart';
 import 'signup_screen.dart';
 import '../home/farmer_home_screen.dart';
 import '../home/consumer_home_screen.dart';
+import '../database_test_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -337,6 +338,36 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 20),
+        // Debug button for database test
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const DatabaseTestScreen(),
+              ),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.orange,
+                  width: 2,
+                ),
+              ),
+            ),
+            child: const Text(
+              'Test DB',
+              style: TextStyle(
+                color: Colors.orange,
+                fontSize: 13,
                 fontWeight: FontWeight.bold,
               ),
             ),

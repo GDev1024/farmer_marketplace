@@ -4,8 +4,19 @@ import '../models/user_model.dart';
 import '../models/product_model.dart';
 import 'local_auth_service.dart';
 import 'local_product_service.dart';
+import 'local_database_service.dart';
 
 class EnhancedStorageService {
+  // Initialize database and ensure test users exist
+  static Future<void> initializeDatabase() async {
+    try {
+      // Initialize the database (this will create tables and sample data)
+      await LocalDatabaseService.database;
+      print('Database initialized successfully');
+    } catch (e) {
+      print('Database initialization error: $e');
+    }
+  }
   // Session management with SharedPreferences
   static Future<void> saveCurrentUser(UserModel user) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

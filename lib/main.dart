@@ -4,12 +4,17 @@ import 'screens/onboarding_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/home/farmer_home_screen.dart';
 import 'screens/home/consumer_home_screen.dart';
+import 'services/enhanced_storage_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Database will be initialized on first use (lazy loading)
-  // This makes app startup faster
+  // Initialize database with sample data
+  try {
+    await EnhancedStorageService.initializeDatabase();
+  } catch (e) {
+    print('Database initialization error: $e');
+  }
   
   runApp(const MyApp());
 }
