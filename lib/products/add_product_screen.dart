@@ -3,6 +3,7 @@ import '../../models/user_model.dart';
 import '../../models/product_model.dart';
 import '../../service/storage_service.dart';
 
+/// Screen to allow farmers to add new products to the marketplace
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
 
@@ -11,12 +12,18 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+  // ------------------------------------------------------------
+  // Form Key and Controllers
+  // ------------------------------------------------------------
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _locationController = TextEditingController();
-  
+
+  // ------------------------------------------------------------
+  // Dropdown selections
+  // ------------------------------------------------------------
   String _selectedCategory = 'Vegetables';
   String _selectedUnit = 'kg';
   bool _isLoading = false;
@@ -33,6 +40,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   @override
   void dispose() {
+    // Dispose controllers to prevent memory leaks
     _nameController.dispose();
     _priceController.dispose();
     _descriptionController.dispose();
@@ -40,17 +48,22 @@ class _AddProductScreenState extends State<AddProductScreen> {
     super.dispose();
   }
 
+  // ------------------------------------------------------------
+  // Save Product Function
+  // ------------------------------------------------------------
   Future<void> _saveProduct() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-      
+
+      // Get the current logged-in user
       UserModel? user = await StorageService.getCurrentUser();
-      
+
       if (user == null) {
         setState(() => _isLoading = false);
         return;
       }
-      
+
+      // Create a new ProductModel
       ProductModel product = ProductModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         farmerId: user.id,
@@ -63,19 +76,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
         location: _locationController.text.isEmpty ? null : _locationController.text,
         createdAt: DateTime.now(),
       );
-      
+
+      // Save the product
       await StorageService.saveProduct(product);
-      
+
       if (!mounted) return;
-      
+
+      // Show confirmation
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Product added successfully!')),
       );
-      
+
+      // Return to previous screen
       Navigator.pop(context);
     }
   }
 
+  // ------------------------------------------------------------
+  // Build UI
+  // ------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,6 +111,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // --------------------------------------------------------
+              // Product Image Placeholder
+              // --------------------------------------------------------
               Container(
                 height: 150,
                 decoration: BoxDecoration(
@@ -115,7 +137,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 20),
+
+              // --------------------------------------------------------
+              // Product Name
+              // --------------------------------------------------------
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(
@@ -125,13 +152,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   fillColor: Colors.white,
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter product name';
-                  }
+                  if (value == null || value.isEmpty) return 'Please enter product name';
                   return null;
                 },
               ),
+
               const SizedBox(height: 16),
+
+              // --------------------------------------------------------
+              // Category Dropdown
+              // --------------------------------------------------------
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
                 decoration: InputDecoration(
@@ -145,7 +175,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 }).toList(),
                 onChanged: (value) => setState(() => _selectedCategory = value!),
               ),
+
               const SizedBox(height: 16),
+
+              // --------------------------------------------------------
+              // Price and Unit
+              // --------------------------------------------------------
               Row(
                 children: [
                   Expanded(
@@ -161,12 +196,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         fillColor: Colors.white,
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter price';
-                        }
-                        if (double.tryParse(value) == null) {
-                          return 'Invalid price';
-                        }
+                        if (value == null || value.isEmpty) return 'Enter price';
+                        if (double.tryParse(value) == null) return 'Invalid price';
                         return null;
                       },
                     ),
@@ -189,7 +220,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ],
               ),
+
               const SizedBox(height: 16),
+
+              // --------------------------------------------------------
+              // Description
+              // --------------------------------------------------------
               TextFormField(
                 controller: _descriptionController,
                 maxLines: 4,
@@ -200,13 +236,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   fillColor: Colors.white,
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter product description';
-                  }
+                  if (value == null || value.isEmpty) return 'Please enter product description';
                   return null;
                 },
               ),
+
               const SizedBox(height: 16),
+
+              // --------------------------------------------------------
+              // Optional Location
+              // --------------------------------------------------------
               TextFormField(
                 controller: _locationController,
                 decoration: InputDecoration(
@@ -217,7 +256,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   fillColor: Colors.white,
                 ),
               ),
+
               const SizedBox(height: 24),
+
+              // --------------------------------------------------------
+              // Submit Button
+              // --------------------------------------------------------
               SizedBox(
                 height: 56,
                 child: ElevatedButton(
@@ -229,7 +273,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('Add Product', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                      : const Text(
+                          'Add Product',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
                 ),
               ),
             ],
