@@ -163,7 +163,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               // Category Dropdown
               // --------------------------------------------------------
               DropdownButtonFormField<String>(
-                initialValue: _selectedCategory,
+                value: _selectedCategory,
                 decoration: InputDecoration(
                   labelText: 'Category',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -205,7 +205,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      initialValue: _selectedUnit,
+                      value: _selectedUnit,
                       decoration: InputDecoration(
                         labelText: 'Unit',
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
