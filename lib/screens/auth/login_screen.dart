@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../../models/user_model.dart';
-import '../../service/storage_service.dart';
+import '../../services/enhanced_storage_service.dart';
 import 'signup_screen.dart';
 import '../home/farmer_home_screen.dart';
 import '../home/consumer_home_screen.dart';
@@ -82,16 +82,23 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       
-      await Future.delayed(const Duration(seconds: 1));
-      
-      UserModel user = UserModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        name: 'Demo User',
-        email: _emailController.text,
-        userType: _emailController.text.contains('farmer') ? 'farmer' : 'consumer',
+      // Attempt to login user with real authentication
+      UserModel? user = await EnhancedStorageService.loginUser(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
       );
       
-      await StorageService.saveCurrentUser(user);
+      if (user == null) {
+        setState(() => _isLoading = false);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invalid email or password'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
       
       if (!mounted) return;
       

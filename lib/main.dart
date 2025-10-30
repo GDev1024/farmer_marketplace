@@ -7,6 +7,10 @@ import 'screens/home/consumer_home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Database will be initialized on first use (lazy loading)
+  // This makes app startup faster
+  
   runApp(const MyApp());
 }
 
