@@ -4,6 +4,7 @@ import '../../models/user_model.dart';
 import '../../service/storage_service.dart';
 import '../../messages/chat_screen.dart';
 
+/// Displays detailed information about a selected product and allows consumers to contact the farmer.
 class ProductDetailsScreen extends StatefulWidget {
   final ProductModel product;
 
@@ -15,36 +16,49 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     with SingleTickerProviderStateMixin {
+  // Animation controller and variables
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
+  // ------------------------------------------------------------
+  // Initialization and Animation Setup
+  // ------------------------------------------------------------
   @override
   void initState() {
     super.initState();
+
+    // Configure animation controller
     _controller = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
 
+    // Fade animation for smooth appearance
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
 
+    // Slide animation for content transition
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
+    // Start the animation
     _controller.forward();
   }
 
   @override
   void dispose() {
+    // Dispose animation controller to avoid memory leaks
     _controller.dispose();
     super.dispose();
   }
 
+  // ------------------------------------------------------------
+  // Main UI Structure
+  // ------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +91,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     );
   }
 
+  // ------------------------------------------------------------
+  // App Bar Section
+  // ------------------------------------------------------------
   Widget _buildAppBar(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 300,
@@ -117,6 +134,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             ),
             child: Stack(
               children: [
+                // Faint background icon for decoration
                 Positioned.fill(
                   child: Icon(
                     Icons.eco,
@@ -124,6 +142,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     color: Colors.white.withValues(alpha: 0.2),
                   ),
                 ),
+                // Availability indicator badge
                 if (widget.product.isAvailable)
                   Positioned(
                     top: 50,
@@ -172,6 +191,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     );
   }
 
+  // ------------------------------------------------------------
+  // Product Information Section
+  // ------------------------------------------------------------
   Widget _buildProductInfo() {
     return Container(
       margin: const EdgeInsets.all(20),
@@ -190,6 +212,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Product title and category badge
           Row(
             children: [
               Expanded(
@@ -220,6 +243,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             ],
           ),
           const SizedBox(height: 16),
+          // Product price and measurement unit
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -249,6 +273,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     );
   }
 
+  // ------------------------------------------------------------
+  // Farmer Information Section
+  // ------------------------------------------------------------
   Widget _buildFarmerInfo() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -278,6 +305,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           const SizedBox(height: 16),
           Row(
             children: [
+              // Farmer icon
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -289,6 +317,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 child: const Icon(Icons.person, color: Colors.white, size: 28),
               ),
               const SizedBox(width: 16),
+              // Farmer name and location
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,6 +361,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     );
   }
 
+  // ------------------------------------------------------------
+  // Product Description Section
+  // ------------------------------------------------------------
   Widget _buildDescription() {
     return Container(
       margin: const EdgeInsets.all(20),
@@ -372,18 +404,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     );
   }
 
+  // ------------------------------------------------------------
+  // Utility Widgets
+  // ------------------------------------------------------------
   Widget _buildDivider() {
     return const SizedBox(height: 12);
   }
 
+  // ------------------------------------------------------------
+  // Bottom Sheet Section (Contact Farmer Button)
+  // ------------------------------------------------------------
   Widget _buildBottomSheet() {
     return FutureBuilder<UserModel?>(
       future: StorageService.getCurrentUser(),
       builder: (context, snapshot) {
+        // Hide button if user is not a consumer
         if (snapshot.data?.userType != 'consumer') {
           return const SizedBox.shrink();
         }
 
+        // Show button for consumers
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -405,6 +445,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
+                        // Navigate to the chat screen with the farmer
                         Navigator.push(
                           context,
                           MaterialPageRoute(
