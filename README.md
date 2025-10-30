@@ -1,24 +1,22 @@
-# 🚜 Farmer Marketplace App – Final Project
+# 🚜 Farmer Marketplace App – Capstone Project 2026 
 
 [![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev/)
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=flat&logo=github&logoColor=white)](https://github.com/GDev1024)
-[![Demo](https://img.shields.io/badge/Demo-Working%20Front-end-brightgreen)]()
 
 ---
 
 ## 📌 Project Title
-**Farmer Marketplace** – A Flutter-based mobile and web platform connecting farmers directly with customers for fresh produce sales.
+**Farmer Marketplace App & Website** – A Flutter-based platform connecting Grenadian farmers directly with consumers to buy and sell fresh produce efficiently.
 
 ---
 
 ## 📝 Project Description
-The Farmer Marketplace app is designed to showcase a **working demo** of buying and selling fresh agricultural products. Farmers can add products, and customers can browse and purchase items. This demo focuses on the **core front-end functionality**, with no backend or database connected yet.
+The Farmer Marketplace App is a **working front-end demo** that allows farmers to list their fresh produce and customers to browse and purchase items. The app is designed to showcase the core functionality of a local marketplace, including product listing, browsing, shopping cart, and basic order tracking. While no backend or database is currently implemented, this demo highlights the **user experience and interface design** for a scalable marketplace platform.
 
 ---
 
-## 🎯 Problem Statement
-Many farmers face difficulties reaching customers directly, often relying on intermediaries that reduce profit margins. Customers struggle to access fresh, locally-produced goods conveniently.  
-This app demonstrates a solution by connecting farmers and consumers in a **simple, functional demo**.
+## 🌱 Local Context
+In Grenada, local farmers are essential for providing fresh produce, but challenges in matching supply and demand can lead to waste and inconsistent access for consumers. This project proposes a **Local Farmers Marketplace App and website** to connect farmers directly with customers, offering a simple and reliable platform for listing, purchasing, and coordinating produce sales. The goal is to improve accessibility, reduce food waste, and enhance economic benefits for both farmers and consumers.
 
 ---
 
@@ -69,5 +67,3 @@ This app demonstrates a solution by connecting farmers and consumers in a **simp
 ## 📞 Contact
 **Developer:** Garyson B.W.  
 **GitHub:** [https://github.com/GDev1024](https://github.com/GDev1024)  
-
----
