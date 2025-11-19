@@ -1,31 +1,39 @@
 <?php
 session_start();
 
-// Simple session check
+// Session info
 $isLoggedIn = $_SESSION['isLoggedIn'] ?? false;
-$userType = $_SESSION['userType'] ?? null;
 $name = $_SESSION['name'] ?? 'Guest';
+$userId = $_SESSION['userId'] ?? null;
+$farmerVerified = $_SESSION['farmerVerified'] ?? false;
 
 // Determine page
 $page = $_GET['page'] ?? 'landing';
-$protectedPages = ['home', 'browse', 'sell', 'listing', 'orders', 'messages', 'profile'];
+$protectedPages = ['home','browse','sell','listing','orders','messages','profile'];
 
 // Redirect unauthenticated users
 if (!$isLoggedIn && in_array($page, $protectedPages)) {
     $page = 'login';
 }
 
-// Redirect logged-in users away from login/register
-if ($isLoggedIn && in_array($page, ['login', 'register'])) {
+// Redirect logged-in users from login/register
+if ($isLoggedIn && in_array($page,['login','register'])) {
     $page = 'home';
+}
+
+// Logout handler
+if($page === 'logout') {
+    session_destroy();
+    header('Location: index.php?page=landing');
+    exit;
 }
 
 // Load the page
 $pageFile = "pages/{$page}.php";
-if (!file_exists($pageFile)) {
+if(!file_exists($pageFile)){
     $pageFile = "pages/landing.php";
 }
 
-include 'header.php'; // Shared header + nav
-include $pageFile;    // Page content
-include 'footer.php'; // Shared footer
+include 'header.php';
+include $pageFile;
+include 'footer.php';
