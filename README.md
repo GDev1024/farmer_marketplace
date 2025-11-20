@@ -1,63 +1,81 @@
-# 🚜 Farmer Marketplace App – Capstone Project 2026 
+# 🚜 Farmer Marketplace App – Capstone Project 2026
 
 [![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat&logo=php&logoColor=white)](https://www.php.net/)  
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)  
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 ---
 
-## 📌 Project Title
+## 📌 Project Title  
 **Farmer Marketplace App & Website** – A platform connecting Grenadian farmers directly with consumers to buy and sell fresh produce efficiently.
+---
+
+## 🌱 Local Context  
+In Grenada, small farmers play a vital role in supplying fresh produce, but supply-demand gaps often lead to food waste or inconsistent access for consumers. This marketplace helps bridge that gap by enabling direct trade, supporting local agriculture, and reducing waste.
 
 ---
 
-## 📝 Project Description
-The Farmer Marketplace App & Website is a **working front-end demo** where users can **browse products, create listings, and track orders**. All users can post and view listings, while farmers can optionally **verify their accounts** by submitting a **Farmer ID** to gain verified status. The project highlights **core functionality and UI/UX design** for a local marketplace platform without a backend.
+## 📝 Project Description  
+The Farmer Marketplace App & Website is a **full-stack application** where users can:
+
+- Browse farm products  
+- Create product listings  
+- Place and track orders  
+
+Farmers can optionally **verify their accounts** by submitting a Farmer ID, giving them a “verified” status. The frontend is built with JavaScript / PHP, and the backend is a **PHP + MySQL API** managed via **phpMyAdmin**.
+
 
 ---
 
-## 🌱 Local Context
-In Grenada, local farmers play a crucial role in supplying fresh produce. However, supply-demand gaps often lead to food waste or inconsistent access for consumers. This project provides a **Local Farmers Marketplace** where users can buy and sell produce directly, helping reduce waste, support local agriculture, and create economic benefits for farmers and customers alike.
+## 🎯 Objectives  
+1. Build a working frontend + backend for a local farmer marketplace  
+2. Enable farmer verification via Farmer ID  
+3. Implement CRUD functionality for product listings  
+4. Support order creation, tracking, and reviews  
+5. Persist all data securely in a MySQL database
 
 ---
 
-## 🎯 Objectives
-1. Demonstrate a functional front-end for all users to post and browse listings  
-2. Allow farmers to optionally verify themselves with a Farmer ID  
-3. Showcase product listing, browsing, and demo order tracking  
+## ⚡ Features  
+- 👤 User profiles (customers & farmers)  
+- ✅ Farmer verification with Farmer ID  
+- 📦 Product listings: create, read, update, delete  
+- 🛒 Browse products and place orders  
+- 🔄 Order tracking and status updates  
+- 💬 Messaging between users  
+- ⭐ Product reviews  
+- 🔔 Notifications for users  
+- 🧾 Data stored in MySQL backend via PHP API  
 
 ---
 
-## ⚡ Features
-- 👨‍🌾 User profiles with optional farmer verification  
-- 🛒 Browse products and place demo orders  
-- 🛍️ Post listings for all users (farmers can be verified)  
-- 💬 Messages and notifications (demo placeholders)  
+## 🛠️ Technology Stack  
+- **Frontend / Website**: PHP, HTML, CSS, JavaScript  
+- **Backend / API**: PHP  
+- **Database**: MySQL (via phpMyAdmin)  
+- **Development Server**: Local (XAMPP)
 
 ---
 
-## 🛠️ Technology Stack
-- **Frontend**: HTML, CSS, JavaScript, PHP – web platform  
-- **Backend/Database**: ❌ Demo currently uses static/mock data & localStorage  
+## 🗄️ Database Overview
+The application uses a relational database to manage its core entities:
 
----
+- **Users**: Stores user profiles, optional farmer verification, and contact information.  
+- **Listings**: Contains product information including name, category, price, quantity, and status.  
+- **Orders & Order Items**: Tracks orders placed by customers and the specific products included.  
+- **Messages**: Supports messaging between users.  
+- **Reviews**: Stores ratings and reviews for completed orders.  
+- **Notifications**: Tracks alerts and updates for users.  
+- **Cart**: Optional structure for storing user cart items.
 
-## 🚀 Usage
-1. Open `index.php` in a browser  
-2. **Register** an account; optionally submit a Farmer ID to be verified  
-3. **Browse products**, post listings, and view messages/notifications  
-4. Verified farmers are highlighted when posting produce  
+The database is fully normalized and uses indexes for efficient querying and relational integrity.
 
 ---
 
 ## 📊 Project Evaluation
 
 ### ✅ Achievements
-- Functional front-end for posting and browsing listings  
-- Farmer verification mechanism implemented (demo with Farmer ID)  
-- Clear and responsive UI for multiple pages  
-
-### 📚 Lessons Learned
-- Building a modular, scalable front-end architecture  
-- Importance of verified user status for trust in marketplace  
-- Managing sessions and user state without a backend  
+- Fully functional frontend integrated with a PHP + MySQL backend  
+- Farmer verification implemented via optional Farmer ID  
+- Secure, persistent CRUD operations for users, listings, orders, and messages  
+- Clear, responsive UI across multiple pages  
 
