@@ -75,7 +75,7 @@ The database is fully normalized and uses indexes for efficient querying and rel
 
 ### ✅ Achievements
 - Fully functional frontend integrated with a PHP + MySQL backend  
-- Farmer verification implemented via optional Farmer ID  
+- Farmer verification (partly) implemented via optional Farmer ID  
 - Secure, persistent CRUD operations for users, listings, orders, and messages  
 - Clear, responsive UI across multiple pages  
 
