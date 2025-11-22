@@ -1,3 +1,12 @@
+    @font-face {
+      font-family: 'sitedefault';
+      src: url('fonts/MyCustomFont.woff2') format('woff2'), /* Path to font file */
+           url('fonts/MyCustomFont.woff') format('woff');
+      font-weight: normal; /* Optional: define weight */
+      font-style: normal; /* Optional: define style */
+      font-display: swap; /* Optional: control font loading behavior */
+    }
+
 /* Reset & Variables */
 * {
     margin: 0;
