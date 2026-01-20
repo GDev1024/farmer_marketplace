@@ -5,7 +5,7 @@ $category = $_GET['category'] ?? '';
 $sortBy = $_GET['sort'] ?? 'newest';
 
 // Build query
-$query = "SELECT l.*, u.name as seller_name, u.farmer_verified FROM listings l JOIN users u ON l.user_id = u.id WHERE l.quantity > 0";
+$query = "SELECT l.*, u.name as seller_name, u.farmer_verified FROM listings l JOIN users u ON l.user_id = u.id WHERE l.quantity > 0 AND l.is_active = 1";
 $params = [];
 
 if(!empty($search)) {
@@ -92,16 +92,24 @@ if($msg['message']): ?>
         <?php foreach($products as $product): ?>
             <div class="product-card">
                 <div class="product-image">
-                    <?php
-                    // Emoji based on category
-                    $emojis = [
-                        'vegetables' => '🥬',
-                        'fruits' => '🍎',
-                        'herbs' => '🌿',
-                        'grains' => '🌾'
-                    ];
-                    echo $emojis[$product['category']] ?? '🌾';
-                    ?>
+                    <?php if (!empty($product['thumbnail_path']) && file_exists($product['thumbnail_path'])): ?>
+                        <img src="<?= htmlspecialchars($product['thumbnail_path']) ?>" 
+                             alt="<?= htmlspecialchars($product['product_name']) ?>"
+                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">
+                    <?php else: ?>
+                        <div style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 8px; font-size: 3rem;">
+                            <?php
+                            // Emoji based on category
+                            $emojis = [
+                                'vegetables' => '🥬',
+                                'fruits' => '🍎',
+                                'herbs' => '🌿',
+                                'grains' => '🌾'
+                            ];
+                            echo $emojis[$product['category']] ?? '🌾';
+                            ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="product-info">
                     <div class="product-name"><?= htmlspecialchars($product['product_name']) ?></div>
