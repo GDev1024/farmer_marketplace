@@ -13,82 +13,155 @@ if($msg['message']): ?>
 <?php endif; ?>
 
 <div class="card">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-    <h2>📦 My Listings</h2>
-    <a href="index.php?page=listing" class="btn btn-primary">+ Add New Product</a>
+  <div class="card-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h2 style="margin: 0; display: flex; align-items: center; gap: var(--space-sm);">
+          <span>📦</span> My Listings
+        </h2>
+        <p style="color: var(--text-secondary); margin: var(--space-sm) 0 0 0; font-size: 14px;">
+          Manage your products and track sales
+        </p>
+      </div>
+      <a href="index.php?page=listing" class="btn btn-primary">
+        <span>+</span> Add Product
+      </a>
+    </div>
   </div>
   
-  <?php if (empty($listings)): ?>
-    <div class="empty-state">
-      <p>📭 You haven't listed any products yet</p>
-      <a href="index.php?page=listing" class="btn btn-primary">Start Your First Listing</a>
-    </div>
-  <?php else: ?>
-    <div class="listings-grid">
-      <?php foreach($listings as $listing): ?>
-        <div class="listing-card">
-          <div class="listing-image">
-            <?php if (!empty($listing['thumbnail_path']) && file_exists($listing['thumbnail_path'])): ?>
-              <img src="<?= htmlspecialchars($listing['thumbnail_path']) ?>" 
-                   alt="<?= htmlspecialchars($listing['product_name']) ?>"
-                   style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px;">
-            <?php else: ?>
-              <div style="width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 8px; font-size: 2rem;">
-                <?php
-                $emojis = ['vegetables' => '🥬', 'fruits' => '🍎', 'herbs' => '🌿', 'grains' => '🌾'];
-                echo $emojis[$listing['category']] ?? '🌾';
-                ?>
+  <div class="card-body">
+    <?php if (empty($listings)): ?>
+      <div class="empty-state">
+        <p>📦</p>
+        <p><strong>No products listed yet</strong></p>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
+          Start selling your fresh produce to the community. It's easy to get started!
+        </p>
+        <a href="index.php?page=listing" class="btn btn-primary btn-lg">
+          🌾 List Your First Product
+        </a>
+      </div>
+    <?php else: ?>
+      <div class="listings-grid">
+        <?php foreach($listings as $listing): ?>
+          <div class="listing-card">
+            <div class="listing-header">
+              <div style="display: flex; gap: var(--space-md); align-items: flex-start;">
+                <div class="listing-image">
+                  <?php if (!empty($listing['thumbnail_path']) && file_exists($listing['thumbnail_path'])): ?>
+                    <img src="<?= htmlspecialchars($listing['thumbnail_path']) ?>" 
+                         alt="<?= htmlspecialchars($listing['product_name']) ?>"
+                         loading="lazy">
+                  <?php else: ?>
+                    <div style="font-size: 32px; color: var(--text-muted);">
+                      <?php
+                      $emojis = ['vegetables' => '🥬', 'fruits' => '🍎', 'herbs' => '🌿', 'grains' => '🌾'];
+                      echo $emojis[$listing['category']] ?? '🌾';
+                      ?>
+                    </div>
+                  <?php endif; ?>
+                </div>
+                
+                <div class="listing-info" style="flex: 1;">
+                  <h3><?= htmlspecialchars($listing['product_name']) ?></h3>
+                  <div class="listing-price">EC$<?= number_format($listing['price'], 2) ?> / <?= htmlspecialchars($listing['unit']) ?></div>
+                  
+                  <div class="listing-status">
+                    <?php if ($listing['is_active'] && $listing['quantity'] > 0): ?>
+                      <span class="status-badge status-active">✅ Active</span>
+                    <?php elseif ($listing['is_active'] && $listing['quantity'] == 0): ?>
+                      <span class="status-badge status-out-of-stock">📦 Out of Stock</span>
+                    <?php else: ?>
+                      <span class="status-badge status-inactive">⏸️ Inactive</span>
+                    <?php endif; ?>
+                  </div>
+                </div>
               </div>
-            <?php endif; ?>
-          </div>
-          
-          <div class="listing-info">
-            <h3><?= htmlspecialchars($listing['product_name']) ?></h3>
-            <div class="listing-price">EC$<?= number_format($listing['price'], 2) ?> / <?= htmlspecialchars($listing['unit']) ?></div>
-            
-            <div class="listing-status">
-              <?php if ($listing['is_active'] && $listing['quantity'] > 0): ?>
-                <span class="status-badge status-active">✅ Active</span>
-              <?php elseif ($listing['is_active'] && $listing['quantity'] == 0): ?>
-                <span class="status-badge status-out-of-stock">📦 Out of Stock</span>
-              <?php else: ?>
-                <span class="status-badge status-inactive">⏸️ Inactive</span>
-              <?php endif; ?>
             </div>
             
             <div class="listing-stats">
-              <span><strong><?= $listing['quantity'] ?></strong> <?= htmlspecialchars($listing['unit']) ?> available</span>
-              <span>Listed <?= date('M j, Y', strtotime($listing['created_at'])) ?></span>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-md);">
+                <div>
+                  <strong style="color: var(--success);"><?= $listing['quantity'] ?></strong> 
+                  <span style="color: var(--text-secondary);"><?= htmlspecialchars($listing['unit']) ?> available</span>
+                </div>
+                <div style="text-align: right;">
+                  <span style="color: var(--text-muted); font-size: 12px;">
+                    Listed <?= date('M j, Y', strtotime($listing['created_at'])) ?>
+                  </span>
+                </div>
+              </div>
+              
+              <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.4; margin-bottom: var(--space-md);">
+                <?= htmlspecialchars(substr($listing['description'], 0, 120)) ?><?= strlen($listing['description']) > 120 ? '...' : '' ?>
+              </p>
             </div>
             
             <div class="listing-actions">
-              <button onclick="editListing(<?= $listing['id'] ?>)" class="btn btn-secondary btn-sm">✏️ Edit</button>
+              <button onclick="editListing(<?= $listing['id'] ?>)" class="btn btn-secondary btn-sm">
+                ✏️ Edit
+              </button>
               
               <?php if ($listing['is_active']): ?>
                 <form method="POST" action="actions.php" style="display: inline;">
                   <input type="hidden" name="listingId" value="<?= $listing['id'] ?>">
                   <input type="hidden" name="deactivateListing" value="1">
-                  <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Deactivate this listing?')">⏸️ Deactivate</button>
+                  <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Deactivate this listing?')">
+                    ⏸️ Pause
+                  </button>
                 </form>
               <?php else: ?>
                 <form method="POST" action="actions.php" style="display: inline;">
                   <input type="hidden" name="listingId" value="<?= $listing['id'] ?>">
                   <input type="hidden" name="activateListing" value="1">
-                  <button type="submit" class="btn btn-success btn-sm">▶️ Activate</button>
+                  <button type="submit" class="btn btn-success btn-sm">
+                    ▶️ Activate
+                  </button>
                 </form>
               <?php endif; ?>
               
               <?php if ($listing['quantity'] == 0): ?>
-                <button onclick="restockListing(<?= $listing['id'] ?>)" class="btn btn-primary btn-sm">📦 Restock</button>
+                <button onclick="restockListing(<?= $listing['id'] ?>)" class="btn btn-primary btn-sm">
+                  📦 Restock
+                </button>
               <?php endif; ?>
               
-              <button onclick="deleteListing(<?= $listing['id'] ?>)" class="btn btn-danger btn-sm">🗑️ Delete</button>
+              <button onclick="deleteListing(<?= $listing['id'] ?>)" class="btn btn-danger btn-sm">
+                🗑️ Delete
+              </button>
             </div>
           </div>
+        <?php endforeach; ?>
+      </div>
+      
+      <!-- Summary Card -->
+      <div style="background: var(--bg-primary); padding: var(--space-lg); border-radius: var(--radius-md); margin-top: var(--space-lg);">
+        <h4 style="margin: 0 0 var(--space-md) 0; color: var(--text-primary); display: flex; align-items: center; gap: var(--space-sm);">
+          📊 Quick Stats
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--space-md);">
+          <div style="text-align: center;">
+            <div style="font-size: 20px; font-weight: var(--font-weight-bold); color: var(--primary);">
+              <?= count($listings) ?>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary);">Total Products</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 20px; font-weight: var(--font-weight-bold); color: var(--success);">
+              <?= count(array_filter($listings, function($l) { return $l['is_active'] && $l['quantity'] > 0; })) ?>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary);">Active</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 20px; font-weight: var(--font-weight-bold); color: var(--warning);">
+              <?= count(array_filter($listings, function($l) { return $l['quantity'] == 0; })) ?>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary);">Out of Stock</div>
+          </div>
         </div>
-      <?php endforeach; ?>
-    </div>
-  <?php endif; ?>
+      </div>
+    <?php endif; ?>
+  </div>
 </div>
 
 <!-- Edit Listing Modal -->
@@ -96,7 +169,7 @@ if($msg['message']): ?>
   <div class="modal-content">
     <div class="modal-header">
       <h3>Edit Listing</h3>
-      <span class="close" onclick="closeEditModal()">&times;</span>
+      <button class="close" onclick="closeEditModal()" aria-label="Close">&times;</button>
     </div>
     <form id="editForm" method="POST" action="actions.php" enctype="multipart/form-data">
       <input type="hidden" name="editListing" value="1">
@@ -110,14 +183,14 @@ if($msg['message']): ?>
       <div class="form-group">
         <label>Category</label>
         <select name="category" id="editCategory" required>
-          <option value="vegetables">Vegetables</option>
-          <option value="fruits">Fruits</option>
-          <option value="herbs">Herbs & Spices</option>
-          <option value="grains">Grains & Legumes</option>
+          <option value="vegetables">🥬 Vegetables</option>
+          <option value="fruits">🍎 Fruits</option>
+          <option value="herbs">🌿 Herbs & Spices</option>
+          <option value="grains">🌾 Grains & Legumes</option>
         </select>
       </div>
       
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
         <div class="form-group">
           <label>Price (EC$)</label>
           <input type="number" name="price" id="editPrice" step="0.01" min="0" required>
@@ -144,9 +217,9 @@ if($msg['message']): ?>
       </div>
       
       <div class="form-group">
-        <label>Update Image (Optional)</label>
+        <label>Update Photo (Optional)</label>
         <input type="file" name="productImage" accept="image/jpeg,image/jpg,image/png">
-        <small style="color:#666;display:block;margin-top:0.5rem;">
+        <small style="color: var(--text-muted); display: block; margin-top: var(--space-xs);">
           Leave empty to keep current image. Upload new image to replace.
         </small>
       </div>
@@ -164,7 +237,7 @@ if($msg['message']): ?>
   <div class="modal-content">
     <div class="modal-header">
       <h3>Restock Product</h3>
-      <span class="close" onclick="closeRestockModal()">&times;</span>
+      <button class="close" onclick="closeRestockModal()" aria-label="Close">&times;</button>
     </div>
     <form method="POST" action="actions.php">
       <input type="hidden" name="restockListing" value="1">
@@ -172,8 +245,8 @@ if($msg['message']): ?>
       
       <div class="form-group">
         <label>Add Quantity</label>
-        <input type="number" name="addQuantity" min="1" required>
-        <small style="color:#666;display:block;margin-top:0.5rem;">
+        <input type="number" name="addQuantity" min="1" placeholder="Enter quantity to add" required>
+        <small style="color: var(--text-muted); display: block; margin-top: var(--space-xs);">
           Enter the number of units to add to current stock.
         </small>
       </div>
@@ -185,137 +258,6 @@ if($msg['message']): ?>
     </form>
   </div>
 </div>
-
-<style>
-.listings-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.listing-card {
-  border: 1px solid #D2DCB6;
-  border-radius: 12px;
-  padding: 1rem;
-  background: white;
-}
-
-.listing-info h3 {
-  margin: 0.5rem 0;
-  color: #2C3E50;
-}
-
-.listing-price {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #27AE60;
-  margin-bottom: 0.5rem;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.status-active { background: #D4EDDA; color: #155724; }
-.status-out-of-stock { background: #FFF3CD; color: #856404; }
-.status-inactive { background: #F8D7DA; color: #721C24; }
-
-.listing-stats {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 1rem;
-}
-
-.listing-stats span {
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.listing-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.btn-sm {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.85rem;
-}
-
-.modal {
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-  background-color: white;
-  margin: 5% auto;
-  padding: 0;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid #eee;
-}
-
-.modal-header h3 {
-  margin: 0;
-}
-
-.close {
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #999;
-}
-
-.close:hover {
-  color: #333;
-}
-
-.modal form {
-  padding: 1.5rem;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .listings-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .listing-actions {
-    flex-direction: column;
-  }
-  
-  .modal-content {
-    width: 95%;
-    margin: 2% auto;
-  }
-}
-</style>
 
 <script>
 function editListing(listingId) {
@@ -333,20 +275,24 @@ function editListing(listingId) {
     document.getElementById('editDescription').value = listing.description;
     
     document.getElementById('editModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
   }
 }
 
 function closeEditModal() {
   document.getElementById('editModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
 }
 
 function restockListing(listingId) {
   document.getElementById('restockListingId').value = listingId;
   document.getElementById('restockModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
 }
 
 function closeRestockModal() {
   document.getElementById('restockModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
 }
 
 function deleteListing(listingId) {
@@ -384,4 +330,12 @@ window.onclick = function(event) {
     closeRestockModal();
   }
 }
+
+// Close modals with Escape key
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeEditModal();
+    closeRestockModal();
+  }
+});
 </script>

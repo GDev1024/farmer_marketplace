@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>">
+<meta name="theme-color" content="#1877F2">
 </head>
 <body>
 <header>
@@ -19,7 +20,7 @@
     </a>
     
     <!-- Mobile menu button -->
-    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
       <span></span>
       <span></span>
       <span></span>
@@ -28,29 +29,26 @@
     <nav id="nav" class="nav-menu">
       <?php if($isLoggedIn): ?>
         <div class="nav-section">
-          <a href="index.php?page=browse" class="nav-link">
+          <a href="index.php?page=browse" class="nav-link" title="Browse Products">
             <span class="nav-icon">🛍️</span>
             <span class="nav-text">Browse</span>
           </a>
-          <a href="index.php?page=cart" class="nav-link cart-link">
+          <a href="index.php?page=cart" class="nav-link cart-link" title="Shopping Cart">
             <span class="nav-icon">🛒</span>
             <span class="nav-text">Cart</span>
             <?php if(isset($_SESSION['cart']) && count($_SESSION['cart']) > 0): ?>
               <span class="cart-badge"><?= count($_SESSION['cart']) ?></span>
             <?php endif; ?>
           </a>
-          <a href="index.php?page=messages" class="nav-link">
+          <a href="index.php?page=messages" class="nav-link" title="Messages">
             <span class="nav-icon">💬</span>
             <span class="nav-text">Messages</span>
           </a>
-        </div>
-        
-        <div class="nav-section">
-          <a href="index.php?page=sell" class="nav-link">
+          <a href="index.php?page=sell" class="nav-link" title="My Listings">
             <span class="nav-icon">📊</span>
             <span class="nav-text">My Listings</span>
           </a>
-          <a href="index.php?page=orders" class="nav-link">
+          <a href="index.php?page=orders" class="nav-link" title="Orders">
             <span class="nav-icon">📦</span>
             <span class="nav-text">Orders</span>
           </a>
@@ -63,7 +61,7 @@
               <span class="verified-badge">✅ Verified Farmer</span>
             <?php endif; ?>
           </div>
-          <a href="index.php?page=profile" class="nav-link">
+          <a href="index.php?page=profile" class="nav-link" title="Profile">
             <span class="nav-icon">👤</span>
             <span class="nav-text">Profile</span>
           </a>

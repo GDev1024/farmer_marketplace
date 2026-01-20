@@ -8,6 +8,9 @@ Config::load();
 // Include AWS-compatible ImageHandler class
 require_once 'includes/AWSImageHandler.php';
 
+// Include Payment Handler
+require_once 'includes/PaymentHandler.php';
+
 // Database Connection
 $dbConfig = Config::getDatabase();
 $host = $dbConfig['host'];
@@ -541,6 +544,181 @@ if(isset($_POST['deleteListing'])) {
         setMessage('Failed to delete listing', 'error');
         redirect('sell');
     }
+}
+
+// Create Stripe Payment Handler
+if(isset($_POST['createStripePayment'])) {
+    header('Content-Type: application/json');
+    
+    if(!$_SESSION['isLoggedIn']) {
+        echo json_encode(['success' => false, 'error' => 'Please login']);
+        exit;
+    }
+
+    if(empty($_SESSION['cart'])) {
+        echo json_encode(['success' => false, 'error' => 'Cart is empty']);
+        exit;
+    }
+
+    $amount = floatval($_POST['amount']);
+    
+    if($amount <= 0) {
+        echo json_encode(['success' => false, 'error' => 'Invalid amount']);
+        exit;
+    }
+
+    $paymentHandler = new PaymentHandler();
+    $metadata = [
+        'user_id' => $_SESSION['userId'],
+        'cart_items' => json_encode($_SESSION['cart'])
+    ];
+
+    $result = $paymentHandler->createStripePaymentIntent($amount, 'usd', $metadata);
+    echo json_encode($result);
+    exit;
+}
+
+// Create PayPal Payment Handler
+if(isset($_POST['createPayPalPayment'])) {
+    header('Content-Type: application/json');
+    
+    if(!$_SESSION['isLoggedIn']) {
+        echo json_encode(['success' => false, 'error' => 'Please login']);
+        exit;
+    }
+
+    if(empty($_SESSION['cart'])) {
+        echo json_encode(['success' => false, 'error' => 'Cart is empty']);
+        exit;
+    }
+
+    $amount = floatval($_POST['amount']);
+    
+    if($amount <= 0) {
+        echo json_encode(['success' => false, 'error' => 'Invalid amount']);
+        exit;
+    }
+
+    $paymentHandler = new PaymentHandler();
+    $orderId = 'ORDER_' . $_SESSION['userId'] . '_' . time();
+
+    $result = $paymentHandler->createPayPalOrder($amount, 'USD', $orderId);
+    echo json_encode($result);
+    exit;
+}
+
+// Process Payment Success Handler
+if(isset($_GET['payment_intent']) || isset($_GET['paymentId'])) {
+    if(!$_SESSION['isLoggedIn']) {
+        setMessage('Please login', 'error');
+        redirect('login');
+    }
+
+    if(empty($_SESSION['cart'])) {
+        setMessage('Cart is empty', 'error');
+        redirect('cart');
+    }
+
+    $paymentHandler = new PaymentHandler();
+    $paymentSuccess = false;
+    $paymentAmount = 0;
+
+    // Handle Stripe payment verification
+    if(isset($_GET['payment_intent'])) {
+        $paymentIntentId = sanitize($_GET['payment_intent']);
+        $verification = $paymentHandler->verifyStripePayment($paymentIntentId);
+        
+        if($verification['success'] && $verification['status'] === 'succeeded') {
+            $paymentSuccess = true;
+            $paymentAmount = $verification['amount'];
+        }
+    }
+
+    // Handle PayPal payment capture
+    if(isset($_GET['paymentId']) && isset($_GET['PayerID'])) {
+        $paymentId = sanitize($_GET['paymentId']);
+        $capture = $paymentHandler->capturePayPalPayment($paymentId);
+        
+        if($capture['success'] && $capture['status'] === 'COMPLETED') {
+            $paymentSuccess = true;
+            // Get amount from session or recalculate
+            $paymentAmount = calculateCartTotal();
+        }
+    }
+
+    if($paymentSuccess) {
+        // Create order in database
+        $orderItems = [];
+        foreach($_SESSION['cart'] as $listingId => $quantity) {
+            $stmt = $pdo->prepare("SELECT price FROM listings WHERE id = ? AND quantity >= ?");
+            $stmt->execute([$listingId, $quantity]);
+            $listing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($listing) {
+                $orderItems[] = ['listingId' => $listingId, 'quantity' => $quantity, 'price' => $listing['price']];
+            }
+        }
+
+        if(!empty($orderItems)) {
+            try {
+                $pdo->beginTransaction();
+
+                // Create order
+                $stmt = $pdo->prepare("INSERT INTO orders (user_id, total_price, payment_status, payment_method, created_at) VALUES (?, ?, 'completed', ?, NOW())");
+                $paymentMethod = isset($_GET['payment_intent']) ? 'stripe' : 'paypal';
+                $stmt->execute([$_SESSION['userId'], $paymentAmount, $paymentMethod]);
+                $orderId = $pdo->lastInsertId();
+
+                // Create order items and update inventory
+                foreach($orderItems as $item) {
+                    $stmt = $pdo->prepare("INSERT INTO order_items (order_id, listing_id, quantity, price) VALUES (?, ?, ?, ?)");
+                    $stmt->execute([$orderId, $item['listingId'], $item['quantity'], $item['price']]);
+
+                    // Update listing quantity
+                    $stmt = $pdo->prepare("UPDATE listings SET quantity = quantity - ? WHERE id = ?");
+                    $stmt->execute([$item['quantity'], $item['listingId']]);
+                }
+
+                $pdo->commit();
+                
+                // Clear cart
+                $_SESSION['cart'] = [];
+                
+                setMessage("Payment successful! Order #$orderId has been placed.", 'success');
+                redirect('orders');
+            } catch (PDOException $e) {
+                $pdo->rollback();
+                setMessage('Order creation failed. Please contact support.', 'error');
+                redirect('cart');
+            }
+        }
+    } else {
+        setMessage('Payment verification failed. Please try again.', 'error');
+        redirect('checkout');
+    }
+}
+
+// Helper function to calculate cart total
+function calculateCartTotal() {
+    global $pdo;
+    $total = 0;
+    
+    if(isset($_SESSION['cart'])) {
+        foreach($_SESSION['cart'] as $listingId => $quantity) {
+            $stmt = $pdo->prepare("SELECT price FROM listings WHERE id = ?");
+            $stmt->execute([$listingId]);
+            $listing = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if($listing) {
+                $total += $listing['price'] * $quantity;
+            }
+        }
+    }
+    
+    // Add tax
+    $total += $total * 0.10;
+    
+    return $total;
 }
 
 // Default redirect

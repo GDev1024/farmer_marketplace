@@ -2,6 +2,13 @@
 CREATE DATABASE IF NOT EXISTS grenada_farmers;
 USE grenada_farmers;
 
+-- Migrations Table (for tracking database updates)
+CREATE TABLE migrations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    migration_name VARCHAR(255) NOT NULL UNIQUE,
+    executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Users Table
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -29,14 +36,16 @@ CREATE TABLE listings (
     price DECIMAL(10, 2) NOT NULL,
     unit VARCHAR(50) NOT NULL,
     quantity INT NOT NULL,
-    image_url VARCHAR(255),
+    image_path VARCHAR(255) NULL,
+    thumbnail_path VARCHAR(255) NULL,
     is_active BOOLEAN DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_user_id (user_id),
     INDEX idx_category (category),
-    INDEX idx_active (is_active)
+    INDEX idx_active (is_active),
+    INDEX idx_listings_has_image (image_path)
 );
 
 -- Orders Table
@@ -45,6 +54,9 @@ CREATE TABLE orders (
     user_id INT NOT NULL,
     total_price DECIMAL(10, 2) NOT NULL,
     status ENUM('pending', 'confirmed', 'shipped', 'delivered', 'cancelled') DEFAULT 'pending',
+    payment_status ENUM('pending', 'completed', 'failed', 'refunded') DEFAULT 'pending',
+    payment_method VARCHAR(50) NULL,
+    payment_transaction_id VARCHAR(255) NULL,
     shipping_address VARCHAR(255),
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -52,6 +64,7 @@ CREATE TABLE orders (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_user_id (user_id),
     INDEX idx_status (status),
+    INDEX idx_payment_status (payment_status),
     INDEX idx_created_at (created_at)
 );
 
@@ -61,7 +74,7 @@ CREATE TABLE order_items (
     order_id INT NOT NULL,
     listing_id INT NOT NULL,
     quantity INT NOT NULL,
-    price_at_purchase DECIMAL(10, 2),
+    price DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE RESTRICT,

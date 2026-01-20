@@ -1,6 +1,42 @@
 <?php
 session_start();
 
+// Load configuration and database connection
+require_once 'includes/Config.php';
+Config::load();
+
+// Database Connection
+$dbConfig = Config::getDatabase();
+$host = $dbConfig['host'];
+$db = $dbConfig['name'];
+$user = $dbConfig['user'];
+$pass = $dbConfig['pass'];
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Database connection failed: ' . $e->getMessage());
+}
+
+// Helper Functions
+function redirect($page, $message = null, $type = 'success') {
+    if($message) {
+        $_SESSION['message'] = $message;
+        $_SESSION['messageType'] = $type;
+    }
+    header("Location: index.php?page=$page");
+    exit;
+}
+
+function getAndClearMessage() {
+    $message = $_SESSION['message'] ?? null;
+    $type = $_SESSION['messageType'] ?? 'success';
+    unset($_SESSION['message']);
+    unset($_SESSION['messageType']);
+    return ['message' => $message, 'type' => $type];
+}
+
 // Session info
 $isLoggedIn = $_SESSION['isLoggedIn'] ?? false;
 $name = $_SESSION['name'] ?? 'Guest';
@@ -9,7 +45,7 @@ $farmerVerified = $_SESSION['farmerVerified'] ?? false;
 
 // Determine page
 $page = $_GET['page'] ?? 'landing';
-$protectedPages = ['home','browse','sell','listing','orders','messages','profile'];
+$protectedPages = ['home','browse','sell','listing','orders','messages','profile','cart','checkout','payment-success','payment-cancel'];
 
 // Redirect unauthenticated users
 if (!$isLoggedIn && in_array($page, $protectedPages)) {

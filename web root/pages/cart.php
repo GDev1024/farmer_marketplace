@@ -96,26 +96,20 @@ if($msg['message']): ?>
                 <span>EC$<?= number_format($total, 2) ?></span>
             </div>
             <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
-                <span>Delivery Fee:</span>
-                <span>EC$0.00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
-                <span>Taxes:</span>
-                <span>EC$0.00</span>
+                <span>Tax (10%):</span>
+                <span>EC$<?= number_format($total * 0.10, 2) ?></span>
             </div>
         </div>
         
         <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-bottom: 1.5rem;">
             <span>Total:</span>
-            <span style="color: #A1BC98;">EC$<?= number_format($total, 2) ?></span>
+            <span style="color: #A1BC98;">EC$<?= number_format($total + ($total * 0.10), 2) ?></span>
         </div>
         
         <?php if($_SESSION['isLoggedIn']): ?>
-            <form method="POST" action="actions.php">
-                <button type="submit" name="checkout" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">💳 Checkout</button>
-            </form>
+            <a href="index.php?page=checkout" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; text-decoration: none; display: block; text-align: center;">💳 Proceed to Checkout</a>
             <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #666;">
-                ✓ Secure checkout | 🚚 Fresh delivery | 💬 Direct seller contact
+                ✓ Secure payment | 🚚 Fresh delivery | 💬 Direct seller contact
             </p>
         <?php else: ?>
             <a href="index.php?page=login" class="btn btn-primary" style="width: 100%; padding: 1rem; text-align: center; display: block;">Login to Checkout</a>

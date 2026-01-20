@@ -44,6 +44,11 @@ Farmers can optionally **verify their accounts** by submitting a Farmer ID, givi
 - 💬 Messaging between users  
 - ⭐ Product reviews  
 - 🔔 Notifications for users  
+- 💳 **Secure Payment Processing** (Stripe & PayPal)
+- 🖼️ **AWS S3 Image Storage** with local fallback
+- 🎨 **Facebook-Inspired UI** with glassmorphism effects
+- 📱 **Responsive Design** for mobile and desktop
+- ☁️ **AWS Deployment Ready** with Elastic Beanstalk support
 - 🧾 Data stored in MySQL backend via PHP API  
 
 ---
@@ -52,7 +57,10 @@ Farmers can optionally **verify their accounts** by submitting a Farmer ID, givi
 - **Frontend / Website**: PHP, HTML, CSS, JavaScript  
 - **Backend / API**: PHP  
 - **Database**: MySQL (via phpMyAdmin)  
-- **Development Server**: Local (XAMPP)
+- **Payment Processing**: Stripe & PayPal APIs
+- **Image Storage**: AWS S3 with CloudFront CDN (optional)
+- **Deployment**: AWS Elastic Beanstalk, RDS, S3
+- **Development Server**: Local (XAMPP) or AWS
 
 ---
 
@@ -71,6 +79,55 @@ The database is fully normalized and uses indexes for efficient querying and rel
 
 ---
 
+## 📚 Documentation
+
+- **[Implementation Guide](IMPLEMENTATION_GUIDE.md)** - Detailed technical implementation and architecture
+- **[AWS Deployment Guide](AWS_DEPLOYMENT_GUIDE.md)** - Complete AWS deployment instructions
+- **[License](LICENSE.md)** - MIT License terms
+
+---
+
+## Payment Integration
+
+The application supports secure payment processing through both Stripe and PayPal:
+
+### Stripe Integration
+- Credit/debit card payments with Stripe Elements
+- Secure tokenization and PCI compliance
+- Real-time payment verification
+- Support for multiple currencies
+
+### PayPal Integration  
+- PayPal account payments
+- Redirect-based payment flow
+- Automatic payment capture
+- Sandbox and live environment support
+
+### Setup Instructions
+1. Copy `.env.example` to `.env`
+2. Add your Stripe API keys:
+   ```
+   STRIPE_PUBLISHABLE_KEY=pk_test_your_key_here
+   STRIPE_SECRET_KEY=sk_test_your_key_here
+   ```
+3. Add your PayPal credentials:
+   ```
+   PAYPAL_CLIENT_ID=your_client_id_here
+   PAYPAL_CLIENT_SECRET=your_client_secret_here
+   PAYPAL_MODE=sandbox
+   ```
+4. Run database migrations to add payment tracking tables
+
+### Payment Flow
+1. Users add items to cart
+2. Proceed to secure checkout page
+3. Choose payment method (Stripe or PayPal)
+4. Complete payment with chosen provider
+5. Order is created and inventory is updated
+6. Payment confirmation and order tracking
+
+---
+
 ## 📊 Project Evaluation
 
 ### ✅ Achievements
@@ -78,4 +135,9 @@ The database is fully normalized and uses indexes for efficient querying and rel
 - Farmer verification (partly) implemented via optional Farmer ID  
 - Secure, persistent CRUD operations for users, listings, orders, and messages  
 - Clear, responsive UI across multiple pages  
+- **Complete payment integration** with Stripe and PayPal support
+- **AWS-ready deployment** with S3 image storage and Elastic Beanstalk configuration
+- **Modern Facebook-inspired UI** with glassmorphism effects and responsive design
+- **Comprehensive order management** with payment tracking and status updates
+- **Professional documentation** with deployment and implementation guides
 
