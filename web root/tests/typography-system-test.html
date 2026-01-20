@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typography System Validation Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/style.css">
+    <style>
+        body {
+            padding: var(--space-8);
+        }
+        .test-result {
+            padding: var(--space-4);
+            margin: var(--space-2) 0;
+            border-radius: var(--radius-md);
+            border-left: 4px solid;
+        }
+        .test-pass {
+            background-color: var(--color-success-bg);
+            border-left-color: var(--color-success);
+            color: var(--color-success);
+        }
+        .test-fail {
+            background-color: var(--color-error-bg);
+            border-left-color: var(--color-error);
+            color: var(--color-error);
+        }
+        .test-section {
+            margin-bottom: var(--space-8);
+            padding: var(--space-6);
+            background-color: var(--color-surface-elevated);
+            border-radius: var(--radius-xl);
+        }
+        #test-elements {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Typography System Validation</h1>
+        <p class="text-lead">Automated testing of typography requirements 4.1, 4.2, 4.3, and 4.4</p>
+        
+        <div class="test-section">
+            <h2>Test Results</h2>
+            <div id="test-results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Typography Samples</h2>
+            <div id="typography-samples">
+                <h1>Sample H1 Heading</h1>
+                <h2>Sample H2 Heading</h2>
+                <h3>Sample H3 Heading</h3>
+                <h4>Sample H4 Heading</h4>
+                <h5>Sample H5 Heading</h5>
+                <h6>Sample H6 Heading</h6>
+                <p class="text-body">Sample body text for UI elements and interface content.</p>
+                <p class="text-lead">Sample lead text for important introductory content.</p>
+                <button class="btn btn-primary">Sample Button</button>
+                <input type="text" class="form-input" placeholder="Sample input field" style="margin-top: var(--space-4); width: 200px;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden test elements -->
+    <div id="test-elements">
+        <h1 id="test-h1">Test H1</h1>
+        <h2 id="test-h2">Test H2</h2>
+        <h3 id="test-h3">Test H3</h3>
+        <h4 id="test-h4">Test H4</h4>
+        <h5 id="test-h5">Test H5</h5>
+        <h6 id="test-h6">Test H6</h6>
+        <p id="test-p">Test paragraph</p>
+        <button id="test-btn" class="btn btn-primary">Test Button</button>
+        <input id="test-input" class="form-input" type="text" placeholder="Test input">
+        <div id="test-ui-text" class="text-body">Test UI text</div>
+    </div>
+
+    <script>
+        // Typography System Validation Tests
+        // Validates Requirements 4.1, 4.2, 4.3, 4.4
+        
+        class TypographyValidator {
+            constructor() {
+                this.results = [];
+                this.testElements = document.getElementById('test-elements');
+                this.resultsContainer = document.getElementById('test-results');
+            }
+            
+            // Test 4.1: Clean sans-serif fonts for UI elements and interface text
+            testSansSerifForUI() {
+                const uiElements = [
+                    { id: 'test-p', name: 'Paragraph' },
+                    { id: 'test-btn', name: 'Button' },
+                    { id: 'test-input', name: 'Input Field' },
+                    { id: 'test-ui-text', name: 'UI Text' }
+                ];
+                
+                let allPass = true;
+                const details = [];
+                
+                uiElements.forEach(element => {
+                    const el = document.getElementById(element.id);
+                    const computedStyle = window.getComputedStyle(el);
+                    const fontFamily = computedStyle.fontFamily.toLowerCase();
+                    
+                    // Check if it uses sans-serif fonts (not Playfair Display)
+                    const isPlayfair = fontFamily.includes('playfair');
+                    const isSansSerif = fontFamily.includes('system') || 
+                                      fontFamily.includes('segoe') || 
+                                      fontFamily.includes('roboto') || 
+                                      fontFamily.includes('arial') || 
+                                      fontFamily.includes('helvetica') ||
+                                      fontFamily.includes('sans-serif');
+                    
+                    const pass = !isPlayfair && isSansSerif;
+                    if (!pass) allPass = false;
+                    
+                    details.push(`${element.name}: ${fontFamily} - ${pass ? 'PASS' : 'FAIL'}`);
+                });
+                
+                this.addResult(
+                    'Requirement 4.1: Sans-serif fonts for UI elements',
+                    allPass,
+                    details.join('<br>')
+                );
+            }
+            
+            // Test 4.2: Playfair Display for headings
+            testPlayfairForHeadings() {
+                const headings = ['test-h1', 'test-h2', 'test-h3', 'test-h4', 'test-h5', 'test-h6'];
+                let allPass = true;
+                const details = [];
+                
+                headings.forEach(headingId => {
+                    const el = document.getElementById(headingId);
+                    const computedStyle = window.getComputedStyle(el);
+                    const fontFamily = computedStyle.fontFamily.toLowerCase();
+                    
+                    const isPlayfair = fontFamily.includes('playfair');
+                    if (!isPlayfair) allPass = false;
+                    
+                    details.push(`${headingId.toUpperCase()}: ${fontFamily} - ${isPlayfair ? 'PASS' : 'FAIL'}`);
+                });
+                
+                this.addResult(
+                    'Requirement 4.2: Playfair Display for headings',
+                    allPass,
+                    details.join('<br>')
+                );
+            }
+            
+            // Test 4.3: Clear hierarchy with consistent sizing and spacing
+            testTypographyHierarchy() {
+                const headings = [
+                    { id: 'test-h1', expectedMinSize: 40 }, // ~3rem at 16px base
+                    { id: 'test-h2', expectedMinSize: 32 }, // ~2.25rem
+                    { id: 'test-h3', expectedMinSize: 24 }, // ~1.875rem
+                    { id: 'test-h4', expectedMinSize: 20 }, // ~1.5rem
+                    { id: 'test-h5', expectedMinSize: 18 }, // ~1.25rem
+                    { id: 'test-h6', expectedMinSize: 16 }  // ~1.125rem
+                ];
+                
+                let allPass = true;
+                const details = [];
+                let previousSize = Infinity;
+                
+                headings.forEach(heading => {
+                    const el = document.getElementById(heading.id);
+                    const computedStyle = window.getComputedStyle(el);
+                    const fontSize = parseFloat(computedStyle.fontSize);
+                    
+                    // Check if font size meets minimum requirement
+                    const meetsMinSize = fontSize >= heading.expectedMinSize;
+                    
+                    // Check if hierarchy is maintained (each heading should be smaller than previous)
+                    const maintainsHierarchy = fontSize <= previousSize;
+                    
+                    const pass = meetsMinSize && maintainsHierarchy;
+                    if (!pass) allPass = false;
+                    
+                    details.push(`${heading.id.toUpperCase()}: ${fontSize}px (min: ${heading.expectedMinSize}px) - ${pass ? 'PASS' : 'FAIL'}`);
+                    previousSize = fontSize;
+                });
+                
+                this.addResult(
+                    'Requirement 4.3: Typography hierarchy and sizing',
+                    allPass,
+                    details.join('<br>')
+                );
+            }
+            
+            // Test 4.4: High readability across all device sizes
+            testReadabilityStandards() {
+                const textElements = [
+                    { id: 'test-p', name: 'Body Text', minSize: 14 },
+                    { id: 'test-ui-text', name: 'UI Text', minSize: 14 },
+                    { id: 'test-btn', name: 'Button Text', minSize: 14 },
+                    { id: 'test-input', name: 'Input Text', minSize: 14 }
+                ];
+                
+                let allPass = true;
+                const details = [];
+                
+                textElements.forEach(element => {
+                    const el = document.getElementById(element.id);
+                    const computedStyle = window.getComputedStyle(el);
+                    const fontSize = parseFloat(computedStyle.fontSize);
+                    const lineHeight = parseFloat(computedStyle.lineHeight);
+                    
+                    // Check minimum font size for readability
+                    const meetsMinSize = fontSize >= element.minSize;
+                    
+                    // Check line height for readability (should be at least 1.2)
+                    const lineHeightRatio = lineHeight / fontSize;
+                    const goodLineHeight = lineHeightRatio >= 1.2;
+                    
+                    const pass = meetsMinSize && goodLineHeight;
+                    if (!pass) allPass = false;
+                    
+                    details.push(`${element.name}: ${fontSize}px, line-height: ${lineHeightRatio.toFixed(2)} - ${pass ? 'PASS' : 'FAIL'}`);
+                });
+                
+                this.addResult(
+                    'Requirement 4.4: Readability standards',
+                    allPass,
+                    details.join('<br>')
+                );
+            }
+            
+            // Test font loading and fallbacks
+            testFontLoading() {
+                const headingEl = document.getElementById('test-h1');
+                const bodyEl = document.getElementById('test-p');
+                
+                const headingFont = window.getComputedStyle(headingEl).fontFamily;
+                const bodyFont = window.getComputedStyle(bodyEl).fontFamily;
+                
+                // Check if fonts are loaded (not using fallback only)
+                const playfairLoaded = headingFont.toLowerCase().includes('playfair');
+                const sansSerifLoaded = bodyFont.toLowerCase().includes('system') || 
+                                      bodyFont.toLowerCase().includes('segoe') || 
+                                      bodyFont.toLowerCase().includes('roboto');
+                
+                const pass = playfairLoaded && sansSerifLoaded;
+                
+                this.addResult(
+                    'Font Loading: Google Fonts integration',
+                    pass,
+                    `Heading font: ${headingFont}<br>Body font: ${bodyFont}`
+                );
+            }
+            
+            addResult(testName, passed, details) {
+                this.results.push({ testName, passed, details });
+            }
+            
+            renderResults() {
+                const passedTests = this.results.filter(r => r.passed).length;
+                const totalTests = this.results.length;
+                
+                let html = `<div class="test-result ${totalTests === passedTests ? 'test-pass' : 'test-fail'}">
+                    <strong>Overall Result: ${passedTests}/${totalTests} tests passed</strong>
+                </div>`;
+                
+                this.results.forEach(result => {
+                    html += `<div class="test-result ${result.passed ? 'test-pass' : 'test-fail'}">
+                        <strong>${result.testName}</strong>: ${result.passed ? 'PASS' : 'FAIL'}
+                        <br><small>${result.details}</small>
+                    </div>`;
+                });
+                
+                this.resultsContainer.innerHTML = html;
+            }
+            
+            runAllTests() {
+                // Wait for fonts to load
+                document.fonts.ready.then(() => {
+                    this.testSansSerifForUI();
+                    this.testPlayfairForHeadings();
+                    this.testTypographyHierarchy();
+                    this.testReadabilityStandards();
+                    this.testFontLoading();
+                    this.renderResults();
+                });
+            }
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('load', () => {
+            const validator = new TypographyValidator();
+            validator.runAllTests();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Component Showcase - Organic Premium Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        body {
+            padding: var(--space-8);
+            background-color: var(--color-background);
+        }
+        .showcase-section {
+            margin-bottom: var(--space-12);
+            padding: var(--space-8);
+            background-color: var(--color-surface-elevated);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+        }
+        .button-row {
+            display: flex;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+        .demo-label {
+            font-size: var(--text-sm);
+            font-weight: var(--font-medium);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-2);
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="text-center mb-12">
+            <h1 class="heading-hero">Button Component System</h1>
+            <p class="text-lead">Comprehensive button variants for the Organic Premium Marketplace</p>
+        </header>
+
+        <!-- Primary Button Variants -->
+        <section class="showcase-section">
+            <h2 class="heading-section">Primary Button Variants</h2>
+            <div class="button-row">
+                <span class="demo-label">Standard:</span>
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-primary" disabled>Disabled</button>
+                <button class="btn btn-primary loading">Loading</button>
+            </div>
+            <div class="button-row">
+                <span class="demo-label">Sizes:</span>
+                <button class="btn btn-primary btn-xs">Extra Small</button>
+                <button class="btn btn-primary btn-sm">Small</button>
+                <button class="btn btn-primary">Default</button>
+                <button class="btn btn-primary btn-lg">Large</button>
+                <button class="btn btn-primary btn-xl">Extra Large</button>
+            </div>
+            <div class="button-row">
+                <span class="demo-label">With Icons:</span>
+                <button class="btn btn-primary">
+                    <span class="btn-icon-left">🛒</span>
+                    Add to Cart
+                </button>
+                <button class="btn btn-primary">
+                    Save Changes
+                    <span class="btn-icon-right">💾</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Secondary Button Variants -->
+        <section class="showcase-section">
+            <h2 class="heading-section">Secondary Button Variants</h2>
+            <div class="button-row">
+                <span class="demo-label">Standard:</span>
+                <button class="btn btn-secondary">Secondary Button</button>
+                <button class="btn btn-secondary" disabled>Disabled</button>
+            </div>
+            <div class="button-row">
+                <span class="demo-label">Outline:</span>
+                <button class="btn btn-outline btn-primary">Outline Primary</button>
+                <button class="btn btn-outline btn-secondary">Outline Secondary</button>
+            </div>
+        </section>
+
+        <!-- Text and Ghost Buttons -->
+        <section class="showcase-section">
+            <h2 class="heading-section">Text & Ghost Button Variants</h2>
+            <div class="button-row">
+                <span class="demo-label">Text Buttons:</span>
+                <button class="btn btn-text">Learn More</button>
+                <button class="btn btn-text" disabled>Disabled Text</button>
+            </div>
+            <div class="button-row">
+                <span class="demo-label">Ghost Buttons:</span>
+                <button class="btn btn-ghost">Ghost Button</button>
+                <button class="btn btn-ghost" disabled>Disabled Ghost</button>
+            </div>
+        </section>
+
+        <!-- Icon Buttons -->
+        <section class="showcase-section">
+            <h2 class="heading-section">Icon Button Variants</h2>
+            <div class="button-row">
+                <span class="demo-label">Standard Icons:</span>
+                <button class="btn btn-icon" aria-label="Favorite">❤️</button>
+                <button class="btn btn-icon" aria-label="Share">📤</button>
+                <button class="btn btn-icon" aria-label="Edit">✏️</button>
+                <button class="btn btn-icon" aria-label="Delete">🗑️</button>
+            </div>
+            <div class="button-row">
+                <span class="demo-label">Primary Icons:</span>
+                <button class="btn btn-icon btn-primary" aria-label="Add">+</button>
+                <button class="btn btn-icon btn-primary" aria-label="Search">🔍</button>
+            </div>
+            <div class="button-row">
+                <span class="demo-label">Icon Sizes:</span>
+                <button class="btn btn-icon btn-xs" aria-label="Small">⚙️</button>
+                <button class="btn btn-icon btn-sm" aria-label="Small">⚙️</button>
+                <button class="btn btn-icon" aria-label="Default">⚙️</button>
+                <button class="btn btn-icon btn-lg" aria-label="Large">⚙️</button>
+                <button class="btn btn-icon btn-xl" aria-label="Extra Large">⚙️</button>
+            </div>
+        </section>
+
+        <!-- Status Buttons -->
+        <section class="showcase-section">
+            <h2 class="heading-section">Status Button Variants</h2>
+            <div class="button-row">
+                <span class="demo-label">Status Colors:</span>
+                <button class="btn btn-success">Success Action</button>
+                <button class="btn btn-warning">Warning Action</button>
+                <button class="btn btn-danger">Danger Action</button>
+            </div>
+            <div class="button-row">
+                <span class="demo-label">Outline Status:</span>
+                <button class="btn btn-outline btn-success">Success Outline</button>
+                <button class="btn btn-outline btn-warning">Warning Outline</button>
+                <button class="btn btn-outline btn-danger">Danger Outline</button>
+            </div>
+        </section>
+
+        <!-- Button Groups -->
+        <section class="showcase-section">
+            <h2 class="heading-section">Button Groups</h2>
+            <div class="button-row">
+                <span class="demo-label">Button Group:</span>
+                <div class="btn-group">
+                    <button class="btn btn-secondary">Left</button>
+                    <button class="btn btn-secondary">Center</button>
+                    <button class="btn btn-secondary">Right</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Special Landing Page Buttons -->
+        <section class="showcase-section">
+            <h2 class="heading-section">Landing Page Special Buttons</h2>
+            <div class="button-row">
+                <span class="demo-label">Hero Buttons:</span>
+                <a href="#" class="btn-primary-new">Get Started Today</a>
+                <a href="#" class="btn-secondary-new">Browse Products</a>
+            </div>
+        </section>
+
+        <!-- Full Width and Block Buttons -->
+        <section class="showcase-section">
+            <h2 class="heading-section">Layout Variants</h2>
+            <div style="margin-bottom: var(--space-4);">
+                <span class="demo-label">Full Width:</span>
+                <button class="btn btn-primary btn-block">Full Width Button</button>
+            </div>
+            <div>
+                <span class="demo-label">Floating Action Button:</span>
+                <p>Check the bottom right corner for the FAB example</p>
+            </div>
+        </section>
+
+        <!-- Accessibility Features -->
+        <section class="showcase-section">
+            <h2 class="heading-section">Accessibility Features</h2>
+            <div class="button-row">
+                <span class="demo-label">Focus States:</span>
+                <button class="btn btn-primary">Tab to focus me</button>
+                <button class="btn btn-secondary">And me too</button>
+            </div>
+            <div class="button-row">
+                <span class="demo-label">ARIA Disabled:</span>
+                <button class="btn btn-primary" aria-disabled="true">ARIA Disabled</button>
+            </div>
+            <div class="button-row">
+                <span class="demo-label">Screen Reader:</span>
+                <button class="btn btn-icon" aria-label="Close dialog">×</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Floating Action Button Example -->
+    <button class="btn-fab" aria-label="Add new item">+</button>
+
+    <script>
+        // Add some interactivity for demonstration
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.classList.contains('loading')) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                if (this.textContent.includes('Loading')) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Prevent default for demo buttons
+                if (this.tagName === 'BUTTON') {
+                    e.preventDefault();
+                }
+                
+                console.log('Button clicked:', this.textContent || this.getAttribute('aria-label'));
+            });
+        });
+
+        // Demo loading state toggle
+        const loadingBtn = document.querySelector('.btn.loading');
+        if (loadingBtn) {
+            setInterval(() => {
+                loadingBtn.classList.toggle('loading');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

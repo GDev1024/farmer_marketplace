@@ -1,14 +1,15 @@
+</div>
 </main>
-<footer>
+<footer class="footer">
   <div class="footer-content">
     <div class="footer-section">
       <h4>🌾 Grenada Farmers</h4>
       <p>Connecting local farmers with fresh produce lovers across Grenada.</p>
-      <div class="footer-social">
-        <span>Follow us:</span>
-        <a href="#" aria-label="Facebook">📘</a>
-        <a href="#" aria-label="Instagram">📷</a>
-        <a href="#" aria-label="Twitter">🐦</a>
+      <div class="flex items-center gap-4 mt-4">
+        <span class="text-sm text-muted">Follow us:</span>
+        <a href="#" aria-label="Facebook" class="text-lg hover:text-primary transition-colors">📘</a>
+        <a href="#" aria-label="Instagram" class="text-lg hover:text-primary transition-colors">📷</a>
+        <a href="#" aria-label="Twitter" class="text-lg hover:text-primary transition-colors">🐦</a>
       </div>
     </div>
     
@@ -35,14 +36,14 @@
     <div class="footer-section">
       <h4>Support Local</h4>
       <p>🇬🇩 Proudly supporting Grenadian agriculture and sustainable farming practices.</p>
-      <div class="footer-stats">
-        <div class="stat">
-          <strong>500+</strong>
-          <span>Products Listed</span>
+      <div class="flex gap-8 mt-4">
+        <div class="text-center">
+          <div class="text-xl font-bold text-primary">500+</div>
+          <div class="text-xs text-muted">Products Listed</div>
         </div>
-        <div class="stat">
-          <strong>100+</strong>
-          <span>Local Farmers</span>
+        <div class="text-center">
+          <div class="text-xl font-bold text-primary">100+</div>
+          <div class="text-xs text-muted">Local Farmers</div>
         </div>
       </div>
     </div>
@@ -63,21 +64,55 @@
 <!-- Mobile menu toggle script -->
 <script>
 function toggleMobileMenu() {
-  const nav = document.getElementById('nav');
+  const nav = document.getElementById('mobileNav');
   const body = document.body;
+  const menuBtn = document.querySelector('.mobile-menu-btn');
   
   nav.classList.toggle('nav-open');
   body.classList.toggle('nav-open');
+  
+  // Update aria-expanded attribute
+  const isOpen = nav.classList.contains('nav-open');
+  menuBtn.setAttribute('aria-expanded', isOpen);
+  menuBtn.classList.toggle('active', isOpen);
 }
+
+// Add click event to mobile menu button
+document.addEventListener('DOMContentLoaded', function() {
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  if (menuBtn) {
+    menuBtn.addEventListener('click', toggleMobileMenu);
+  }
+});
 
 // Close mobile menu when clicking outside
 document.addEventListener('click', function(e) {
-  const nav = document.getElementById('nav');
+  const nav = document.getElementById('mobileNav');
   const menuBtn = document.querySelector('.mobile-menu-btn');
   
-  if (!nav.contains(e.target) && !menuBtn.contains(e.target)) {
+  if (nav && menuBtn && !nav.contains(e.target) && !menuBtn.contains(e.target)) {
     nav.classList.remove('nav-open');
     document.body.classList.remove('nav-open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.classList.remove('active');
+  }
+});
+
+// User dropdown toggle
+function toggleUserMenu() {
+  const userMenu = document.getElementById('userMenu');
+  if (userMenu) {
+    userMenu.classList.toggle('hidden');
+  }
+}
+
+// Close user menu when clicking outside
+document.addEventListener('click', function(e) {
+  const userMenu = document.getElementById('userMenu');
+  const userBtn = document.querySelector('.user-btn');
+  
+  if (userMenu && userBtn && !userMenu.contains(e.target) && !userBtn.contains(e.target)) {
+    userMenu.classList.add('hidden');
   }
 });
 

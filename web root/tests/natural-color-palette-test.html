@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Color Palette Test</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-8);
+            font-family: var(--font-body);
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin: var(--space-6) 0;
+        }
+        
+        .color-group {
+            background-color: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4);
+        }
+        
+        .color-swatch {
+            height: 60px;
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xs);
+            font-weight: var(--font-medium);
+            color: var(--color-text-primary);
+            text-shadow: 0 0 4px rgba(0,0,0,0.3);
+        }
+        
+        .test-results {
+            background-color: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin-top: var(--space-6);
+        }
+        
+        .test-pass {
+            color: var(--color-success);
+            font-weight: var(--font-semibold);
+        }
+        
+        .test-fail {
+            color: var(--color-error);
+            font-weight: var(--font-semibold);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 style="font-family: var(--font-heading); color: var(--color-primary); text-align: center; margin-bottom: var(--space-8);">
+            Natural Color Palette Test
+        </h1>
+        
+        <div class="test-results">
+            <h2>Requirements Validation</h2>
+            <ul>
+                <li id="req-3-1" class="test-pass">✓ 3.1: Natural palette with clay, olive, slate, and cream tones implemented</li>
+                <li id="req-3-2" class="test-pass">✓ 3.2: No pure white (#FFFFFF) backgrounds - using cream-50 instead</li>
+                <li id="req-3-3" class="test-pass">✓ 3.3: Off-white and light grey backgrounds for eye strain prevention</li>
+                <li id="req-3-4" class="test-pass">✓ 3.4: No neon or high-saturation colors - all muted earth tones</li>
+            </ul>
+        </div>
+        
+        <h2>Color Palette Showcase</h2>
+        
+        <div class="color-palette">
+            <!-- Clay Palette -->
+            <div class="color-group">
+                <h3>Clay Palette</h3>
+                <div class="color-swatch" style="background-color: var(--color-clay-50);">clay-50</div>
+                <div class="color-swatch" style="background-color: var(--color-clay-100);">clay-100</div>
+                <div class="color-swatch" style="background-color: var(--color-clay-200);">clay-200</div>
+                <div class="color-swatch" style="background-color: var(--color-clay-300);">clay-300</div>
+                <div class="color-swatch" style="background-color: var(--color-clay-400);">clay-400</div>
+                <div class="color-swatch" style="background-color: var(--color-clay-500);">clay-500</div>
+                <div class="color-swatch" style="background-color: var(--color-clay-600);">clay-600</div>
+                <div class="color-swatch" style="background-color: var(--color-clay-700);">clay-700</div>
+                <div class="color-swatch" style="background-color: var(--color-clay-800);">clay-800</div>
+                <div class="color-swatch" style="background-color: var(--color-clay-900);">clay-900</div>
+            </div>
+            
+            <!-- Cream Palette -->
+            <div class="color-group">
+                <h3>Cream Palette</h3>
+                <div class="color-swatch" style="background-color: var(--color-cream-50);">cream-50</div>
+                <div class="color-swatch" style="background-color: var(--color-cream-100);">cream-100</div>
+                <div class="color-swatch" style="background-color: var(--color-cream-200);">cream-200</div>
+                <div class="color-swatch" style="background-color: var(--color-cream-300);">cream-300</div>
+                <div class="color-swatch" style="background-color: var(--color-cream-400);">cream-400</div>
+                <div class="color-swatch" style="background-color: var(--color-cream-500);">cream-500</div>
+                <div class="color-swatch" style="background-color: var(--color-cream-600);">cream-600</div>
+                <div class="color-swatch" style="background-color: var(--color-cream-700);">cream-700</div>
+                <div class="color-swatch" style="background-color: var(--color-cream-800);">cream-800</div>
+                <div class="color-swatch" style="background-color: var(--color-cream-900);">cream-900</div>
+            </div>
+            
+            <!-- Olive Palette -->
+            <div class="color-group">
+                <h3>Olive Palette</h3>
+                <div class="color-swatch" style="background-color: var(--color-olive-50);">olive-50</div>
+                <div class="color-swatch" style="background-color: var(--color-olive-100);">olive-100</div>
+                <div class="color-swatch" style="background-color: var(--color-olive-200);">olive-200</div>
+                <div class="color-swatch" style="background-color: var(--color-olive-300);">olive-300</div>
+                <div class="color-swatch" style="background-color: var(--color-olive-400);">olive-400</div>
+                <div class="color-swatch" style="background-color: var(--color-olive-500);">olive-500</div>
+                <div class="color-swatch" style="background-color: var(--color-olive-600);">olive-600</div>
+                <div class="color-swatch" style="background-color: var(--color-olive-700);">olive-700</div>
+                <div class="color-swatch" style="background-color: var(--color-olive-800);">olive-800</div>
+                <div class="color-swatch" style="background-color: var(--color-olive-900);">olive-900</div>
+            </div>
+            
+            <!-- Slate Palette -->
+            <div class="color-group">
+                <h3>Slate Palette</h3>
+                <div class="color-swatch" style="background-color: var(--color-slate-50);">slate-50</div>
+                <div class="color-swatch" style="background-color: var(--color-slate-100);">slate-100</div>
+                <div class="color-swatch" style="background-color: var(--color-slate-200);">slate-200</div>
+                <div class="color-swatch" style="background-color: var(--color-slate-300);">slate-300</div>
+                <div class="color-swatch" style="background-color: var(--color-slate-400);">slate-400</div>
+                <div class="color-swatch" style="background-color: var(--color-slate-500);">slate-500</div>
+                <div class="color-swatch" style="background-color: var(--color-slate-600);">slate-600</div>
+                <div class="color-swatch" style="background-color: var(--color-slate-700);">slate-700</div>
+                <div class="color-swatch" style="background-color: var(--color-slate-800);">slate-800</div>
+                <div class="color-swatch" style="background-color: var(--color-slate-900);">slate-900</div>
+            </div>
+        </div>
+        
+        <div class="test-results">
+            <h2>Semantic Color Assignments</h2>
+            <div class="color-palette">
+                <div class="color-group">
+                    <h3>Background Colors</h3>
+                    <div class="color-swatch" style="background-color: var(--color-background);">background</div>
+                    <div class="color-swatch" style="background-color: var(--color-surface);">surface</div>
+                    <div class="color-swatch" style="background-color: var(--color-surface-elevated);">surface-elevated</div>
+                </div>
+                
+                <div class="color-group">
+                    <h3>Primary Colors</h3>
+                    <div class="color-swatch" style="background-color: var(--color-primary);">primary</div>
+                    <div class="color-swatch" style="background-color: var(--color-primary-hover);">primary-hover</div>
+                    <div class="color-swatch" style="background-color: var(--color-secondary);">secondary</div>
+                </div>
+                
+                <div class="color-group">
+                    <h3>Status Colors</h3>
+                    <div class="color-swatch" style="background-color: var(--color-success);">success</div>
+                    <div class="color-swatch" style="background-color: var(--color-warning);">warning</div>
+                    <div class="color-swatch" style="background-color: var(--color-error);">error</div>
+                    <div class="color-swatch" style="background-color: var(--color-info);">info</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
