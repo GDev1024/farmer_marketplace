@@ -93,8 +93,8 @@ if($msg['message']): ?>
 <?php else: ?>
     <div class="product-grid">
         <?php foreach($products as $product): ?>
-            <div class="product-card">
-                <div class="product-image">
+            <article class="product-card">
+                <div class="product-card-image">
                     <?php if (!empty($product['thumbnail_path']) && file_exists($product['thumbnail_path'])): ?>
                         <img src="<?= htmlspecialchars($product['thumbnail_path']) ?>" 
                              alt="<?= htmlspecialchars($product['product_name']) ?>"
@@ -115,54 +115,52 @@ if($msg['message']): ?>
                     <?php endif; ?>
                 </div>
                 
-                <div class="product-info">
-                    <div class="product-header">
+                <div class="product-card-content">
+                    <header class="product-card-header">
                         <div>
-                            <div class="product-name"><?= htmlspecialchars($product['product_name']) ?></div>
-                            <div class="product-category"><?= ucfirst($product['category']) ?></div>
+                            <h3 class="product-card-title"><?= htmlspecialchars($product['product_name']) ?></h3>
+                            <span class="product-card-category"><?= ucfirst($product['category']) ?></span>
                         </div>
-                        <div class="product-price">EC$<?= number_format($product['price'], 2) ?></div>
-                    </div>
+                        <div class="product-card-price">EC$<?= number_format($product['price'], 2) ?></div>
+                    </header>
                     
-                    <div class="product-seller">
-                        <span>👤 <?= htmlspecialchars($product['seller_name']) ?></span>
+                    <p class="product-card-farmer">
+                        by <?= htmlspecialchars($product['seller_name']) ?>
                         <?php if($product['farmer_verified']): ?>
                             <span class="verified-badge">✅ Verified</span>
                         <?php endif; ?>
-                    </div>
+                    </p>
                     
                     <p style="color: var(--text-secondary); margin-bottom: var(--space-md); line-height: 1.4;">
                         <?= htmlspecialchars(substr($product['description'], 0, 100)) ?><?= strlen($product['description']) > 100 ? '...' : '' ?>
                     </p>
                     
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md); padding: var(--space-sm); background: var(--bg-tertiary); border-radius: var(--radius-md);">
-                        <span style="font-size: 14px; color: var(--text-secondary);">
-                            <strong style="color: var(--success);"><?= intval($product['quantity']) ?></strong> <?= htmlspecialchars($product['unit']) ?> available
-                        </span>
-                        <span style="font-size: 12px; color: var(--text-muted);">
-                            per <?= htmlspecialchars($product['unit']) ?>
-                        </span>
-                    </div>
-                    
-                    <?php if($_SESSION['isLoggedIn']): ?>
-                        <form method="POST" action="actions.php" class="product-actions">
-                            <input type="hidden" name="listingId" value="<?= $product['id'] ?>">
-                            <input type="hidden" name="addToCart" value="1">
-                            <input type="number" name="cartQuantity" value="1" min="1" max="<?= intval($product['quantity']) ?>" 
-                                   style="width: 80px; padding: var(--space-sm); border: 1px solid var(--border-light); border-radius: var(--radius-md); text-align: center; font-size: 14px;">
-                            <button type="submit" class="btn btn-primary" style="flex: 1;">
-                                🛒 Add to Cart
-                            </button>
-                        </form>
-                    <?php else: ?>
-                        <div class="product-actions">
-                            <a href="index.php?page=login" class="btn btn-primary" style="width: 100%;">
-                                🔐 Login to Purchase
-                            </a>
+                    <footer class="product-card-footer">
+                        <div class="product-card-stock">
+                            <strong style="color: var(--success);"><?= intval($product['quantity']) ?></strong> 
+                            <span class="product-card-unit"><?= htmlspecialchars($product['unit']) ?> available</span>
                         </div>
-                    <?php endif; ?>
+                        
+                        <?php if($_SESSION['isLoggedIn']): ?>
+                            <form method="POST" action="actions.php" class="product-actions">
+                                <input type="hidden" name="listingId" value="<?= $product['id'] ?>">
+                                <input type="hidden" name="addToCart" value="1">
+                                <input type="number" name="cartQuantity" value="1" min="1" max="<?= intval($product['quantity']) ?>" 
+                                       style="width: 80px; padding: var(--space-sm); border: 1px solid var(--border-light); border-radius: var(--radius-md); text-align: center; font-size: 14px;">
+                                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                                    🛒 Add to Cart
+                                </button>
+                            </form>
+                        <?php else: ?>
+                            <div class="product-actions">
+                                <a href="index.php?page=login" class="btn btn-primary" style="width: 100%;">
+                                    🔐 Login to Purchase
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                    </footer>
                 </div>
-            </div>
+            </article>
         <?php endforeach; ?>
     </div>
     

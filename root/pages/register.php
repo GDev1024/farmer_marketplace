@@ -2,24 +2,24 @@
   <h2>Register</h2>
   <form method="POST" action="actions.php">
     <div class="form-group">
-      <label>Full Name</label>
-      <input type="text" name="name" required>
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required>
     </div>
     <div class="form-group">
-      <label>Email</label>
-      <input type="email" name="email" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
     </div>
     <div class="form-group">
-      <label>Password</label>
-      <input type="password" name="password" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
     </div>
     <div class="form-group">
-      <label>Confirm Password</label>
-      <input type="password" name="confirm" required>
+      <label for="confirm">Confirm Password</label>
+      <input type="password" id="confirm" name="confirm" required>
     </div>
     <div class="form-group">
-      <label>Farmer ID (optional, for verification)</label>
-      <input type="text" name="farmerID" placeholder="Enter your Farmer ID">
+      <label for="farmerID">Farmer ID (optional, for verification)</label>
+      <input type="text" id="farmerID" name="farmerID" placeholder="Enter your Farmer ID">
     </div>
     <button type="submit" name="register" class="btn btn-primary" style="width:100%;">Register</button>
   </form>

@@ -58,7 +58,7 @@ if($msg['message']): ?>
                 <a href="index.php?page=cart" class="btn btn-secondary">
                     🛒 Review Cart
                 </a>
-                <a href="index.php?page=browse" class="btn btn-outline">
+                <a href="index.php?page=browse" class="btn btn-secondary">
                     🔍 Continue Shopping
                 </a>
             </div>
@@ -125,19 +125,6 @@ if($msg['message']): ?>
 
 .btn-secondary:hover {
     background: var(--border-medium);
-    transform: translateY(-1px);
-}
-
-.btn-outline {
-    background: transparent;
-    color: var(--text-secondary);
-    border: 1px solid var(--border-medium);
-}
-
-.btn-outline:hover {
-    background: var(--bg-primary);
-    border-color: var(--primary);
-    color: var(--primary);
     transform: translateY(-1px);
 }
 

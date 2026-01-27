@@ -11,8 +11,8 @@
   <div class="card-body">
     <form method="POST" action="actions.php" enctype="multipart/form-data">
       <div class="form-group">
-        <label>Product Name</label>
-        <input type="text" name="productName" placeholder="e.g., Fresh Organic Tomatoes" required>
+        <label for="productName">Product Name</label>
+        <input type="text" id="productName" name="productName" placeholder="e.g., Fresh Organic Tomatoes" required>
       </div>
       
       <div class="form-group">
@@ -28,8 +28,8 @@
       
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
         <div class="form-group">
-          <label>Price (EC$)</label>
-          <input type="number" name="price" step="0.01" min="0" placeholder="0.00" required>
+          <label for="price">Price (EC$)</label>
+          <input type="number" id="price" name="price" step="0.01" min="0" placeholder="0.00" required>
         </div>
         <div class="form-group">
           <label>Unit Type</label>
@@ -44,8 +44,8 @@
       </div>
       
       <div class="form-group">
-        <label>Quantity Available</label>
-        <input type="number" name="quantity" min="0" placeholder="How many units do you have?" required>
+        <label for="quantity">Quantity Available</label>
+        <input type="number" id="quantity" name="quantity" min="0" placeholder="How many units do you have?" required>
       </div>
       
       <div class="form-group">
