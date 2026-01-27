@@ -1,0 +1,43 @@
+# Environment variables
+.env
+
+# Uploads directory
+root/uploads/
+uploads/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+error_log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Composer
+vendor/
+composer.lock
+
+# Node modules (if using any build tools)
+node_modules/
+npm-debug.log*
+
+# AWS credentials (backup)
+.aws/
+
+# Database backups
+*.sql.backup
+*.sql.bak
+
+# Cache files
+cache/
+*.cache

@@ -1,0 +1,50 @@
+:root {
+    /* Colors */
+    --primary-green: #2d5016;
+    --primary-green-hover: #3d6820;
+    --primary-green-light: #4a7a2a;
+    --secondary-cream: #fefdfb;
+    --white: #ffffff;
+    --gray-50: #f9f9f9;
+    --gray-100: #f5f3f0;
+    --gray-200: #e8e8e8;
+    --gray-300: #d4d4d4;
+    --gray-600: #666666;
+    --gray-900: #333333;
+    --error: #dc3545;
+    --success: #28a745;
+    --warning: #ffc107;
+    
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-xxl: 4rem;
+    
+    /* Typography */
+    --font-family-primary: 'Playfair Display', Georgia, serif;
+    --font-family-secondary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 2rem;
+    --font-size-4xl: 2.5rem;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.12);
+    
+    /* Transitions */
+    --transition: all 0.3s ease;
+}
