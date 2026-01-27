@@ -6,8 +6,8 @@ require_once 'includes/functions.php';
 requireLogin();
 $user = getCurrentUser();
 
-if ($user['user_type'] !== 'consumer') {
-    redirect('index.php');
+if ($user['user_type'] !== 'customer') {
+    redirect('dashboard.php');
 }
 
 $db = Config::getDB();
@@ -29,71 +29,100 @@ $orders = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Orders - <?= Config::SITE_NAME ?></title>
+    <title>My Orders - <?= Config::getSiteName() ?></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/marketplace.css">
 </head>
-<body>
+<body class="app-page">
     <header>
         <nav>
-            <div class="logo">🌾 <?= Config::SITE_NAME ?></div>
+            <a href="dashboard.php" class="logo">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
+            </a>
             <div class="nav-links">
-                <a href="index.php">Browse</a>
+                <a href="dashboard.php">Browse</a>
                 <a href="cart.php">Cart</a>
-                <a href="orders.php">Orders</a>
+                <a href="orders.php">My Orders</a>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
                 <a href="api/auth.php?action=logout" class="btn btn-secondary btn-sm">Logout</a>
             </div>
         </nav>
     </header>
 
-    <div class="container" style="margin-top: 3rem;">
-        <h1 style="color: var(--primary-green); margin-bottom: 2rem;">My Orders</h1>
-        
-        <?php if (empty($orders)): ?>
-            <div class="card" style="text-align: center; padding: 3rem;">
-                <h2 style="color: var(--gray-600); margin-bottom: 1rem;">No orders yet</h2>
-                <p style="color: var(--gray-600); margin-bottom: 2rem;">Start shopping for fresh local produce</p>
-                <a href="index.php" class="btn btn-primary">Browse Products</a>
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>My Orders</h1>
+                <p>Track your purchases and order history</p>
             </div>
-        <?php else: ?>
-            <div class="grid">
-                <?php foreach ($orders as $order): ?>
-                    <div class="card">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
-                            <div>
-                                <h3 style="color: var(--primary-green);">Order #<?= str_pad($order['id'], 6, '0', STR_PAD_LEFT) ?></h3>
-                                <p style="color: var(--gray-600); font-size: var(--font-size-sm);">
-                                    <?= date('F j, Y', strtotime($order['created_at'])) ?>
-                                </p>
+            
+            <?php if (empty($orders)): ?>
+                <div class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <h3>No orders yet</h3>
+                    <p>Start shopping for fresh local produce</p>
+                    <a href="dashboard.php" class="btn btn-primary">Browse Products</a>
+                </div>
+            <?php else: ?>
+                <div class="orders-grid">
+                    <?php foreach ($orders as $order): ?>
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div class="order-info">
+                                    <h3>Order #<?= str_pad($order['id'], 6, '0', STR_PAD_LEFT) ?></h3>
+                                    <p class="order-date"><?= date('F j, Y', strtotime($order['created_at'])) ?></p>
+                                </div>
+                                <span class="order-status <?= strtolower($order['status']) ?>"><?= ucfirst($order['status']) ?></span>
                             </div>
-                            <span class="badge badge-success"><?= ucfirst($order['status']) ?></span>
+                            
+                            <div class="order-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Items</span>
+                                    <span class="metric-value"><?= $order['item_count'] ?></span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Total</span>
+                                    <span class="metric-value">$<?= number_format($order['total_amount'], 2) ?></span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Payment</span>
+                                    <span class="metric-value"><?= ucfirst($order['payment_method']) ?></span>
+                                </div>
+                            </div>
+                            
+                            <div class="order-actions">
+                                <a href="order-success.php?order_id=<?= $order['id'] ?>" class="btn btn-outline btn-sm">
+                                    View Details
+                                </a>
+                            </div>
                         </div>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: var(--gray-50); border-radius: var(--radius-sm);">
-                            <div>
-                                <div style="color: var(--gray-600); font-size: var(--font-size-sm);">Items</div>
-                                <strong><?= $order['item_count'] ?></strong>
-                            </div>
-                            <div>
-                                <div style="color: var(--gray-600); font-size: var(--font-size-sm);">Total</div>
-                                <strong style="color: var(--primary-green);">$<?= number_format($order['total_amount'], 2) ?></strong>
-                            </div>
-                            <div>
-                                <div style="color: var(--gray-600); font-size: var(--font-size-sm);">Payment</div>
-                                <strong><?= ucfirst($order['payment_method']) ?></strong>
-                            </div>
-                        </div>
-                        
-                        <a href="order-success.php?order_id=<?= $order['id'] ?>" class="btn btn-secondary btn-sm btn-block">
-                            View Details
-                        </a>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
             </div>
-        <?php endif; ?>
-    </div>
+            <p class="footer-tagline">Supporting local agriculture in Grenada</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

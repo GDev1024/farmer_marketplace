@@ -39,6 +39,23 @@
     font-size: var(--font-size-sm);
 }
 
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary-green);
+    border: 2px solid var(--primary-green);
+}
+
+.btn-outline:hover {
+    background: var(--primary-green);
+    color: var(--white);
+}
+
 .btn-block {
     width: 100%;
 }

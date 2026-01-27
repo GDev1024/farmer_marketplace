@@ -1,3 +1,4 @@
+<?php
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
@@ -15,7 +16,7 @@ $stmt->execute([$productId]);
 $product = $stmt->fetch();
 
 if (!$product) {
-    redirect('index.php');
+    redirect('dashboard.php');
 }
 
 // Get reviews
@@ -39,25 +40,33 @@ if (!empty($reviews)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($product['name']) ?> - <?= Config::SITE_NAME ?></title>
+    <title><?= htmlspecialchars($product['name']) ?> - <?= Config::getSiteName() ?></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/marketplace.css">
 </head>
-<body>
+<body class="app-page">
     <header>
         <nav>
-            <div class="logo">🌾 <?= Config::SITE_NAME ?></div>
+            <a href="dashboard.php" class="logo">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
+            </a>
             <div class="nav-links">
-                <a href="index.php">Browse</a>
+                <a href="dashboard.php">Browse</a>
                 <?php if ($user): ?>
                     <?php if ($user['user_type'] === 'farmer'): ?>
                         <a href="dashboard.php">My Products</a>
                     <?php else: ?>
                         <a href="cart.php">Cart</a>
+                        <a href="orders.php">My Orders</a>
                     <?php endif; ?>
+                    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
                     <a href="api/auth.php?action=logout" class="btn btn-secondary btn-sm">Logout</a>
                 <?php else: ?>
                     <a href="login.php" class="btn btn-primary btn-sm">Login</a>
@@ -66,91 +75,109 @@ if (!empty($reviews)) {
         </nav>
     </header>
 
-    <div class="container" style="margin-top: 3rem;">
-        <div class="grid grid-2">
-            <div>
-                <img src="<?= $product['image_url'] ?: 'https://via.placeholder.com/600x450?text=No+Image' ?>" 
-                     alt="<?= htmlspecialchars($product['name']) ?>" 
-                     style="width: 100%; border-radius: var(--radius-md);">
-            </div>
-            
-            <div>
-                <div class="badge badge-primary" style="margin-bottom: 1rem;">
-                    <?= ucfirst($product['category']) ?>
+    <main class="main-content">
+        <div class="container">
+            <div class="product-detail-layout">
+                <div class="product-image-section">
+                    <img src="<?= $product['image_url'] ?: 'https://via.placeholder.com/600x450/f5f3f0/666?text=No+Image' ?>" 
+                         alt="<?= htmlspecialchars($product['name']) ?>" 
+                         class="product-detail-image">
                 </div>
                 
-                <h1 style="font-size: var(--font-size-3xl); color: var(--primary-green); margin-bottom: 1rem;">
-                    <?= htmlspecialchars($product['name']) ?>
-                </h1>
-                
-                <div style="margin-bottom: 1rem;">
-                    <span style="font-size: var(--font-size-sm); color: var(--gray-600);">
-                        Sold by <?= htmlspecialchars($product['farmer_name']) ?>
+                <div class="product-info-section">
+                    <div class="product-category"><?= ucfirst($product['category']) ?></div>
+                    
+                    <h1 class="product-detail-title"><?= htmlspecialchars($product['name']) ?></h1>
+                    
+                    <div class="farmer-info">
+                        <span class="farmer-label">Sold by <?= htmlspecialchars($product['farmer_name']) ?></span>
                         <?php if ($product['verified']): ?>
-                            <span class="badge badge-success" style="font-size: 0.7rem;">✓ Verified</span>
+                            <span class="verified-badge">✓ Verified Farmer</span>
                         <?php endif; ?>
-                    </span>
-                </div>
-                
-                <?php if (!empty($reviews)): ?>
-                    <div style="margin-bottom: 1rem;">
-                        <span style="color: #ffc107;">★</span>
-                        <strong><?= number_format($avgRating, 1) ?></strong>
-                        <span style="color: var(--gray-600);">(<?= count($reviews) ?> reviews)</span>
                     </div>
-                <?php endif; ?>
-                
-                <div style="font-size: var(--font-size-3xl); font-weight: 700; color: var(--primary-green); margin: 1.5rem 0;">
-                    $<?= number_format($product['price'], 2) ?> / <?= $product['unit'] ?>
-                </div>
-                
-                <div style="margin-bottom: 1.5rem;">
-                    <?php if ($product['quantity'] > 0): ?>
-                        <span class="badge badge-success">In Stock: <?= $product['quantity'] ?> <?= $product['unit'] ?> available</span>
-                    <?php else: ?>
-                        <span class="badge badge-warning">Out of Stock</span>
+                    
+                    <?php if (!empty($reviews)): ?>
+                        <div class="rating-section">
+                            <span class="rating-stars">★</span>
+                            <strong class="rating-value"><?= number_format($avgRating, 1) ?></strong>
+                            <span class="rating-count">(<?= count($reviews) ?> reviews)</span>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div class="product-price">
+                        $<?= number_format($product['price'], 2) ?> / <?= $product['unit'] ?>
+                    </div>
+                    
+                    <div class="stock-status">
+                        <?php if ($product['quantity'] > 0): ?>
+                            <span class="availability-badge in-stock">In Stock: <?= $product['quantity'] ?> <?= $product['unit'] ?> available</span>
+                        <?php else: ?>
+                            <span class="availability-badge out-of-stock">Out of Stock</span>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="product-description">
+                        <?= nl2br(htmlspecialchars($product['description'])) ?>
+                    </div>
+                    
+                    <?php if ($user && $user['user_type'] === 'customer' && $product['quantity'] > 0): ?>
+                        <form method="POST" action="api/cart.php" class="add-to-cart-form">
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="listing_id" value="<?= $product['id'] ?>">
+                            <div class="quantity-selector">
+                                <label class="quantity-label">Quantity:</label>
+                                <input type="number" name="quantity" value="1" min="1" max="<?= $product['quantity'] ?>" 
+                                       class="quantity-input">
+                                <span class="unit-label"><?= $product['unit'] ?></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
+                        </form>
+                    <?php elseif (!$user): ?>
+                        <div class="login-prompt">
+                            <a href="login.php" class="btn btn-primary btn-lg">Login to Purchase</a>
+                        </div>
                     <?php endif; ?>
                 </div>
-                
-                <p style="color: var(--gray-600); line-height: 1.8; margin-bottom: 2rem;">
-                    <?= nl2br(htmlspecialchars($product['description'])) ?>
-                </p>
-                
-                <?php if ($user && $user['user_type'] === 'consumer' && $product['quantity'] > 0): ?>
-                    <form method="POST" action="api/cart.php" style="display: flex; gap: 1rem; align-items: center;">
-                        <input type="hidden" name="action" value="add">
-                        <input type="hidden" name="listing_id" value="<?= $product['id'] ?>">
-                        <input type="number" name="quantity" value="1" min="1" max="<?= $product['quantity'] ?>" 
-                               class="form-input" style="width: 100px;">
-                        <button type="submit" class="btn btn-primary">Add to Cart</button>
-                    </form>
-                <?php elseif (!$user): ?>
-                    <a href="login.php" class="btn btn-primary">Login to Purchase</a>
-                <?php endif; ?>
             </div>
-        </div>
-        
-        <?php if (!empty($reviews)): ?>
-            <div style="margin-top: 4rem;">
-                <h2 style="color: var(--primary-green); margin-bottom: 2rem;">Customer Reviews</h2>
-                <div class="grid">
-                    <?php foreach ($reviews as $review): ?>
-                        <div class="card">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                <strong><?= htmlspecialchars($review['username']) ?></strong>
-                                <span style="color: #ffc107;">
-                                    <?= str_repeat('★', $review['rating']) . str_repeat('☆', 5 - $review['rating']) ?>
-                                </span>
+            
+            <?php if (!empty($reviews)): ?>
+                <section class="reviews-section">
+                    <h2 class="section-title">Customer Reviews</h2>
+                    <div class="reviews-grid">
+                        <?php foreach ($reviews as $review): ?>
+                            <div class="review-card">
+                                <div class="review-header">
+                                    <strong class="reviewer-name"><?= htmlspecialchars($review['username']) ?></strong>
+                                    <span class="review-rating">
+                                        <?= str_repeat('★', $review['rating']) . str_repeat('☆', 5 - $review['rating']) ?>
+                                    </span>
+                                </div>
+                                <p class="review-comment"><?= htmlspecialchars($review['comment']) ?></p>
+                                <small class="review-date">
+                                    <?= date('M j, Y', strtotime($review['created_at'])) ?>
+                                </small>
                             </div>
-                            <p style="color: var(--gray-600);"><?= htmlspecialchars($review['comment']) ?></p>
-                            <small style="color: var(--gray-600);">
-                                <?= date('M j, Y', strtotime($review['created_at'])) ?>
-                            </small>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+            <?php endif; ?>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
             </div>
-        <?php endif; ?>
-    </div>
+            <p class="footer-tagline">Supporting local agriculture in Grenada</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

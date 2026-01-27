@@ -6,8 +6,8 @@ require_once 'includes/functions.php';
 requireLogin();
 $user = getCurrentUser();
 
-if ($user['user_type'] !== 'consumer') {
-    redirect('index.php');
+if ($user['user_type'] !== 'customer') {
+    redirect('dashboard.php');
 }
 
 $db = Config::getDB();
@@ -33,102 +33,131 @@ foreach ($cartItems as $item) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - <?= Config::SITE_NAME ?></title>
+    <title>Shopping Cart - <?= Config::getSiteName() ?></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/marketplace.css">
 </head>
-<body>
+<body class="app-page">
     <header>
         <nav>
-            <div class="logo">🌾 <?= Config::SITE_NAME ?></div>
+            <a href="dashboard.php" class="logo">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
+            </a>
             <div class="nav-links">
-                <a href="index.php">Browse</a>
+                <a href="dashboard.php">Browse</a>
                 <a href="cart.php">Cart</a>
-                <a href="orders.php">Orders</a>
+                <a href="orders.php">My Orders</a>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
                 <a href="api/auth.php?action=logout" class="btn btn-secondary btn-sm">Logout</a>
             </div>
         </nav>
     </header>
 
-    <div class="container" style="margin-top: 3rem;">
-        <h1 style="color: var(--primary-green); margin-bottom: 2rem;">Shopping Cart</h1>
-        
-        <?php if (empty($cartItems)): ?>
-            <div class="card" style="text-align: center; padding: 3rem;">
-                <h2 style="color: var(--gray-600); margin-bottom: 1rem;">Your cart is empty</h2>
-                <p style="color: var(--gray-600); margin-bottom: 2rem;">Browse our marketplace to find fresh local produce</p>
-                <a href="index.php" class="btn btn-primary">Start Shopping</a>
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Shopping Cart</h1>
+                <p>Review your items before checkout</p>
             </div>
-        <?php else: ?>
-            <div class="grid grid-2" style="align-items: start;">
-                <div>
-                    <?php foreach ($cartItems as $item): ?>
-                        <div class="card" style="margin-bottom: 1rem;">
-                            <div style="display: flex; gap: 1.5rem;">
-                                <img src="<?= $item['image_url'] ?: 'https://via.placeholder.com/100?text=No+Image' ?>" 
-                                     alt="<?= htmlspecialchars($item['name']) ?>"
-                                     style="width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-sm);">
+            
+            <?php if (empty($cartItems)): ?>
+                <div class="empty-state">
+                    <div class="empty-icon">🛒</div>
+                    <h3>Your cart is empty</h3>
+                    <p>Browse our marketplace to find fresh local produce</p>
+                    <a href="dashboard.php" class="btn btn-primary">Start Shopping</a>
+                </div>
+            <?php else: ?>
+                <div class="cart-layout">
+                    <div class="cart-items">
+                        <?php foreach ($cartItems as $item): ?>
+                            <div class="cart-item-card">
+                                <div class="item-image">
+                                    <img src="<?= $item['image_url'] ?: 'https://via.placeholder.com/120x120/f5f3f0/666?text=No+Image' ?>" 
+                                         alt="<?= htmlspecialchars($item['name']) ?>">
+                                </div>
                                 
-                                <div style="flex: 1;">
-                                    <h3 style="color: var(--primary-green); margin-bottom: 0.5rem;">
-                                        <?= htmlspecialchars($item['name']) ?>
-                                    </h3>
-                                    <p style="color: var(--gray-600); font-size: var(--font-size-sm); margin-bottom: 0.5rem;">
-                                        From <?= htmlspecialchars($item['farmer_name']) ?>
-                                    </p>
-                                    <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1rem;">
-                                        <form method="POST" action="api/cart.php" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="item-details">
+                                    <h3 class="item-name"><?= htmlspecialchars($item['name']) ?></h3>
+                                    <p class="item-farmer">From <?= htmlspecialchars($item['farmer_name']) ?></p>
+                                    
+                                    <div class="item-controls">
+                                        <form method="POST" action="api/cart.php" class="quantity-form">
                                             <input type="hidden" name="action" value="update">
                                             <input type="hidden" name="listing_id" value="<?= $item['listing_id'] ?>">
-                                            <label style="font-size: var(--font-size-sm);">Qty:</label>
+                                            <label class="quantity-label">Quantity:</label>
                                             <input type="number" name="quantity" value="<?= $item['quantity'] ?>" 
                                                    min="1" max="<?= $item['stock'] ?>" 
-                                                   class="form-input" style="width: 80px;"
+                                                   class="quantity-input"
                                                    onchange="this.form.submit()">
+                                            <span class="unit-label"><?= $item['unit'] ?></span>
                                         </form>
-                                        <strong style="color: var(--primary-green);">
+                                        
+                                        <div class="item-price">
                                             $<?= number_format($item['price'] * $item['quantity'], 2) ?>
-                                        </strong>
+                                        </div>
                                     </div>
                                 </div>
                                 
-                                <form method="POST" action="api/cart.php">
-                                    <input type="hidden" name="action" value="remove">
-                                    <input type="hidden" name="listing_id" value="<?= $item['listing_id'] ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                                </form>
+                                <div class="item-actions">
+                                    <form method="POST" action="api/cart.php">
+                                        <input type="hidden" name="action" value="remove">
+                                        <input type="hidden" name="listing_id" value="<?= $item['listing_id'] ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                    </form>
+                                </div>
                             </div>
+                        <?php endforeach; ?>
+                    </div>
+                    
+                    <div class="cart-summary">
+                        <div class="summary-card">
+                            <h2>Order Summary</h2>
+                            
+                            <div class="summary-line">
+                                <span>Subtotal:</span>
+                                <strong>$<?= number_format($total, 2) ?></strong>
+                            </div>
+                            
+                            <div class="summary-line">
+                                <span>Shipping:</span>
+                                <strong class="free-shipping">Free</strong>
+                            </div>
+                            
+                            <div class="summary-total">
+                                <span>Total:</span>
+                                <strong>$<?= number_format($total, 2) ?></strong>
+                            </div>
+                            
+                            <a href="checkout.php" class="btn btn-primary btn-lg btn-block">Proceed to Checkout</a>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
                 </div>
-                
-                <div class="card" style="position: sticky; top: 100px;">
-                    <h2 style="color: var(--primary-green); margin-bottom: 1.5rem;">Order Summary</h2>
-                    
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                        <span>Subtotal:</span>
-                        <strong>$<?= number_format($total, 2) ?></strong>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--gray-200);">
-                        <span>Shipping:</span>
-                        <strong>Free</strong>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; font-size: var(--font-size-xl);">
-                        <strong>Total:</strong>
-                        <strong style="color: var(--primary-green);">$<?= number_format($total, 2) ?></strong>
-                    </div>
-                    
-                    <a href="checkout.php" class="btn btn-primary btn-block">Proceed to Checkout</a>
-                </div>
+            <?php endif; ?>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
             </div>
-        <?php endif; ?>
-    </div>
+            <p class="footer-tagline">Supporting local agriculture in Grenada</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
-
-<?php

@@ -4,130 +4,142 @@ require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
 $user = getCurrentUser();
-$db = Config::getDB();
 
-// Fetch products
-$search = isset($_GET['search']) ? sanitizeInput($_GET['search']) : '';
-$category = isset($_GET['category']) ? sanitizeInput($_GET['category']) : '';
-
-$sql = "SELECT l.*, u.username as farmer_name 
-        FROM listings l 
-        JOIN users u ON l.farmer_id = u.id 
-        WHERE l.status = 'active'";
-
-$params = [];
-if ($search) {
-    $sql .= " AND (l.name LIKE ? OR l.description LIKE ?)";
-    $params[] = "%$search%";
-    $params[] = "%$search%";
+// If user is logged in, redirect to appropriate dashboard
+if ($user) {
+    if ($user['user_type'] === 'farmer') {
+        header('Location: dashboard.php');
+    } else {
+        header('Location: dashboard.php'); // or browse page when implemented
+    }
+    exit;
 }
-if ($category) {
-    $sql .= " AND l.category = ?";
-    $params[] = $category;
-}
-
-$sql .= " ORDER BY l.created_at DESC";
-
-$stmt = $db->prepare($sql);
-$stmt->execute($params);
-$products = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= Config::SITE_NAME ?> - Fresh Local Produce</title>
+    <title><?= Config::getSiteName() ?> - Connect with Local Farmers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/marketplace.css">
 </head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">🌾 <?= Config::SITE_NAME ?></div>
-            <div class="nav-links">
-                <a href="index.php">Browse</a>
-                <?php if ($user): ?>
-                    <?php if ($user['user_type'] === 'farmer'): ?>
-                        <a href="dashboard.php">My Products</a>
-                    <?php else: ?>
-                        <a href="cart.php">Cart</a>
-                        <a href="orders.php">Orders</a>
-                    <?php endif; ?>
-                    <a href="api/auth.php?action=logout" class="btn btn-secondary btn-sm">Logout</a>
-                <?php else: ?>
-                    <a href="login.php" class="btn btn-secondary btn-sm">Login</a>
-                    <a href="register.php" class="btn btn-primary btn-sm">Sign Up</a>
-                <?php endif; ?>
+<body class="landing-page">
+    <!-- Navigation -->
+    <nav class="landing-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🌾</span>
+                <span class="logo-text"><?= Config::getSiteName() ?></span>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
-    <div class="hero">
-        <h1>Fresh From Grenada's Farms</h1>
-        <p>Connect directly with local farmers for the freshest produce</p>
-    </div>
-
-    <div class="search-section">
-        <form class="search-container" method="GET" action="">
-            <input type="text" name="search" class="search-input form-input" 
-                   placeholder="Search for produce..." value="<?= htmlspecialchars($search) ?>">
-            <select name="category" class="form-input">
-                <option value="">All Categories</option>
-                <option value="vegetables" <?= $category === 'vegetables' ? 'selected' : '' ?>>Vegetables</option>
-                <option value="fruits" <?= $category === 'fruits' ? 'selected' : '' ?>>Fruits</option>
-                <option value="herbs" <?= $category === 'herbs' ? 'selected' : '' ?>>Herbs</option>
-                <option value="other" <?= $category === 'other' ? 'selected' : '' ?>>Other</option>
-            </select>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-    </div>
-
-    <div class="container">
-        <h2 class="section-title">Available Products</h2>
-        
-        <?php if (empty($products)): ?>
-            <div class="card" style="text-align: center; padding: 3rem;">
-                <p style="font-size: 1.2rem; color: var(--gray-600);">No products found. Try adjusting your search.</p>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title"><?= Config::getSiteName() ?></h1>
+                    <p class="hero-tagline">Connecting Grenadian farmers directly with consumers for fresh, local produce</p>
+                    
+                    <div class="hero-actions">
+                        <a href="login.php" class="btn btn-primary btn-lg">Log In</a>
+                        <a href="register.php" class="btn btn-secondary btn-lg">Sign Up</a>
+                    </div>
+                </div>
             </div>
-        <?php else: ?>
-            <div class="grid grid-auto">
-                <?php foreach ($products as $product): ?>
-                    <div class="product-card" onclick="window.location.href='product.php?id=<?= $product['id'] ?>'">
-                        <img src="<?= $product['image_url'] ?: 'https://via.placeholder.com/400x300?text=No+Image' ?>" 
-                             alt="<?= htmlspecialchars($product['name']) ?>" 
-                             class="product-image">
-                        <div class="product-info">
-                            <div class="product-category"><?= ucfirst($product['category']) ?></div>
-                            <h3 class="product-name"><?= htmlspecialchars($product['name']) ?></h3>
-                            <div class="product-price">$<?= number_format($product['price'], 2) ?> / <?= $product['unit'] ?></div>
-                            <div class="product-farmer">By <?= htmlspecialchars($product['farmer_name']) ?></div>
-                            <div style="margin-top: 1rem;">
-                                <span class="badge badge-success"><?= $product['quantity'] ?> <?= $product['unit'] ?> available</span>
-                            </div>
+            
+            <div class="hero-media">
+                <div class="video-container">
+                    <video autoplay muted loop playsinline poster="https://via.placeholder.com/600x400/2d5016/ffffff?text=Fresh+Local+Produce">
+                        <source src="assets/hero-video.mp4" type="video/mp4">
+                        <!-- Fallback image if video doesn't load -->
+                    </video>
+                    <div class="video-overlay">
+                        <div class="video-play-btn" onclick="toggleVideo()">
+                            <span>▶</span>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                </div>
             </div>
-        <?php endif; ?>
-    </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            
+            <div class="user-paths">
+                <div class="user-path">
+                    <div class="path-icon">
+                        <span class="icon">🌱</span>
+                    </div>
+                    <h3 class="path-title">I Am a Seller</h3>
+                    <ul class="path-features">
+                        <li>List produce easily</li>
+                        <li>Share listings with buyers</li>
+                        <li>Earn by selling directly to consumers</li>
+                    </ul>
+                    <a href="register.php?type=farmer" class="btn btn-outline">Start Selling</a>
+                </div>
+                
+                <div class="user-path">
+                    <div class="path-icon">
+                        <span class="icon">🛒</span>
+                    </div>
+                    <h3 class="path-title">I Am a Buyer</h3>
+                    <ul class="path-features">
+                        <li>Find fresh, local produce</li>
+                        <li>Connect directly with farmers</li>
+                        <li>Save money with competitive prices</li>
+                    </ul>
+                    <a href="register.php?type=customer" class="btn btn-outline">Start Shopping</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">🌾</span>
+                    <span class="logo-text"><?= Config::getSiteName() ?></span>
+                </div>
+                <p class="footer-tagline">Supporting local agriculture in Grenada</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // Dynamic search (optional enhancement)
-        const searchForm = document.querySelector('.search-container');
-        let searchTimeout;
-        
-        searchForm.querySelector('[name="search"]').addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                searchForm.submit();
-            }, 500);
+        function toggleVideo() {
+            const video = document.querySelector('video');
+            const overlay = document.querySelector('.video-overlay');
+            
+            if (video.paused) {
+                video.play();
+                overlay.style.opacity = '0';
+            } else {
+                video.pause();
+                overlay.style.opacity = '1';
+            }
+        }
+
+        // Auto-hide video overlay after video starts
+        document.querySelector('video').addEventListener('play', function() {
+            setTimeout(() => {
+                document.querySelector('.video-overlay').style.opacity = '0';
+            }, 1000);
         });
     </script>
 </body>
 </html>
-
-<?php

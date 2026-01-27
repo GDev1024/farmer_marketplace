@@ -37,27 +37,38 @@ $totalCents = $total * 100; // Stripe uses cents
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - <?= Config::SITE_NAME ?></title>
+    <title>Checkout - <?= Config::getSiteName() ?></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/marketplace.css">
     <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://www.paypal.com/sdk/js?client-id=<?= Config::PAYPAL_CLIENT_ID ?>"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=<?= Config::getPaypalClientId() ?>"></script>
 </head>
-<body>
+<body class="app-page">
     <header>
         <nav>
-            <div class="logo">🌾 <?= Config::SITE_NAME ?></div>
+            <a href="dashboard.php" class="logo">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
+            </a>
             <div class="nav-links">
                 <a href="cart.php">← Back to Cart</a>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
             </div>
         </nav>
     </header>
 
-    <div class="container" style="margin-top: 3rem;">
-        <h1 style="color: var(--primary-green); margin-bottom: 2rem;">Checkout</h1>
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Checkout</h1>
+                <p>Complete your order</p>
+            </div>
         
         <div class="grid grid-2" style="align-items: start;">
             <!-- Order Details -->
@@ -183,7 +194,7 @@ $totalCents = $total * 100; // Stripe uses cents
         
         function initStripe() {
             if (!stripe) {
-                stripe = Stripe('<?= Config::STRIPE_PUBLIC_KEY ?>');
+                stripe = Stripe('<?= Config::getStripePublicKey() ?>');
                 elements = stripe.elements();
                 cardElement = elements.create('card', {
                     style: {
@@ -313,6 +324,22 @@ $totalCents = $total * 100; // Stripe uses cents
                 console.error('Error:', error);
                 alert('An error occurred. Please contact support.');
             }
+        }
+    </script>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
+            </div>
+            <p class="footer-tagline">Supporting local agriculture in Grenada</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
         }
     </script>
 </body>

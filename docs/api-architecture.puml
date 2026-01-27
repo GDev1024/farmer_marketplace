@@ -1,0 +1,147 @@
+@startuml API Architecture - Grenada Farmer Marketplace
+!theme plain
+skinparam backgroundColor #f8f9fa
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title API Architecture & Endpoints
+
+' Define colors for different API types
+skinparam rectangle {
+    BackgroundColor<<auth>> #fff3cd
+    BackgroundColor<<crud>> #e8f5e8
+    BackgroundColor<<payment>> #f8d7da
+    BackgroundColor<<external>> #e6f3ff
+}
+
+' Authentication API
+package "🔐 Authentication API" {
+    rectangle "api/auth.php" as auth_api <<auth>> {
+        rectangle "POST /login" as login_endpoint
+        rectangle "POST /register" as register_endpoint
+        rectangle "GET /logout" as logout_endpoint
+        rectangle "GET /profile" as profile_endpoint
+    }
+}
+
+' Products API
+package "📦 Products API" {
+    rectangle "api/products.php" as products_api <<crud>> {
+        rectangle "GET /products" as get_products
+        rectangle "GET /product/{id}" as get_product
+        rectangle "POST /create" as create_product
+        rectangle "PUT /update/{id}" as update_product
+        rectangle "DELETE /delete/{id}" as delete_product
+        rectangle "POST /toggle_status" as toggle_status
+    }
+}
+
+' Cart API
+package "🛒 Cart API" {
+    rectangle "api/cart.php" as cart_api <<crud>> {
+        rectangle "GET /cart" as get_cart
+        rectangle "POST /add" as add_to_cart
+        rectangle "PUT /update" as update_cart
+        rectangle "DELETE /remove" as remove_from_cart
+        rectangle "DELETE /clear" as clear_cart
+    }
+}
+
+' Payment API
+package "💳 Payment API" {
+    rectangle "api/payment.php" as payment_api <<payment>> {
+        rectangle "POST /create_stripe_intent" as create_stripe
+        rectangle "POST /create_paypal_order" as create_paypal
+        rectangle "POST /complete_order" as complete_order
+        rectangle "POST /webhook/stripe" as stripe_webhook
+        rectangle "POST /webhook/paypal" as paypal_webhook
+    }
+}
+
+' External Services
+package "🌐 External Services" {
+    rectangle "Stripe API" as stripe_service <<external>> {
+        rectangle "Payment Intents" as stripe_intents
+        rectangle "Webhooks" as stripe_webhooks
+    }
+    
+    rectangle "PayPal API" as paypal_service <<external>> {
+        rectangle "Orders API" as paypal_orders
+        rectangle "Webhooks" as paypal_webhooks
+    }
+    
+    rectangle "AWS S3" as s3_service <<external>> {
+        rectangle "Image Upload" as s3_upload
+        rectangle "Image Storage" as s3_storage
+    }
+}
+
+' Database Layer
+package "🗄️ Database Layer" {
+    rectangle "MySQL Database" as database {
+        rectangle "Users Table" as users_table
+        rectangle "Listings Table" as listings_table
+        rectangle "Orders Table" as orders_table
+        rectangle "Cart Table" as cart_table
+        rectangle "Order Items Table" as order_items_table
+    }
+}
+
+' Configuration Layer
+package "⚙️ Configuration" {
+    rectangle "Config Class" as config {
+        rectangle "Environment Variables" as env_vars
+        rectangle "Database Connection" as db_connection
+        rectangle "API Keys" as api_keys
+    }
+}
+
+' API Request Flow
+actor "Frontend" as frontend
+actor "Mobile App" as mobile
+
+frontend --> auth_api : "Authentication"
+frontend --> products_api : "Product Management"
+frontend --> cart_api : "Shopping Cart"
+frontend --> payment_api : "Checkout"
+
+mobile --> auth_api : "Authentication"
+mobile --> products_api : "Browse Products"
+mobile --> cart_api : "Shopping Cart"
+
+' API to Database Connections
+auth_api --> users_table : "User Operations"
+products_api --> listings_table : "Product CRUD"
+cart_api --> cart_table : "Cart Management"
+payment_api --> orders_table : "Order Creation"
+payment_api --> order_items_table : "Order Details"
+
+' External Service Connections
+payment_api --> stripe_service : "Process Payments"
+payment_api --> paypal_service : "Process Payments"
+products_api --> s3_service : "Image Upload"
+
+stripe_service --> stripe_webhook : "Payment Events"
+paypal_service --> paypal_webhook : "Payment Events"
+
+' Configuration Dependencies
+auth_api --> config : "DB & Settings"
+products_api --> config : "DB & AWS"
+cart_api --> config : "DB Connection"
+payment_api --> config : "Payment Keys"
+
+' API Response Formats
+note right of auth_api : "Response Format:\n{\n  'success': boolean,\n  'message': string,\n  'data': object,\n  'user': object\n}"
+
+note right of products_api : "Response Format:\n{\n  'success': boolean,\n  'message': string,\n  'products': array,\n  'product': object\n}"
+
+note right of cart_api : "Response Format:\n{\n  'success': boolean,\n  'message': string,\n  'cart': array,\n  'total': number\n}"
+
+note right of payment_api : "Response Format:\n{\n  'success': boolean,\n  'message': string,\n  'order_id': number,\n  'client_secret': string\n}"
+
+' Security Notes
+note top of auth_api : "Security:\n- bcrypt password hashing\n- Session management\n- Input validation\n- CSRF protection"
+
+note top of payment_api : "Security:\n- Webhook verification\n- Atomic transactions\n- PCI compliance\n- Secure API keys"
+
+@enduml

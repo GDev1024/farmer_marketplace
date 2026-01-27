@@ -1,0 +1,105 @@
+@startuml User Flows - Grenada Farmer Marketplace
+!theme plain
+skinparam backgroundColor #f8f9fa
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+
+title User Journey Flows
+
+' Define colors for different user types
+skinparam rectangle {
+    BackgroundColor<<visitor>> #e8f5e8
+    BackgroundColor<<farmer>> #d4edda
+    BackgroundColor<<customer>> #cce5ff
+    BackgroundColor<<decision>> #fff3cd
+    BackgroundColor<<process>> #f8d7da
+}
+
+' Visitor Flow
+package "👤 Visitor Flow" {
+    rectangle "🏠 Landing Page" as visitor_landing <<visitor>>
+    rectangle "Choose Action" as visitor_choice <<decision>>
+    rectangle "📝 Register" as visitor_register <<visitor>>
+    rectangle "🔐 Login" as visitor_login <<visitor>>
+    
+    visitor_landing --> visitor_choice
+    visitor_choice --> visitor_register : "New User"
+    visitor_choice --> visitor_login : "Existing User"
+    visitor_register --> visitor_login : "After Registration"
+}
+
+' Farmer Flow
+package "👨‍🌾 Farmer Journey" {
+    rectangle "🔐 Farmer Login" as farmer_login <<farmer>>
+    rectangle "📊 Farmer Dashboard" as farmer_dashboard <<farmer>>
+    rectangle "➕ Add Product" as add_product <<farmer>>
+    rectangle "✏️ Edit Product" as edit_product <<farmer>>
+    rectangle "📦 Manage Inventory" as manage_inventory <<farmer>>
+    rectangle "📋 View Orders" as farmer_orders <<farmer>>
+    
+    farmer_login --> farmer_dashboard
+    farmer_dashboard --> add_product : "Add New Product"
+    farmer_dashboard --> edit_product : "Edit Existing"
+    farmer_dashboard --> manage_inventory : "Update Stock"
+    farmer_dashboard --> farmer_orders : "Check Orders"
+    
+    add_product --> farmer_dashboard : "Product Added"
+    edit_product --> farmer_dashboard : "Changes Saved"
+    manage_inventory --> farmer_dashboard : "Stock Updated"
+}
+
+' Customer Flow
+package "🛒 Customer Journey" {
+    rectangle "🔐 Customer Login" as customer_login <<customer>>
+    rectangle "🏪 Browse Products" as browse_products <<customer>>
+    rectangle "📦 Product Detail" as view_product <<customer>>
+    rectangle "🛍️ Shopping Cart" as shopping_cart <<customer>>
+    rectangle "💳 Checkout" as checkout_process <<customer>>
+    rectangle "✅ Order Success" as order_success <<customer>>
+    rectangle "📋 Order History" as order_history <<customer>>
+    
+    customer_login --> browse_products
+    browse_products --> view_product : "View Details"
+    view_product --> shopping_cart : "Add to Cart"
+    view_product --> browse_products : "Continue Browsing"
+    shopping_cart --> checkout_process : "Proceed to Checkout"
+    shopping_cart --> browse_products : "Continue Shopping"
+    checkout_process --> order_success : "Payment Complete"
+    order_success --> order_history : "View All Orders"
+    order_success --> browse_products : "Continue Shopping"
+}
+
+' Payment Process Flow
+package "💳 Payment Process" {
+    rectangle "🛍️ Cart Review" as cart_review <<process>>
+    rectangle "📍 Address Entry" as address_entry <<process>>
+    rectangle "💳 Payment Method" as payment_method <<decision>>
+    rectangle "💳 Stripe Payment" as stripe_payment <<process>>
+    rectangle "💰 PayPal Payment" as paypal_payment <<process>>
+    rectangle "✅ Payment Success" as payment_success <<process>>
+    rectangle "❌ Payment Failed" as payment_failed <<process>>
+    
+    cart_review --> address_entry
+    address_entry --> payment_method
+    payment_method --> stripe_payment : "Credit Card"
+    payment_method --> paypal_payment : "PayPal"
+    stripe_payment --> payment_success : "Success"
+    stripe_payment --> payment_failed : "Failed"
+    paypal_payment --> payment_success : "Success"
+    paypal_payment --> payment_failed : "Failed"
+    payment_failed --> payment_method : "Try Again"
+}
+
+' Cross-connections between flows
+visitor_login --> farmer_login : "Farmer Account"
+visitor_login --> customer_login : "Customer Account"
+
+checkout_process --> cart_review
+payment_success --> order_success
+
+note top of visitor_landing : "Entry point for all users\nConversion-focused design"
+note right of farmer_dashboard : "Product management hub\nInventory tracking\nOrder monitoring"
+note right of browse_products : "Product discovery\nSearch & filtering\nCategory browsing"
+note bottom of payment_method : "Dual payment options\nStripe & PayPal integration"
+
+@enduml

@@ -1,8 +1,9 @@
+<?php
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
 if (isLoggedIn()) {
-    redirect('index.php');
+    redirect('dashboard.php');
 }
 
 $error = '';
@@ -20,11 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_type'] = $user['user_type'];
         
-        if ($user['user_type'] === 'farmer') {
-            redirect('dashboard.php');
-        } else {
-            redirect('index.php');
-        }
+        redirect('dashboard.php');
     } else {
         $error = 'Invalid email or password';
     }
@@ -35,53 +32,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - <?= Config::SITE_NAME ?></title>
+    <title>Login - <?= Config::getSiteName() ?></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/marketplace.css">
 </head>
-<body>
+<body class="auth-page">
     <header>
         <nav>
-            <div class="logo">🌾 <?= Config::SITE_NAME ?></div>
+            <a href="index.php" class="logo">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
+            </a>
             <div class="nav-links">
-                <a href="index.php">Browse</a>
-                <a href="register.php" class="btn btn-primary btn-sm">Sign Up</a>
+                <a href="index.php">Home</a>
             </div>
         </nav>
     </header>
 
-    <div class="container container-sm" style="margin-top: 4rem;">
-        <div class="card">
-            <h1 style="text-align: center; color: var(--primary-green); margin-bottom: 2rem;">Login</h1>
-            
-            <?php if ($error): ?>
-                <div style="background: #fee; border: 1px solid var(--error); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
-                    <?= $error ?>
-                </div>
-            <?php endif; ?>
-            
-            <form method="POST" action="">
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-input" required>
+    <main class="auth-main">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to your account</p>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-input" required>
-                </div>
+                <?php if ($error): ?>
+                    <div class="alert alert-error">
+                        <?= $error ?>
+                    </div>
+                <?php endif; ?>
                 
-                <button type="submit" class="btn btn-primary btn-block">Login</button>
-            </form>
-            
-            <p style="text-align: center; margin-top: 1.5rem; color: var(--gray-600);">
-                Don't have an account? <a href="register.php" style="color: var(--primary-green); font-weight: 600;">Sign up</a>
-            </p>
+                <form method="POST" action="" class="auth-form">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" name="email" class="form-input" required 
+                               value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-input" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign In</button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="register.php">Create one here</a></p>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">🌾</span>
+                <span><?= Config::getSiteName() ?></span>
+            </div>
+            <p class="footer-tagline">Supporting local agriculture in Grenada</p>
+        </div>
+    </footer>
 </body>
 </html>
-
-<?php
