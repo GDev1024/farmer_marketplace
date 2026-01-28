@@ -1,0 +1,142 @@
+@startuml Database Entity Relationship Diagram
+!theme plain
+skinparam backgroundColor #f8f9fa
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title Grenada Farmer Marketplace - Database Schema
+
+' Define entity colors
+skinparam class {
+    BackgroundColor<<core>> #e8f5e8
+    BackgroundColor<<transaction>> #cce5ff
+    BackgroundColor<<communication>> #fff3cd
+    BackgroundColor<<system>> #f8d7da
+}
+
+' Core Entities
+class Users <<core>> {
+    + id : INT (PK)
+    --
+    username : VARCHAR(50)
+    email : VARCHAR(100) UNIQUE
+    password_hash : VARCHAR(255)
+    user_type : ENUM('farmer', 'customer')
+    farmer_id : VARCHAR(50) NULL
+    verified : BOOLEAN DEFAULT FALSE
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+class Listings <<core>> {
+    + id : INT (PK)
+    + farmer_id : INT (FK)
+    --
+    name : VARCHAR(100)
+    description : TEXT
+    category : ENUM('vegetables', 'fruits', 'herbs', 'other')
+    price : DECIMAL(10,2)
+    unit : ENUM('lb', 'kg', 'bunch', 'each')
+    quantity : INT
+    image_url : VARCHAR(500)
+    status : ENUM('active', 'inactive', 'out_of_stock')
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+' Transaction Entities
+class Orders <<transaction>> {
+    + id : INT (PK)
+    + customer_id : INT (FK)
+    --
+    total_amount : DECIMAL(10,2)
+    status : ENUM('pending', 'confirmed', 'delivered', 'cancelled')
+    payment_method : ENUM('stripe', 'paypal')
+    payment_intent_id : VARCHAR(255)
+    delivery_address : TEXT
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+class OrderItems <<transaction>> {
+    + id : INT (PK)
+    + order_id : INT (FK)
+    + listing_id : INT (FK)
+    --
+    quantity : INT
+    price_at_purchase : DECIMAL(10,2)
+    created_at : TIMESTAMP
+}
+
+class Cart <<transaction>> {
+    + id : INT (PK)
+    + user_id : INT (FK)
+    + listing_id : INT (FK)
+    --
+    quantity : INT
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+' Communication Entities
+class Messages <<communication>> {
+    + id : INT (PK)
+    + sender_id : INT (FK)
+    + receiver_id : INT (FK)
+    --
+    message : TEXT
+    is_read : BOOLEAN DEFAULT FALSE
+    created_at : TIMESTAMP
+}
+
+class Reviews <<communication>> {
+    + id : INT (PK)
+    + customer_id : INT (FK)
+    + listing_id : INT (FK)
+    + order_id : INT (FK)
+    --
+    rating : INT (1-5)
+    comment : TEXT
+    created_at : TIMESTAMP
+}
+
+' System Entities
+class Notifications <<system>> {
+    + id : INT (PK)
+    + user_id : INT (FK)
+    --
+    type : ENUM('order', 'message', 'system')
+    title : VARCHAR(100)
+    message : TEXT
+    is_read : BOOLEAN DEFAULT FALSE
+    created_at : TIMESTAMP
+}
+
+' Relationships
+Users ||--o{ Listings : "farmer creates"
+Users ||--o{ Orders : "customer places"
+Users ||--o{ Cart : "user has"
+Users ||--o{ Messages : "sender"
+Users ||--o{ Messages : "receiver"
+Users ||--o{ Reviews : "customer writes"
+Users ||--o{ Notifications : "user receives"
+
+Listings ||--o{ OrderItems : "product in"
+Listings ||--o{ Cart : "product in"
+Listings ||--o{ Reviews : "product reviewed"
+
+Orders ||--o{ OrderItems : "contains"
+Orders ||--o{ Reviews : "generates"
+
+' Indexes and Constraints
+note right of Users : "Indexes:\n- email (UNIQUE)\n- user_type\n- farmer_id"
+note right of Listings : "Indexes:\n- farmer_id\n- category\n- status\n- created_at"
+note right of Orders : "Indexes:\n- customer_id\n- status\n- created_at\n- payment_intent_id"
+note right of Cart : "Indexes:\n- user_id\n- listing_id\n- UNIQUE(user_id, listing_id)"
+
+' Business Rules
+note top of Listings : "Business Rules:\n- Only farmers can create listings\n- Quantity must be >= 0\n- Price must be > 0"
+note top of Orders : "Business Rules:\n- Only customers can place orders\n- Total calculated from order items\n- Payment intent required for completion"
+note top of Reviews : "Business Rules:\n- Only after order delivery\n- One review per customer per product\n- Rating between 1-5"
+
+@enduml

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Contrast Compliance Test - Grenada Farmer Marketplace</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+        .pass-aaa { border-color: #22c55e; background: #f0fdf4; }
+        .pass-aa { border-color: #3b82f6; background: #eff6ff; }
+        .fail { border-color: #ef4444; background: #fef2f2; }
+        .summary {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .color-swatch {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            margin: 0 5px;
+            vertical-align: middle;
+        }
+        pre {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        .recommendations {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #f59e0b;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Color Contrast Compliance Test</h1>
+    <p>Testing all color combinations in the Grenada Farmer Marketplace design system for WCAG 2.1 AA compliance.</p>
+    
+    <div id="results"></div>
+    <div id="summary"></div>
+    <div id="recommendations"></div>
+
+    <script src="color-contrast-checker.js"></script>
+    <script>
+        // Run the color contrast test
+        const testResults = testColorContrast();
+        
+        // Display results in HTML
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            const summaryDiv = document.getElementById('summary');
+            const recommendationsDiv = document.getElementById('recommendations');
+            
+            // Display individual results
+            let html = '<h2>📋 Test Results</h2>';
+            results.results.forEach(result => {
+                const status = result.normalText.passAAA ? 'pass-aaa' : 
+                              result.normalText.passAA ? 'pass-aa' : 'fail';
+                const statusText = result.normalText.passAAA ? '✅ AAA' : 
+                                  result.normalText.passAA ? '✅ AA' : '❌ FAIL';
+                const ratio = result.ratio.toFixed(2);
+                
+                html += `
+                    <div class="test-result ${status}">
+                        <strong>${statusText} ${ratio}:1</strong> - ${result.context}<br>
+                        <small>
+                            <span class="color-swatch" style="background-color: ${result.foregroundHex}"></span>
+                            ${result.foreground} (${result.foregroundHex}) on 
+                            <span class="color-swatch" style="background-color: ${result.backgroundHex}"></span>
+                            ${result.background} (${result.backgroundHex})
+                        </small>
+                        ${!result.normalText.passAA ? `<br><small style="color: #dc2626;">⚠️ Normal text fails WCAG AA (needs 4.5:1, got ${ratio}:1)</small>` : ''}
+                    </div>
+                `;
+            });
+            resultsDiv.innerHTML = html;
+            
+            // Display summary
+            const summary = results.summary;
+            summaryDiv.innerHTML = `
+                <div class="summary">
+                    <h2>📊 Summary</h2>
+                    <p><strong>Total tests:</strong> ${summary.total}</p>
+                    <p><strong>✅ Passed WCAG AA:</strong> ${summary.passedAA} (${((summary.passedAA/summary.total)*100).toFixed(1)}%)</p>
+                    <p><strong>✅ Passed WCAG AAA:</strong> ${summary.passedAAA} (${((summary.passedAAA/summary.total)*100).toFixed(1)}%)</p>
+                    <p><strong>❌ Failed WCAG AA:</strong> ${summary.failed} (${((summary.failed/summary.total)*100).toFixed(1)}%)</p>
+                    ${summary.allPass ? 
+                        '<p style="color: #22c55e; font-weight: bold;">🎉 All color combinations pass WCAG AA standards!</p>' : 
+                        `<p style="color: #dc2626; font-weight: bold;">⚠️ ${summary.failed} color combinations need improvement for WCAG AA compliance.</p>`
+                    }
+                </div>
+            `;
+            
+            // Display recommendations for failing combinations
+            const failing = results.results.filter(r => !r.normalText.passAA);
+            if (failing.length > 0) {
+                let recHtml = `
+                    <div class="recommendations">
+                        <h2>🔧 Recommendations for Failing Combinations</h2>
+                `;
+                
+                failing.forEach(result => {
+                    const improvement = (4.5 / result.ratio).toFixed(2);
+                    recHtml += `
+                        <div style="margin: 15px 0; padding: 10px; background: white; border-radius: 4px;">
+                            <strong>❌ ${result.context}</strong><br>
+                            <small>Current ratio: ${result.ratio.toFixed(2)}:1 (needs 4.5:1)</small><br>
+                            <small>Colors: ${result.foregroundHex} on ${result.backgroundHex}</small><br>
+                            <small style="color: #059669;">💡 Suggestion: Increase contrast by ${improvement}x - Make foreground darker or background lighter</small>
+                        </div>
+                    `;
+                });
+                
+                recHtml += '</div>';
+                recommendationsDiv.innerHTML = recHtml;
+            } else {
+                recommendationsDiv.innerHTML = '<div class="summary"><h2>✅ No Recommendations Needed</h2><p>All combinations pass WCAG AA standards!</p></div>';
+            }
+        }
+        
+        displayResults(testResults);
+    </script>
+</body>
+</html>

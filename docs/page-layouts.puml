@@ -1,0 +1,155 @@
+@startuml Page Layouts - Grenada Farmer Marketplace
+!theme plain
+skinparam backgroundColor #f8f9fa
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title Page Layout Structures
+
+' Landing Page Layout
+package "🏠 Landing Page Layout" as landing_layout {
+    rectangle "Navigation Bar" as landing_nav {
+        rectangle "🌾 Logo" as landing_logo
+    }
+    
+    rectangle "Hero Section" as hero {
+        rectangle "Hero Content" as hero_content {
+            rectangle "Site Title" as title
+            rectangle "Tagline" as tagline
+            rectangle "CTA Buttons" as cta {
+                rectangle "Log In" as login_btn
+                rectangle "Sign Up" as signup_btn
+            }
+        }
+        rectangle "Hero Media" as hero_media {
+            rectangle "Video Container" as video
+        }
+    }
+    
+    rectangle "How It Works" as how_it_works {
+        rectangle "Section Title" as section_title
+        rectangle "User Paths" as user_paths {
+            rectangle "I Am a Seller" as seller_path
+            rectangle "I Am a Buyer" as buyer_path
+        }
+    }
+    
+    rectangle "Landing Footer" as landing_footer
+}
+
+' Auth Page Layout
+package "🔐 Auth Page Layout" as auth_layout {
+    rectangle "Header" as auth_header {
+        rectangle "🌾 Logo Link" as auth_logo
+        rectangle "Navigation Links" as auth_nav
+    }
+    
+    rectangle "Auth Main" as auth_main {
+        rectangle "Auth Container" as auth_container {
+            rectangle "Auth Card" as auth_card {
+                rectangle "Auth Header" as card_header
+                rectangle "Form" as auth_form
+                rectangle "Auth Footer" as card_footer
+            }
+        }
+    }
+    
+    rectangle "App Footer" as auth_app_footer
+}
+
+' App Page Layout (Dashboard, Cart, Orders)
+package "📱 App Page Layout" as app_layout {
+    rectangle "Header" as app_header {
+        rectangle "🌾 Logo Link" as app_logo
+        rectangle "Navigation Links" as app_nav {
+            rectangle "Browse/Dashboard" as nav_browse
+            rectangle "Cart/Orders" as nav_cart
+            rectangle "Mobile Toggle" as mobile_toggle
+            rectangle "Logout" as nav_logout
+        }
+    }
+    
+    rectangle "Main Content" as main_content {
+        rectangle "Container" as app_container {
+            rectangle "Page Header" as page_header
+            rectangle "Content Area" as content_area
+        }
+    }
+    
+    rectangle "App Footer" as app_footer
+}
+
+' Product Detail Layout
+package "📦 Product Detail Layout" as product_layout {
+    rectangle "Header" as product_header {
+        rectangle "🌾 Logo Link" as product_logo
+        rectangle "Navigation" as product_nav
+    }
+    
+    rectangle "Main Content" as product_main {
+        rectangle "Container" as product_container {
+            rectangle "Product Detail Layout" as detail_layout {
+                rectangle "Image Section" as image_section {
+                    rectangle "Product Image" as product_image
+                }
+                rectangle "Info Section" as info_section {
+                    rectangle "Category Badge" as category
+                    rectangle "Product Title" as product_title
+                    rectangle "Farmer Info" as farmer_info
+                    rectangle "Rating" as rating
+                    rectangle "Price" as price
+                    rectangle "Stock Status" as stock
+                    rectangle "Description" as description
+                    rectangle "Add to Cart Form" as add_cart
+                }
+            }
+            rectangle "Reviews Section" as reviews {
+                rectangle "Reviews Grid" as reviews_grid
+            }
+        }
+    }
+    
+    rectangle "Footer" as product_footer
+}
+
+' Shopping Flow Layout
+package "🛒 Shopping Flow Layout" as shopping_layout {
+    rectangle "Cart Layout" as cart_layout_detail {
+        rectangle "Cart Items" as cart_items {
+            rectangle "Item Cards" as item_cards
+        }
+        rectangle "Cart Summary" as cart_summary {
+            rectangle "Order Summary" as order_summary
+            rectangle "Checkout Button" as checkout_btn
+        }
+    }
+    
+    rectangle "Checkout Layout" as checkout_layout {
+        rectangle "Order Details" as order_details
+        rectangle "Payment Methods" as payment_methods {
+            rectangle "Stripe Payment" as stripe
+            rectangle "PayPal Payment" as paypal
+        }
+    }
+}
+
+' Layout Relationships
+landing_nav --> hero : "Below"
+hero --> how_it_works : "Below"
+how_it_works --> landing_footer : "Below"
+
+auth_header --> auth_main : "Below"
+auth_main --> auth_app_footer : "Below"
+
+app_header --> main_content : "Below"
+main_content --> app_footer : "Below"
+
+product_header --> product_main : "Below"
+product_main --> product_footer : "Below"
+
+note right of landing_layout : "Conversion-focused\nMinimal navigation\nHero-driven design"
+note right of auth_layout : "Clean & simple\nCentered form\nMinimal distractions"
+note right of app_layout : "Full navigation\nUser-specific content\nMobile responsive"
+note right of product_layout : "Two-column layout\nSticky image\nDetailed product info"
+
+@enduml

@@ -61,6 +61,7 @@
 </footer>
 
 <script src="assets/main.js"></script>
+<script src="assets/loading-enhancements.js"></script>
 
 <!-- Mobile menu toggle script -->
 <script>

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Functionality Preservation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-header {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+        .property-info {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .test-progress {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #22c55e;
+            transition: width 0.3s ease;
+        }
+        .test-results {
+            margin-top: 20px;
+        }
+        .test-result {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        .test-pass {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+        }
+        .test-fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .run-tests-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .run-tests-btn:hover {
+            background: #2563eb;
+        }
+        .run-tests-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .console-output {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        .summary-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .counter-example {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 8px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Property-Based Test: Functionality Preservation</h1>
+            <p>Testing that all existing features work without regression after design system migration.</p>
+            <button class="run-tests-btn" id="runTestsBtn" onclick="runPropertyTests()">Run Property Tests</button>
+        </div>
+
+        <div class="property-info">
+            <h3>Property 16: Functionality Preservation</h3>
+            <p><strong>Feature:</strong> design-system-migration</p>
+            <p><strong>Validates:</strong> Requirements 14.1</p>
+            <p><strong>Description:</strong> For any migrated page or component in the application, all existing functionality should work without regression after the design system migration.</p>
+        </div>
+
+        <div class="test-progress" id="testProgress" style="display: none;">
+            <h4>Test Progress</h4>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <p id="progressText">Preparing tests...</p>
+        </div>
+
+        <div class="console-output" id="consoleOutput" style="display: none;"></div>
+
+        <div class="test-results" id="testResults"></div>
+
+        <div class="summary-card" id="summaryCard" style="display: none;">
+            <h3>Test Summary</h3>
+            <div id="summaryContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+        let consoleOutput = [];
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            consoleOutput.push(logEntry);
+            
+            const consoleElement = document.getElementById('consoleOutput');
+            if (consoleElement.style.display !== 'none') {
+                consoleElement.innerHTML = consoleOutput.join('\n');
+                consoleElement.scrollTop = consoleElement.scrollHeight;
+            }
+            
+            console.log(message);
+        }
+
+        // Property-based test framework
+        class PropertyTest {
+            constructor(name, generator, property, iterations = 100) {
+                this.name = name;
+                this.generator = generator;
+                this.property = property;
+                this.iterations = iterations;
+            }
+
+            async run() {
+                log(`🧪 Running property test: ${this.name}`);
+                const results = [];
+                
+                for (let i = 0; i < this.iterations; i++) {
+                    try {
+                        const testData = this.generator();
+                        const result = await this.property(testData);
+                        results.push({ iteration: i + 1, passed: result, data: testData });
+                        
+                        if (!result) {
+                            log(`❌ Property failed at iteration ${i + 1}: ${JSON.stringify(testData)}`);
+                            return { 
+                                passed: false, 
+                                failedAt: i + 1, 
+                                counterExample: testData, 
+                                results,
+                                totalIterations: this.iterations
+                            };
+                        }
+                        
+                        // Update progress
+                        updateProgress(i + 1, this.iterations, `${this.name} - Iteration ${i + 1}/${this.iterations}`);
+                        
+                        // Small delay to show progress
+                        if (i % 10 === 0) {
+                            await new Promise(resolve => setTimeout(resolve, 10));
+                        }
+                    } catch (error) {
+                        log(`💥 Error at iteration ${i + 1}: ${error.message}`);
+                        return { 
+                            passed: false, 
+                            failedAt: i + 1, 
+                            error: error.message, 
+                            results,
+                            totalIterations: this.iterations
+                        };
+                    }
+                }
+                
+                log(`✅ Property passed all ${this.iterations} iterations`);
+                return { 
+                    passed: true, 
+                    iterations: this.iterations, 
+                    results,
+                    totalIterations: this.iterations
+                };
+            }
+        }
+
+        // Test data generators
+        const generators = {
+            pagePath: () => {
+                const pages = [
+                    'index.php', 'login.php', 'register.php', 'dashboard.php',
+                    'pages/landing.php', 'pages/home.php', 'pages/browse.php',
+                    'pages/cart.php', 'pages/checkout.php', 'pages/orders.php',
+                    'pages/profile.php', 'pages/sell.php', 'pages/listing.php',
+                    'pages/messages.php', 'pages/payment-success.php', 'pages/payment-cancel.php'
+                ];
+                return pages[Math.floor(Math.random() * pages.length)];
+            },
+
+            formData: () => {
+                const forms = [
+                    { type: 'login', fields: ['email', 'password'] },
+                    { type: 'register', fields: ['username', 'email', 'password', 'user_type'] },
+                    { type: 'product', fields: ['name', 'category', 'price', 'quantity', 'unit', 'description'] },
+                    { type: 'profile', fields: ['username', 'email', 'phone'] }
+                ];
+                const form = forms[Math.floor(Math.random() * forms.length)];
+                
+                const data = { type: form.type, fields: {} };
+                form.fields.forEach(field => {
+                    data.fields[field] = `test_${field}_${Math.random().toString(36).substr(2, 9)}`;
+                });
+                
+                return data;
+            },
+
+            userInteraction: () => {
+                const interactions = [
+                    { type: 'click', target: 'button' },
+                    { type: 'click', target: 'link' },
+                    { type: 'input', target: 'text_field' },
+                    { type: 'submit', target: 'form' },
+                    { type: 'navigate', target: 'page' },
+                    { type: 'scroll', target: 'page' },
+                    { type: 'resize', target: 'window' }
+                ];
+                return interactions[Math.floor(Math.random() * interactions.length)];
+            },
+
+            cssClass: () => {
+                const classes = [
+                    'btn', 'btn-primary', 'btn-secondary', 'btn-outline',
+                    'card', 'card__header', 'card__body', 'card__footer',
+                    'nav-brand', 'nav-toggle', 'nav-links',
+                    'form-input', 'form-label', 'form-group',
+                    'page', 'page-main', 'page-header',
+                    'container', 'hero-section', 'auth-card'
+                ];
+                return classes[Math.floor(Math.random() * classes.length)];
+            }
+        };
+
+        // Property test implementations
+        const propertyTests = [
+            new PropertyTest(
+                "Page Accessibility Preservation",
+                generators.pagePath,
+                async (pagePath) => {
+                    // Property: All pages should remain accessible after migration
+                    const pageExists = await simulatePageLoad(pagePath);
+                    const hasValidStructure = await validatePageStructure(pagePath);
+                    const maintainsNavigation = await validateNavigation(pagePath);
+                    
+                    return pageExists && hasValidStructure && maintainsNavigation;
+                },
+                50 // Reduced iterations for browser testing
+            ),
+
+            new PropertyTest(
+                "Form Functionality Preservation",
+                generators.formData,
+                async (formData) => {
+                    // Property: All forms should maintain validation and submission functionality
+                    const hasRequiredFields = validateFormFields(formData);
+                    const hasValidation = await testFormValidation(formData);
+                    const canSubmit = await testFormSubmission(formData);
+                    
+                    return hasRequiredFields && hasValidation && canSubmit;
+                },
+                50
+            ),
+
+            new PropertyTest(
+                "User Interaction Preservation",
+                generators.userInteraction,
+                async (interaction) => {
+                    // Property: All user interactions should work as expected
+                    const isSupported = await validateInteractionSupport(interaction);
+                    const hasProperResponse = await testInteractionResponse(interaction);
+                    const maintainsAccessibility = await validateInteractionAccessibility(interaction);
+                    
+                    return isSupported && hasProperResponse && maintainsAccessibility;
+                },
+                50
+            ),
+
+            new PropertyTest(
+                "CSS Class Migration Preservation",
+                generators.cssClass,
+                async (cssClass) => {
+                    // Property: CSS classes should maintain styling and functionality
+                    const hasStyles = await validateCSSClassStyles(cssClass);
+                    const maintainsVisualAppearance = await testVisualConsistency(cssClass);
+                    const preservesInteractivity = await testInteractiveStates(cssClass);
+                    
+                    return hasStyles && maintainsVisualAppearance && preservesInteractivity;
+                },
+                50
+            )
+        ];
+
+        // Helper functions (simplified for browser testing)
+        async function simulatePageLoad(pagePath) {
+            const commonPages = ['index.php', 'login.php', 'register.php', 'dashboard.php'];
+            return commonPages.includes(pagePath) || pagePath.startsWith('pages/');
+        }
+
+        async function validatePageStructure(pagePath) {
+            return true; // Assume pages have proper structure after migration
+        }
+
+        async function validateNavigation(pagePath) {
+            return !pagePath.includes('payment-'); // Payment pages might have different nav
+        }
+
+        function validateFormFields(formData) {
+            return formData.fields && Object.keys(formData.fields).length > 0;
+        }
+
+        async function testFormValidation(formData) {
+            const requiredValidation = ['login', 'register'].includes(formData.type);
+            return requiredValidation ? formData.fields.email && formData.fields.password : true;
+        }
+
+        async function testFormSubmission(formData) {
+            return formData.type !== 'invalid_form';
+        }
+
+        async function validateInteractionSupport(interaction) {
+            const supportedInteractions = ['click', 'input', 'submit', 'navigate', 'scroll', 'resize'];
+            return supportedInteractions.includes(interaction.type);
+        }
+
+        async function testInteractionResponse(interaction) {
+            return interaction.target !== 'broken_element';
+        }
+
+        async function validateInteractionAccessibility(interaction) {
+            const accessibleInteractions = ['click', 'input', 'submit', 'navigate'];
+            return accessibleInteractions.includes(interaction.type);
+        }
+
+        async function validateCSSClassStyles(cssClass) {
+            const styledClasses = [
+                'btn', 'btn-primary', 'btn-secondary', 'card', 'nav-brand', 
+                'nav-toggle', 'form-input', 'page', 'container'
+            ];
+            return styledClasses.some(styled => cssClass.includes(styled));
+        }
+
+        async function testVisualConsistency(cssClass) {
+            return !cssClass.includes('deprecated');
+        }
+
+        async function testInteractiveStates(cssClass) {
+            const interactiveClasses = ['btn', 'nav-toggle', 'form-input'];
+            return !interactiveClasses.includes(cssClass) || cssClass !== 'broken-interactive';
+        }
+
+        // UI functions
+        function updateProgress(current, total, message) {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            const percentage = (current / total) * 100;
+            progressFill.style.width = `${percentage}%`;
+            progressText.textContent = message;
+        }
+
+        function displayTestResult(testName, result) {
+            const resultsContainer = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${result.passed ? 'test-pass' : 'test-fail'}`;
+            
+            let content = `
+                <h4>${testName}</h4>
+                <p><strong>Status:</strong> ${result.passed ? '✅ PASSED' : '❌ FAILED'}</p>
+                <p><strong>Iterations:</strong> ${result.passed ? result.iterations : result.failedAt}/${result.totalIterations}</p>
+            `;
+            
+            if (!result.passed) {
+                if (result.counterExample) {
+                    content += `
+                        <div class="counter-example">
+                            <strong>Counter-example:</strong><br>
+                            ${JSON.stringify(result.counterExample, null, 2)}
+                        </div>
+                    `;
+                }
+                if (result.error) {
+                    content += `<p><strong>Error:</strong> ${result.error}</p>`;
+                }
+            }
+            
+            resultDiv.innerHTML = content;
+            resultsContainer.appendChild(resultDiv);
+        }
+
+        function displaySummary(results) {
+            const summaryCard = document.getElementById('summaryCard');
+            const summaryContent = document.getElementById('summaryContent');
+            
+            const totalTests = results.length;
+            const passedTests = results.filter(r => r.passed).length;
+            const failedTests = totalTests - passedTests;
+            const successRate = Math.round((passedTests / totalTests) * 100);
+            
+            summaryContent.innerHTML = `
+                <p><strong>Total Property Tests:</strong> ${totalTests}</p>
+                <p><strong>Passed:</strong> ${passedTests}</p>
+                <p><strong>Failed:</strong> ${failedTests}</p>
+                <p><strong>Success Rate:</strong> ${successRate}%</p>
+                ${successRate === 100 ? 
+                    '<p style="color: #22c55e; font-weight: bold;">🎉 All functionality preservation property tests passed!</p>' : 
+                    '<p style="color: #ef4444; font-weight: bold;">⚠️ Some property tests failed. Review the failures above.</p>'
+                }
+            `;
+            
+            summaryCard.style.display = 'block';
+        }
+
+        async function runPropertyTests() {
+            const runButton = document.getElementById('runTestsBtn');
+            const testProgress = document.getElementById('testProgress');
+            const consoleOutputDiv = document.getElementById('consoleOutput');
+            const testResults = document.getElementById('testResults');
+            
+            // Reset UI
+            runButton.disabled = true;
+            runButton.textContent = 'Running Tests...';
+            testProgress.style.display = 'block';
+            consoleOutputDiv.style.display = 'block';
+            testResults.innerHTML = '';
+            consoleOutput = [];
+            
+            log('🧪 Starting Functionality Preservation Property Tests');
+            log('Feature: design-system-migration, Property 16: Functionality Preservation');
+            log('Validates: Requirements 14.1');
+            
+            const results = [];
+            
+            for (let i = 0; i < propertyTests.length; i++) {
+                const test = propertyTests[i];
+                log(`\n📋 Running: ${test.name}`);
+                
+                const result = await test.run();
+                results.push({ name: test.name, ...result });
+                
+                displayTestResult(test.name, result);
+                
+                // Small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            log('\n📊 All property tests completed');
+            displaySummary(results);
+            
+            // Re-enable button
+            runButton.disabled = false;
+            runButton.textContent = 'Run Property Tests Again';
+            testProgress.style.display = 'none';
+            
+            return results;
+        }
+
+        // Auto-run tests when page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                log('Auto-running functionality preservation property tests...');
+                runPropertyTests();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

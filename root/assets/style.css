@@ -1,7 +1,13 @@
 /**
  * GRENADA FARMER MARKETPLACE - MAIN STYLES
- * Using the modern design system with earthy, natural tones
- * Import design system variables and modular components
+ * Modern design system with earthy, natural tones
+ * 
+ * Import Order (CRITICAL - DO NOT CHANGE):
+ * 1. variables.css - Design tokens and CSS custom properties
+ * 2. base.css - Reset, typography, and utility classes
+ * 3. components.css - Reusable UI components
+ * 4. layout.css - Page structure and navigation
+ * 5. marketplace.css - Application-specific styles
  */
 
 @import url('css/variables.css');
@@ -10,36 +16,64 @@
 @import url('css/layout.css');
 @import url('css/marketplace.css');
 
-/* Modal adjustments for mobile */
+/**
+ * CRITICAL RESPONSIVE OVERRIDES
+ * Mobile-specific adjustments that need to override component styles
+ */
+
 @media (max-width: 639px) {
-    .modal-content {
-        width: 95%;
-        margin: 2% auto;
+    /* Modal mobile optimization */
+    .modal__content {
+        width: 95vw;
+        max-width: 95vw;
+        margin: var(--space-4);
         max-height: 85vh;
     }
     
-    .modal-header {
+    .modal__header,
+    .modal__body,
+    .modal__footer {
         padding: var(--space-4);
     }
     
-    .modal form {
-        padding: var(--space-4);
-    }
-    
-    .modal-actions {
+    .modal__footer {
         flex-direction: column;
-        gap: var(--space-3);
+        gap: var(--space-2);
     }
     
-    .modal-actions .btn {
+    .modal__footer .btn {
         width: 100%;
+    }
+    
+    /* Button mobile optimization */
+    .hero__actions .btn,
+    .auth-actions .btn,
+    .form-actions .btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 
-/* Print styles */
+/**
+ * PRINT STYLES
+ * Optimized styles for printing
+ */
+
 @media print {
-    header, footer, .mobile-menu-btn, .nav-menu {
-        display: none;
+    /* Hide interactive elements */
+    .header,
+    .footer,
+    .nav-toggle,
+    .nav-links,
+    .btn,
+    .modal,
+    .alert {
+        display: none !important;
+    }
+    
+    /* Optimize layout for print */
+    .page {
+        min-height: auto;
     }
     
     .container {
@@ -48,12 +82,22 @@
         padding: 0;
     }
     
+    /* Ensure readability */
     .card {
         box-shadow: none;
         border: 1px solid var(--border-primary);
+        break-inside: avoid;
     }
     
-    .btn {
-        display: none;
+    /* Force black text for better printing */
+    * {
+        color: #000 !important;
+        background: transparent !important;
+    }
+    
+    /* Preserve essential colors */
+    .text-primary,
+    .color-primary {
+        color: #2d4429 !important;
     }
 }

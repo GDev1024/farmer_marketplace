@@ -1,0 +1,87 @@
+@startuml Grenada Farmer Marketplace - Sitemap
+!theme plain
+skinparam backgroundColor #f8f9fa
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+title Grenada Farmer Marketplace - Website Sitemap
+
+' Define colors for different page types
+skinparam rectangle {
+    BackgroundColor<<landing>> #e8f5e8
+    BackgroundColor<<auth>> #fff3cd
+    BackgroundColor<<farmer>> #d4edda
+    BackgroundColor<<customer>> #cce5ff
+    BackgroundColor<<shared>> #f8f9fa
+    BackgroundColor<<api>> #ffe6e6
+}
+
+' Landing & Public Pages
+rectangle "🏠 Landing Page\n(index.php)" as landing <<landing>>
+
+' Authentication Pages
+rectangle "🔐 Login\n(login.php)" as login <<auth>>
+rectangle "📝 Register\n(register.php)" as register <<auth>>
+
+' Farmer Pages
+rectangle "👨‍🌾 Farmer Dashboard\n(dashboard.php)" as farmer_dash <<farmer>>
+rectangle "📦 Product Detail\n(product.php)" as product <<shared>>
+
+' Customer Pages  
+rectangle "🛒 Customer Dashboard\n(dashboard.php)" as customer_dash <<customer>>
+rectangle "🛍️ Shopping Cart\n(cart.php)" as cart <<customer>>
+rectangle "💳 Checkout\n(checkout.php)" as checkout <<customer>>
+rectangle "📋 My Orders\n(orders.php)" as orders <<customer>>
+rectangle "✅ Order Success\n(order-success.php)" as success <<customer>>
+
+' API Endpoints
+rectangle "🔌 Auth API\n(api/auth.php)" as auth_api <<api>>
+rectangle "🔌 Products API\n(api/products.php)" as products_api <<api>>
+rectangle "🔌 Cart API\n(api/cart.php)" as cart_api <<api>>
+rectangle "🔌 Payment API\n(api/payment.php)" as payment_api <<api>>
+
+' Navigation Flow - Landing
+landing --> login : "Log In"
+landing --> register : "Sign Up"
+
+' Authentication Flow
+login --> farmer_dash : "Farmer Login"
+login --> customer_dash : "Customer Login"
+register --> login : "After Registration"
+
+' Farmer Navigation
+farmer_dash --> product : "View Product"
+farmer_dash --> orders : "View Orders"
+
+' Customer Navigation
+customer_dash --> product : "Browse Products"
+customer_dash --> cart : "View Cart"
+customer_dash --> orders : "My Orders"
+
+' Shopping Flow
+product --> cart : "Add to Cart"
+cart --> checkout : "Proceed to Checkout"
+checkout --> success : "Payment Complete"
+success --> orders : "View All Orders"
+success --> customer_dash : "Continue Shopping"
+
+' API Connections (dotted lines)
+login ..> auth_api : "Authentication"
+register ..> auth_api : "Registration"
+farmer_dash ..> products_api : "Manage Products"
+product ..> cart_api : "Add to Cart"
+cart ..> cart_api : "Update Cart"
+checkout ..> payment_api : "Process Payment"
+
+' Logout connections
+farmer_dash --> landing : "Logout"
+customer_dash --> landing : "Logout"
+cart --> landing : "Logout"
+orders --> landing : "Logout"
+
+note top of landing : "Entry point for all users\nConversion-focused design"
+note right of farmer_dash : "Product management\nInventory tracking\nOrder management"
+note right of customer_dash : "Product browsing\nSearch & filter\nOrder history"
+note bottom of auth_api : "Handles login/logout\nSession management\nUser validation"
+
+@enduml

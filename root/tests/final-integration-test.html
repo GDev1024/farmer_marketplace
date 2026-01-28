@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Integration Test - Grenada Farmers Marketplace</title>
+    
+    <!-- Load CSS files in correct order -->
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/marketplace.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-6);
+            font-family: var(--font-secondary);
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+            padding: var(--space-6);
+            background: var(--color-primary-pale);
+            border-radius: var(--radius-lg);
+        }
+        
+        .test-results {
+            background: var(--color-white);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+        
+        .test-console {
+            background: var(--color-gray-900);
+            color: var(--color-white);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .run-test-btn {
+            background: var(--color-primary);
+            color: var(--color-white);
+            border: none;
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-md);
+            font-size: var(--text-lg);
+            font-weight: var(--font-semibold);
+            cursor: pointer;
+            transition: var(--transition-all);
+            margin-bottom: var(--space-6);
+        }
+        
+        .run-test-btn:hover {
+            background: var(--color-primary-dark);
+        }
+        
+        .run-test-btn:disabled {
+            background: var(--color-gray-400);
+            cursor: not-allowed;
+        }
+        
+        .sample-components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+        
+        .component-sample {
+            padding: var(--space-4);
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--color-gray-300);
+            border-radius: 50%;
+            border-top-color: var(--color-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="page">
+    <!-- Skip Links for Accessibility -->
+    <div class="skip-links">
+        <a href="#main-content" class="skip-link">Skip to main content</a>
+        <a href="#test-navigation" class="skip-link">Skip to test navigation</a>
+    </div>
+
+    <header class="header" role="banner">
+        <div class="container">
+            <nav class="nav" role="navigation" aria-label="Test navigation" id="test-navigation">
+                <a href="#" class="nav-brand" aria-label="Grenada Farmers Marketplace - Test Page">
+                    <span class="nav-brand-icon" aria-hidden="true">🌾</span>
+                    <span class="logo-text">Integration Test</span>
+                </a>
+                
+                <button class="nav-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navLinks">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </button>
+                
+                <ul class="nav-links" id="navLinks" role="menubar">
+                    <li class="nav-section" role="none">
+                        <a href="#" class="nav-link" role="menuitem" aria-label="Test browse">
+                            <span class="nav-icon" aria-hidden="true">🛍️</span>
+                            <span class="nav-text">Browse</span>
+                        </a>
+                    </li>
+                    <li class="nav-section" role="none">
+                        <a href="#" class="nav-link cart-link" role="menuitem" aria-label="Test cart">
+                            <span class="nav-icon" aria-hidden="true">🛒</span>
+                            <span class="nav-text">Cart</span>
+                            <span class="cart-badge" aria-label="3 items in cart">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-section user-section" role="none" id="user-menu">
+                        <div class="user-info" role="group" aria-label="User information">
+                            <span class="user-name" aria-label="Welcome Test User">👋 Test User</span>
+                            <span class="verified-badge" aria-label="Verified farmer account">✅ Verified Farmer</span>
+                        </div>
+                        <a href="#" class="nav-link" role="menuitem" aria-label="View profile">
+                            <span class="nav-icon" aria-hidden="true">👤</span>
+                            <span class="nav-text">Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ARIA Live Regions for Dynamic Content -->
+    <div id="live-region-polite" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+    <div id="live-region-assertive" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+    <div id="status-region" role="status" aria-live="polite" class="sr-only"></div>
+
+    <main class="page-main" id="main-content" role="main">
+        <div class="test-container">
+            <header class="test-header">
+                <h1>Final Integration Test</h1>
+                <p>Comprehensive validation of all components and pages integration</p>
+            </header>
+
+            <section class="test-controls">
+                <button id="runTestBtn" class="run-test-btn" onclick="runIntegrationTest()">
+                    <span id="btnText">Run Integration Test</span>
+                    <span id="btnSpinner" class="loading-spinner" style="display: none; margin-left: 8px;"></span>
+                </button>
+            </section>
+
+            <section class="test-results">
+                <h2>Test Results</h2>
+                <div id="testConsole" class="test-console">
+                    Click "Run Integration Test" to start validation...
+                </div>
+            </section>
+
+            <!-- Sample Components for Testing -->
+            <section class="sample-components">
+                <div class="component-sample">
+                    <h3>Button Components</h3>
+                    <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-3);">
+                        <button class="btn btn-primary">Primary Button</button>
+                        <button class="btn btn-secondary">Secondary Button</button>
+                        <button class="btn btn-tertiary">Tertiary Button</button>
+                        <button class="btn btn-danger">Danger Button</button>
+                    </div>
+                </div>
+
+                <div class="component-sample">
+                    <h3>Card Component</h3>
+                    <article class="card">
+                        <header class="card__header">
+                            <h4>Sample Product</h4>
+                        </header>
+                        <div class="card__body">
+                            <p>This is a sample product card to test component structure.</p>
+                        </div>
+                        <footer class="card__footer">
+                            <span class="price">EC$15.00</span>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </footer>
+                    </article>
+                </div>
+
+                <div class="component-sample">
+                    <h3>Form Components</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="testEmail">Email Address</label>
+                            <input type="email" id="testEmail" name="email" required aria-describedby="emailHelp">
+                            <small id="emailHelp" class="form-text">We'll never share your email.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="testMessage">Message</label>
+                            <textarea id="testMessage" name="message" rows="3" aria-describedby="messageHelp"></textarea>
+                            <small id="messageHelp" class="form-text">Optional message.</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+
+                <div class="component-sample">
+                    <h3>Hero Section Sample</h3>
+                    <div class="hero" style="min-height: 200px;">
+                        <div class="hero-content">
+                            <div class="hero-text">
+                                <h2>Test Hero Section</h2>
+                                <p class="hero-subtitle">Testing hero component integration</p>
+                                <div class="cta-buttons">
+                                    <a href="#" class="btn btn-primary">Primary CTA</a>
+                                    <a href="#" class="btn btn-secondary">Secondary CTA</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>🌾 Integration Test</h4>
+                    <p>Testing footer integration and consistency.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Test Links</h4>
+                    <ul>
+                        <li><a href="#">Test Link 1</a></li>
+                        <li><a href="#">Test Link 2</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Integration Test | Design System Migration</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load the integration test script -->
+    <script src="final-integration-validation.js"></script>
+    
+    <script>
+        // Mobile menu toggle function
+        function toggleMobileMenu() {
+            const nav = document.getElementById('navLinks');
+            const body = document.body;
+            const toggle = document.querySelector('.nav-toggle');
+            
+            nav.classList.toggle('is-active');
+            body.classList.toggle('nav-open');
+            
+            // Update ARIA expanded state
+            const isExpanded = nav.classList.contains('is-active');
+            toggle.setAttribute('aria-expanded', isExpanded);
+        }
+
+        // Override console.log to display in test console
+        const originalConsoleLog = console.log;
+        const testConsole = document.getElementById('testConsole');
+        
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            
+            // Format the message for display
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            
+            testConsole.textContent += message + '\n';
+            testConsole.scrollTop = testConsole.scrollHeight;
+        };
+
+        // Run integration test function
+        async function runIntegrationTest() {
+            const btn = document.getElementById('runTestBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            
+            // Disable button and show loading
+            btn.disabled = true;
+            btnText.textContent = 'Running Tests...';
+            btnSpinner.style.display = 'inline-block';
+            
+            // Clear console
+            testConsole.textContent = '';
+            
+            try {
+                // Wait a moment for UI to update
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // Run the integration test
+                const validator = new FinalIntegrationValidator();
+                const results = await validator.runAllTests();
+                
+                // Announce completion to screen readers
+                const liveRegion = document.getElementById('live-region-polite');
+                liveRegion.textContent = `Integration test completed with overall score: ${results.overall.score}%`;
+                
+            } catch (error) {
+                console.log('❌ Test execution error:', error.message);
+            } finally {
+                // Re-enable button
+                btn.disabled = false;
+                btnText.textContent = 'Run Integration Test';
+                btnSpinner.style.display = 'none';
+            }
+        }
+
+        // Auto-run test on page load (optional)
+        // window.addEventListener('load', () => {
+        //     setTimeout(runIntegrationTest, 1000);
+        // });
+    </script>
+</body>
+</html>

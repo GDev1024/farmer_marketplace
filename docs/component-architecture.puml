@@ -1,0 +1,158 @@
+@startuml Component Architecture - Design System
+!theme plain
+skinparam backgroundColor #f8f9fa
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title Design System Component Architecture
+
+' CSS Architecture
+package "🎨 CSS Architecture" {
+    rectangle "variables.css" as variables {
+        rectangle "Colors" as colors
+        rectangle "Typography" as typography
+        rectangle "Spacing" as spacing
+        rectangle "Shadows" as shadows
+        rectangle "Border Radius" as radius
+        rectangle "Transitions" as transitions
+    }
+    
+    rectangle "base.css" as base {
+        rectangle "Reset Styles" as reset
+        rectangle "Global Styles" as global
+        rectangle "Typography Base" as typo_base
+    }
+    
+    rectangle "components.css" as components {
+        rectangle "Buttons" as buttons
+        rectangle "Cards" as cards
+        rectangle "Forms" as forms
+        rectangle "Badges" as badges
+        rectangle "Modals" as modals
+        rectangle "Alerts" as alerts
+    }
+    
+    rectangle "layout.css" as layout {
+        rectangle "Header" as header
+        rectangle "Navigation" as navigation
+        rectangle "Footer" as footer
+        rectangle "Grid System" as grid
+        rectangle "Containers" as containers
+    }
+    
+    rectangle "marketplace.css" as marketplace {
+        rectangle "Landing Page" as landing_styles
+        rectangle "Auth Pages" as auth_styles
+        rectangle "Dashboard" as dashboard_styles
+        rectangle "Product Pages" as product_styles
+        rectangle "Shopping Flow" as shopping_styles
+    }
+}
+
+' Component Hierarchy
+package "🧩 Component Hierarchy" {
+    rectangle "Page Layouts" as page_layouts {
+        rectangle "Landing Layout" as landing_layout
+        rectangle "Auth Layout" as auth_layout
+        rectangle "App Layout" as app_layout
+    }
+    
+    rectangle "Navigation Components" as nav_components {
+        rectangle "Landing Nav" as landing_nav
+        rectangle "App Header" as app_header
+        rectangle "Mobile Menu" as mobile_menu
+    }
+    
+    rectangle "Content Components" as content_components {
+        rectangle "Hero Section" as hero_section
+        rectangle "Product Cards" as product_cards
+        rectangle "Cart Items" as cart_items
+        rectangle "Order Cards" as order_cards
+        rectangle "Review Cards" as review_cards
+    }
+    
+    rectangle "Form Components" as form_components {
+        rectangle "Auth Forms" as auth_forms
+        rectangle "Product Forms" as product_forms
+        rectangle "Checkout Forms" as checkout_forms
+    }
+    
+    rectangle "Interactive Components" as interactive_components {
+        rectangle "Modals" as modal_components
+        rectangle "Dropdowns" as dropdowns
+        rectangle "Image Upload" as image_upload
+        rectangle "Quantity Selector" as quantity_selector
+    }
+}
+
+' Responsive Design
+package "📱 Responsive Design" {
+    rectangle "Breakpoints" as breakpoints {
+        rectangle "Mobile (320px+)" as mobile
+        rectangle "Tablet (768px+)" as tablet
+        rectangle "Desktop (1024px+)" as desktop
+        rectangle "Large (1200px+)" as large
+    }
+    
+    rectangle "Mobile Patterns" as mobile_patterns {
+        rectangle "Hamburger Menu" as hamburger
+        rectangle "Touch Targets" as touch_targets
+        rectangle "Stacked Layouts" as stacked
+    }
+    
+    rectangle "Desktop Patterns" as desktop_patterns {
+        rectangle "Multi-column" as multi_column
+        rectangle "Sidebar Layouts" as sidebar
+        rectangle "Hover States" as hover_states
+    }
+}
+
+' Design Tokens
+package "🎯 Design Tokens" {
+    rectangle "Color Palette" as color_palette {
+        rectangle "Primary Green" as primary_green
+        rectangle "Caribbean Blue" as caribbean_blue
+        rectangle "Caribbean Orange" as caribbean_orange
+        rectangle "Gray Scale" as gray_scale
+    }
+    
+    rectangle "Typography Scale" as typography_scale {
+        rectangle "Playfair Display" as playfair
+        rectangle "System Fonts" as system_fonts
+        rectangle "Font Sizes" as font_sizes
+        rectangle "Font Weights" as font_weights
+    }
+    
+    rectangle "Spacing Scale" as spacing_scale {
+        rectangle "XS (0.5rem)" as xs
+        rectangle "SM (1rem)" as sm
+        rectangle "MD (1.5rem)" as md
+        rectangle "LG (2rem)" as lg
+        rectangle "XL (3rem)" as xl
+        rectangle "XXL (4rem)" as xxl
+    }
+}
+
+' Dependencies
+variables --> base : "Imports"
+base --> components : "Extends"
+components --> layout : "Uses"
+layout --> marketplace : "Specializes"
+
+page_layouts --> nav_components : "Contains"
+page_layouts --> content_components : "Contains"
+page_layouts --> form_components : "Contains"
+
+breakpoints --> mobile_patterns : "Defines"
+breakpoints --> desktop_patterns : "Defines"
+
+color_palette --> variables : "Defines"
+typography_scale --> variables : "Defines"
+spacing_scale --> variables : "Defines"
+
+note right of variables : "Design tokens\nCSS custom properties\nConsistent values"
+note right of components : "Reusable UI elements\nConsistent styling\nModular approach"
+note right of page_layouts : "Page-level templates\nLayout structures\nContent organization"
+note bottom of breakpoints : "Mobile-first approach\nProgressive enhancement\nTouch-friendly design"
+
+@enduml

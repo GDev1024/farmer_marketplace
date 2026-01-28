@@ -47,155 +47,206 @@ if($msg['message']): ?>
     </div>
 <?php endif; ?>
 
-<div class="checkout-container">
-    <!-- Order Summary -->
-    <div class="card">
-        <div class="card-header">
-            <h2 style="margin: 0; display: flex; align-items: center; gap: var(--space-sm);">
-                <span>🛒</span> Order Summary
-            </h2>
-            <p style="color: var(--text-secondary); margin: var(--space-sm) 0 0 0; font-size: 14px;">
-                Review your items before payment
-            </p>
-        </div>
-        
-        <div class="card-body">
-            <?php foreach ($cartItems as $item): ?>
-                <div style="display: flex; gap: var(--space-md); padding: var(--space-md) 0; border-bottom: 1px solid var(--border-light);">
-                    <div style="width: 60px; height: 60px; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;">
-                        <?php if (!empty($item['listing']['thumbnail_path']) && file_exists($item['listing']['thumbnail_path'])): ?>
-                            <img src="<?= htmlspecialchars($item['listing']['thumbnail_path']) ?>" 
-                                 alt="<?= htmlspecialchars($item['listing']['product_name']) ?>"
-                                 style="width: 100%; height: 100%; object-fit: cover;">
-                        <?php else: ?>
-                            <span style="font-size: 24px;">
-                                <?php
-                                $emojis = ['vegetables' => '🥬', 'fruits' => '🍎', 'herbs' => '🌿', 'grains' => '🌾'];
-                                echo $emojis[$item['listing']['category']] ?? '🌾';
-                                ?>
-                            </span>
-                        <?php endif; ?>
+<main class="page-main checkout-page" id="main-content" role="main">
+    <header class="page-header">
+        <h1 class="page-title">Secure Checkout</h1>
+        <p class="page-subtitle">Review your order and complete your purchase securely</p>
+    </header>
+
+    <div class="checkout-content">
+        <section class="order-summary-section" aria-labelledby="order-summary-title">
+            <div class="card">
+                <header class="card-header">
+                    <h2 id="order-summary-title" class="checkout-section-title">
+                        <span class="section-icon" aria-hidden="true">🛒</span>
+                        Order Summary
+                    </h2>
+                    <p class="section-subtitle">Review your items before payment</p>
+                </header>
+                
+                <div class="card-body">
+                    <div class="order-items-list">
+                        <?php foreach ($cartItems as $item): ?>
+                            <article class="order-item" aria-labelledby="order-item-<?= $item['listing']['id'] ?>-title">
+                                <div class="order-item-image">
+                                    <?php if (!empty($item['listing']['thumbnail_path']) && file_exists($item['listing']['thumbnail_path'])): ?>
+                                        <img src="<?= htmlspecialchars($item['listing']['thumbnail_path']) ?>" 
+                                             alt="<?= htmlspecialchars($item['listing']['product_name']) ?>"
+                                             class="item-image"
+                                             loading="lazy">
+                                    <?php else: ?>
+                                        <div class="item-placeholder" aria-label="Product image placeholder">
+                                            <?php
+                                            $emojis = ['vegetables' => '🥬', 'fruits' => '🍎', 'herbs' => '🌿', 'grains' => '🌾'];
+                                            echo $emojis[$item['listing']['category']] ?? '🌾';
+                                            ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <div class="order-item-details">
+                                    <h3 id="order-item-<?= $item['listing']['id'] ?>-title" class="item-title">
+                                        <?= htmlspecialchars($item['listing']['product_name']) ?>
+                                    </h3>
+                                    <p class="item-seller">
+                                        From <strong><?= htmlspecialchars($item['listing']['seller_name']) ?></strong>
+                                    </p>
+                                    <div class="item-pricing">
+                                        <span class="item-quantity-price" aria-label="<?= $item['quantity'] ?> items at EC$<?= number_format($item['listing']['price'], 2) ?> each">
+                                            <?= $item['quantity'] ?> × EC$<?= number_format($item['listing']['price'], 2) ?>
+                                        </span>
+                                        <span class="item-total" aria-label="Item total: EC$<?= number_format($item['total'], 2) ?>">
+                                            EC$<?= number_format($item['total'], 2) ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
                     </div>
                     
-                    <div style="flex: 1;">
-                        <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 16px; font-weight: var(--font-weight-semibold);">
-                            <?= htmlspecialchars($item['listing']['product_name']) ?>
-                        </h4>
-                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-                            From <?= htmlspecialchars($item['listing']['seller_name']) ?>
-                        </p>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-sm);">
-                            <span style="color: var(--text-secondary); font-size: 14px;">
-                                <?= $item['quantity'] ?> × EC$<?= number_format($item['listing']['price'], 2) ?>
-                            </span>
-                            <span style="font-weight: var(--font-weight-semibold); color: var(--success);">
-                                EC$<?= number_format($item['total'], 2) ?>
-                            </span>
+                    <div class="order-totals">
+                        <div class="total-line">
+                            <span class="total-label">Subtotal:</span>
+                            <span class="total-value">EC$<?= number_format($subtotal, 2) ?></span>
+                        </div>
+                        <div class="total-line">
+                            <span class="total-label">Tax (10%):</span>
+                            <span class="total-value">EC$<?= number_format($tax, 2) ?></span>
+                        </div>
+                        <div class="total-divider"></div>
+                        <div class="total-line total-final">
+                            <span class="total-label">Total:</span>
+                            <span class="total-value total-amount">EC$<?= number_format($total, 2) ?></span>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-            
-            <!-- Order Totals -->
-            <div style="margin-top: var(--space-lg);">
-                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-sm);">
-                    <span style="color: var(--text-secondary);">Subtotal:</span>
-                    <span>EC$<?= number_format($subtotal, 2) ?></span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-sm);">
-                    <span style="color: var(--text-secondary);">Tax (10%):</span>
-                    <span>EC$<?= number_format($tax, 2) ?></span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding-top: var(--space-sm); border-top: 2px solid var(--border-medium); font-size: 18px; font-weight: var(--font-weight-bold);">
-                    <span>Total:</span>
-                    <span style="color: var(--success);">EC$<?= number_format($total, 2) ?></span>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- Payment Methods -->
-    <div class="card">
-        <div class="card-header">
-            <h3 style="margin: 0; display: flex; align-items: center; gap: var(--space-sm);">
-                <span>💳</span> Payment Method
-            </h3>
-            <p style="color: var(--text-secondary); margin: var(--space-sm) 0 0 0; font-size: 14px;">
-                Choose your preferred payment option
-            </p>
-        </div>
+        </section>
         
-        <div class="card-body">
-            <?php if (empty($availablePaymentMethods)): ?>
-                <div class="alert alert-warning">
-                    ⚠ Payment methods are not configured. Please contact support.
-                </div>
-            <?php else: ?>
-                <div class="payment-methods">
-                    <?php if (in_array('stripe', $availablePaymentMethods)): ?>
-                        <div class="payment-method" data-method="stripe">
-                            <div class="payment-method-header">
-                                <input type="radio" name="payment_method" value="stripe" id="stripe" checked>
-                                <label for="stripe" class="payment-method-label">
-                                    <div class="payment-method-info">
-                                        <span class="payment-method-name">💳 Credit/Debit Card</span>
-                                        <span class="payment-method-desc">Secure payment with Stripe</span>
-                                    </div>
-                                    <div class="payment-method-logos">
-                                        <span style="font-size: 20px;">💳</span>
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="payment-method-form" id="stripe-form">
-                                <div id="stripe-card-element" style="padding: var(--space-md); border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-secondary);"></div>
-                                <div id="stripe-card-errors" style="color: var(--error); font-size: 14px; margin-top: var(--space-sm);"></div>
-                            </div>
+        <section class="payment-section" aria-labelledby="payment-title">
+            <div class="card">
+                <header class="card-header">
+                    <h2 id="payment-title" class="checkout-section-title">
+                        <span class="section-icon" aria-hidden="true">💳</span>
+                        Payment Method
+                    </h2>
+                    <p class="section-subtitle">Choose your preferred payment option</p>
+                </header>
+                
+                <div class="card-body">
+                    <?php if (empty($availablePaymentMethods)): ?>
+                        <div class="alert alert-warning">
+                            <span aria-hidden="true">⚠</span> Payment methods are not configured. Please contact support.
                         </div>
-                    <?php endif; ?>
-                    
-                    <?php if (in_array('paypal', $availablePaymentMethods)): ?>
-                        <div class="payment-method" data-method="paypal">
-                            <div class="payment-method-header">
-                                <input type="radio" name="payment_method" value="paypal" id="paypal" <?= !in_array('stripe', $availablePaymentMethods) ? 'checked' : '' ?>>
-                                <label for="paypal" class="payment-method-label">
-                                    <div class="payment-method-info">
-                                        <span class="payment-method-name">🅿️ PayPal</span>
-                                        <span class="payment-method-desc">Pay with your PayPal account</span>
+                    <?php else: ?>
+                        <form class="payment-form" role="form" aria-label="Payment method selection">
+                            <fieldset class="payment-methods" aria-labelledby="payment-methods-legend">
+                                <legend id="payment-methods-legend" class="sr-only">Select payment method</legend>
+                                
+                                <?php if (in_array('stripe', $availablePaymentMethods)): ?>
+                                    <div class="payment-method" data-method="stripe">
+                                        <div class="payment-method-header">
+                                            <input type="radio" 
+                                                   name="payment_method" 
+                                                   value="stripe" 
+                                                   id="stripe" 
+                                                   class="payment-method-input"
+                                                   checked
+                                                   aria-describedby="stripe-description">
+                                            <label for="stripe" class="payment-method-label">
+                                                <div class="payment-method-info">
+                                                    <span class="payment-method-name">
+                                                        <span class="payment-icon" aria-hidden="true">💳</span>
+                                                        Credit/Debit Card
+                                                    </span>
+                                                    <span id="stripe-description" class="payment-method-desc">
+                                                        Secure payment with Stripe
+                                                    </span>
+                                                </div>
+                                                <div class="payment-method-indicator" aria-hidden="true"></div>
+                                            </label>
+                                        </div>
+                                        <div class="payment-method-form" id="stripe-form" aria-labelledby="stripe-form-title">
+                                            <h3 id="stripe-form-title" class="sr-only">Credit card information</h3>
+                                            <div id="stripe-card-element" 
+                                                 class="stripe-card-element"
+                                                 aria-label="Credit card information input"></div>
+                                            <div id="stripe-card-errors" 
+                                                 class="payment-error"
+                                                 role="alert"
+                                                 aria-live="polite"></div>
+                                        </div>
                                     </div>
-                                    <div class="payment-method-logos">
-                                        <span style="font-size: 20px; color: #0070ba;">🅿️</span>
+                                <?php endif; ?>
+                                
+                                <?php if (in_array('paypal', $availablePaymentMethods)): ?>
+                                    <div class="payment-method" data-method="paypal">
+                                        <div class="payment-method-header">
+                                            <input type="radio" 
+                                                   name="payment_method" 
+                                                   value="paypal" 
+                                                   id="paypal" 
+                                                   class="payment-method-input"
+                                                   <?= !in_array('stripe', $availablePaymentMethods) ? 'checked' : '' ?>
+                                                   aria-describedby="paypal-description">
+                                            <label for="paypal" class="payment-method-label">
+                                                <div class="payment-method-info">
+                                                    <span class="payment-method-name">
+                                                        <span class="payment-icon" aria-hidden="true">🅿️</span>
+                                                        PayPal
+                                                    </span>
+                                                    <span id="paypal-description" class="payment-method-desc">
+                                                        Pay with your PayPal account
+                                                    </span>
+                                                </div>
+                                                <div class="payment-method-indicator" aria-hidden="true"></div>
+                                            </label>
+                                        </div>
+                                        <div class="payment-method-form" id="paypal-form" style="display: none;" aria-labelledby="paypal-form-title">
+                                            <h3 id="paypal-form-title" class="sr-only">PayPal payment information</h3>
+                                            <p class="paypal-notice">
+                                                You'll be redirected to PayPal to complete your payment securely.
+                                            </p>
+                                        </div>
                                     </div>
-                                </label>
+                                <?php endif; ?>
+                            </fieldset>
+                            
+                            <div class="checkout-actions">
+                                <button type="button" 
+                                        id="checkout-btn" 
+                                        class="btn btn-primary btn-lg checkout-button" 
+                                        disabled
+                                        aria-describedby="checkout-btn-help">
+                                    <span id="checkout-btn-text" class="btn-content">
+                                        <span class="btn-icon" aria-hidden="true">🔒</span>
+                                        Complete Order - EC$<?= number_format($total, 2) ?>
+                                    </span>
+                                    <div id="checkout-spinner" class="btn-spinner" style="display: none;" aria-hidden="true">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </button>
+                                <small id="checkout-btn-help" class="checkout-help">
+                                    Select a payment method to continue
+                                </small>
                             </div>
-                            <div class="payment-method-form" id="paypal-form" style="display: none;">
-                                <p style="color: var(--text-secondary); font-size: 14px; margin: var(--space-md) 0;">
-                                    You'll be redirected to PayPal to complete your payment securely.
+                        </form>
+                        
+                        <div class="security-notice">
+                            <div class="security-icon" aria-hidden="true">🔒</div>
+                            <div class="security-content">
+                                <h3 class="security-title">Secure Payment</h3>
+                                <p class="security-description">
+                                    Your payment information is encrypted and secure. We never store your card details.
                                 </p>
                             </div>
                         </div>
                     <?php endif; ?>
                 </div>
-                
-                <!-- Checkout Button -->
-                <button id="checkout-btn" class="btn btn-primary btn-lg" style="width: 100%; margin-top: var(--space-lg);" disabled>
-                    <span id="checkout-btn-text">🔒 Complete Order - EC$<?= number_format($total, 2) ?></span>
-                    <div id="checkout-spinner" style="display: none;" class="spinner"></div>
-                </button>
-                
-                <!-- Security Notice -->
-                <div style="display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-md); padding: var(--space-md); background: var(--bg-primary); border-radius: var(--radius-md);">
-                    <span style="font-size: 16px;">🔒</span>
-                    <div>
-                        <p style="margin: 0; font-size: 12px; color: var(--text-secondary);">
-                            <strong>Secure Payment</strong><br>
-                            Your payment information is encrypted and secure. We never store your card details.
-                        </p>
-                    </div>
-                </div>
-            <?php endif; ?>
-        </div>
+            </div>
+        </section>
     </div>
-</div>
+</main>
 
 <!-- Include Stripe.js -->
 <?php if (in_array('stripe', $availablePaymentMethods)): ?>

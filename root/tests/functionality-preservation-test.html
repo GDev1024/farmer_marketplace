@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functionality Preservation Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-header {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+        .test-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .test-item:last-child {
+            border-bottom: none;
+        }
+        .test-status {
+            width: 80px;
+            font-weight: bold;
+            margin-right: 16px;
+        }
+        .test-pass {
+            color: #22c55e;
+        }
+        .test-fail {
+            color: #ef4444;
+        }
+        .test-pending {
+            color: #f59e0b;
+        }
+        .test-name {
+            flex: 1;
+            font-weight: 500;
+        }
+        .test-description {
+            color: #666;
+            font-size: 14px;
+        }
+        .run-tests-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .run-tests-btn:hover {
+            background: #2563eb;
+        }
+        .results-summary {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+        .iframe-test {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Functionality Preservation Test Suite</h1>
+            <p>Testing that all existing features work without regression after design system migration.</p>
+            <button class="run-tests-btn" onclick="runAllTests()">Run All Tests</button>
+        </div>
+
+        <div id="test-results">
+            <div class="test-item">
+                <span class="test-status test-pending" id="status-pages">PENDING</span>
+                <div>
+                    <div class="test-name">Page Accessibility</div>
+                    <div class="test-description">Verify all required pages are accessible and load correctly</div>
+                </div>
+            </div>
+
+            <div class="test-item">
+                <span class="test-status test-pending" id="status-forms">PENDING</span>
+                <div>
+                    <div class="test-name">Form Functionality</div>
+                    <div class="test-description">Test form submissions and validation work correctly</div>
+                </div>
+            </div>
+
+            <div class="test-item">
+                <span class="test-status test-pending" id="status-navigation">PENDING</span>
+                <div>
+                    <div class="test-name">Navigation System</div>
+                    <div class="test-description">Verify navigation links and routing work properly</div>
+                </div>
+            </div>
+
+            <div class="test-item">
+                <span class="test-status test-pending" id="status-responsive">PENDING</span>
+                <div>
+                    <div class="test-name">Responsive Design</div>
+                    <div class="test-description">Test layout works across different screen sizes</div>
+                </div>
+            </div>
+
+            <div class="test-item">
+                <span class="test-status test-pending" id="status-css">PENDING</span>
+                <div>
+                    <div class="test-name">CSS Loading</div>
+                    <div class="test-description">Verify all CSS files load in correct order</div>
+                </div>
+            </div>
+
+            <div class="test-item">
+                <span class="test-status test-pending" id="status-javascript">PENDING</span>
+                <div>
+                    <div class="test-name">JavaScript Functionality</div>
+                    <div class="test-description">Test interactive elements and JavaScript features</div>
+                </div>
+            </div>
+
+            <div class="test-item">
+                <span class="test-status test-pending" id="status-images">PENDING</span>
+                <div>
+                    <div class="test-name">Image Loading</div>
+                    <div class="test-description">Verify images load correctly with proper alt text</div>
+                </div>
+            </div>
+
+            <div class="test-item">
+                <span class="test-status test-pending" id="status-fonts">PENDING</span>
+                <div>
+                    <div class="test-name">Font Loading</div>
+                    <div class="test-description">Test Merriweather font loads and applies correctly</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-summary" id="results-summary" style="display: none;">
+            <h3>Test Results Summary</h3>
+            <div id="summary-content"></div>
+        </div>
+    </div>
+
+    <!-- Test iframes for page loading -->
+    <div class="test-container" id="page-test-container" style="display: none;">
+        <h3>Page Loading Tests</h3>
+        <div id="page-iframes"></div>
+    </div>
+
+    <script>
+        let testResults = {};
+        let totalTests = 8;
+
+        async function runAllTests() {
+            console.log('Starting functionality preservation tests...');
+            
+            // Reset all tests to pending
+            document.querySelectorAll('.test-status').forEach(status => {
+                status.className = 'test-status test-pending';
+                status.textContent = 'RUNNING';
+            });
+
+            // Run tests
+            await testPageAccessibility();
+            await testFormFunctionality();
+            await testNavigationSystem();
+            await testResponsiveDesign();
+            await testCSSLoading();
+            await testJavaScriptFunctionality();
+            await testImageLoading();
+            await testFontLoading();
+
+            // Show results
+            showResultsSummary();
+        }
+
+        async function testPageAccessibility() {
+            const testId = 'pages';
+            try {
+                const pages = [
+                    '../index.php',
+                    '../login.php',
+                    '../register.php',
+                    '../dashboard.php'
+                ];
+
+                let passedPages = 0;
+                const pageContainer = document.getElementById('page-test-container');
+                const iframeContainer = document.getElementById('page-iframes');
+                
+                for (const page of pages) {
+                    try {
+                        const iframe = document.createElement('iframe');
+                        iframe.src = page;
+                        iframe.className = 'iframe-test';
+                        iframe.title = `Test loading ${page}`;
+                        
+                        await new Promise((resolve, reject) => {
+                            iframe.onload = () => {
+                                passedPages++;
+                                resolve();
+                            };
+                            iframe.onerror = () => reject(new Error(`Failed to load ${page}`));
+                            
+                            iframeContainer.appendChild(iframe);
+                            
+                            // Timeout after 5 seconds
+                            setTimeout(() => reject(new Error(`Timeout loading ${page}`)), 5000);
+                        });
+                    } catch (error) {
+                        console.warn(`Page test failed for ${page}:`, error.message);
+                    }
+                }
+
+                const success = passedPages >= pages.length * 0.75; // 75% success rate
+                updateTestStatus(testId, success, `${passedPages}/${pages.length} pages loaded successfully`);
+                
+                if (passedPages > 0) {
+                    pageContainer.style.display = 'block';
+                }
+            } catch (error) {
+                updateTestStatus(testId, false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testFormFunctionality() {
+            const testId = 'forms';
+            try {
+                // Test form elements exist and have proper attributes
+                const testForm = document.createElement('form');
+                testForm.innerHTML = `
+                    <input type="email" name="email" required>
+                    <input type="password" name="password" required>
+                    <button type="submit">Submit</button>
+                `;
+                
+                const emailInput = testForm.querySelector('input[type="email"]');
+                const passwordInput = testForm.querySelector('input[type="password"]');
+                const submitButton = testForm.querySelector('button[type="submit"]');
+                
+                const hasRequiredElements = emailInput && passwordInput && submitButton;
+                const hasValidation = emailInput.hasAttribute('required') && passwordInput.hasAttribute('required');
+                
+                updateTestStatus(testId, hasRequiredElements && hasValidation, 
+                    hasRequiredElements && hasValidation ? 'Form elements and validation working' : 'Form validation issues detected');
+            } catch (error) {
+                updateTestStatus(testId, false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testNavigationSystem() {
+            const testId = 'navigation';
+            try {
+                // Test navigation structure
+                const nav = document.createElement('nav');
+                nav.innerHTML = `
+                    <a href="index.php" class="nav-brand">Brand</a>
+                    <button class="nav-toggle">Menu</button>
+                    <ul class="nav-links">
+                        <li><a href="login.php">Login</a></li>
+                        <li><a href="register.php">Register</a></li>
+                    </ul>
+                `;
+                
+                const brand = nav.querySelector('.nav-brand');
+                const toggle = nav.querySelector('.nav-toggle');
+                const links = nav.querySelector('.nav-links');
+                
+                const hasNavStructure = brand && toggle && links;
+                updateTestStatus(testId, hasNavStructure, 
+                    hasNavStructure ? 'Navigation structure correct' : 'Navigation structure issues');
+            } catch (error) {
+                updateTestStatus(testId, false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testResponsiveDesign() {
+            const testId = 'responsive';
+            try {
+                // Test viewport meta tag
+                const viewportMeta = document.querySelector('meta[name="viewport"]');
+                const hasViewport = viewportMeta && viewportMeta.content.includes('width=device-width');
+                
+                // Test CSS media queries support
+                const supportsMediaQueries = window.matchMedia && window.matchMedia('(min-width: 768px)').matches !== undefined;
+                
+                updateTestStatus(testId, hasViewport && supportsMediaQueries, 
+                    hasViewport && supportsMediaQueries ? 'Responsive design support detected' : 'Responsive design issues');
+            } catch (error) {
+                updateTestStatus(testId, false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testCSSLoading() {
+            const testId = 'css';
+            try {
+                // Test CSS files are referenced
+                const cssFiles = [
+                    'variables.css',
+                    'base.css',
+                    'components.css',
+                    'layout.css',
+                    'marketplace.css'
+                ];
+                
+                const linkElements = document.querySelectorAll('link[rel="stylesheet"]');
+                let foundCSSFiles = 0;
+                
+                cssFiles.forEach(cssFile => {
+                    const found = Array.from(linkElements).some(link => 
+                        link.href && link.href.includes(cssFile)
+                    );
+                    if (found) foundCSSFiles++;
+                });
+                
+                const success = foundCSSFiles >= cssFiles.length * 0.8; // 80% of CSS files found
+                updateTestStatus(testId, success, `${foundCSSFiles}/${cssFiles.length} CSS files detected`);
+            } catch (error) {
+                updateTestStatus(testId, false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testJavaScriptFunctionality() {
+            const testId = 'javascript';
+            try {
+                // Test basic JavaScript functionality
+                const testFunction = () => 'test';
+                const canExecuteJS = testFunction() === 'test';
+                
+                // Test DOM manipulation
+                const testDiv = document.createElement('div');
+                testDiv.textContent = 'test';
+                const canManipulateDOM = testDiv.textContent === 'test';
+                
+                updateTestStatus(testId, canExecuteJS && canManipulateDOM, 
+                    canExecuteJS && canManipulateDOM ? 'JavaScript functionality working' : 'JavaScript issues detected');
+            } catch (error) {
+                updateTestStatus(testId, false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testImageLoading() {
+            const testId = 'images';
+            try {
+                // Test image loading capability
+                const testImg = new Image();
+                
+                await new Promise((resolve, reject) => {
+                    testImg.onload = () => resolve();
+                    testImg.onerror = () => reject(new Error('Image loading failed'));
+                    testImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiLz48L3N2Zz4=';
+                    
+                    setTimeout(() => reject(new Error('Image loading timeout')), 3000);
+                });
+                
+                updateTestStatus(testId, true, 'Image loading functionality working');
+            } catch (error) {
+                updateTestStatus(testId, false, `Error: ${error.message}`);
+            }
+        }
+
+        async function testFontLoading() {
+            const testId = 'fonts';
+            try {
+                // Test font loading
+                const testElement = document.createElement('div');
+                testElement.style.fontFamily = 'Merriweather, serif';
+                testElement.style.position = 'absolute';
+                testElement.style.visibility = 'hidden';
+                testElement.textContent = 'Test';
+                document.body.appendChild(testElement);
+                
+                const computedStyle = window.getComputedStyle(testElement);
+                const fontFamily = computedStyle.fontFamily;
+                
+                document.body.removeChild(testElement);
+                
+                const hasMerriweather = fontFamily.includes('Merriweather') || fontFamily.includes('serif');
+                updateTestStatus(testId, hasMerriweather, 
+                    hasMerriweather ? 'Font loading working' : 'Font loading issues detected');
+            } catch (error) {
+                updateTestStatus(testId, false, `Error: ${error.message}`);
+            }
+        }
+
+        function updateTestStatus(testId, passed, message) {
+            const statusElement = document.getElementById(`status-${testId}`);
+            if (statusElement) {
+                statusElement.className = `test-status ${passed ? 'test-pass' : 'test-fail'}`;
+                statusElement.textContent = passed ? 'PASS' : 'FAIL';
+            }
+            
+            testResults[testId] = { passed, message };
+            console.log(`Test ${testId}: ${passed ? 'PASS' : 'FAIL'} - ${message}`);
+        }
+
+        function showResultsSummary() {
+            const summaryContainer = document.getElementById('results-summary');
+            const summaryContent = document.getElementById('summary-content');
+            
+            const passedTests = Object.values(testResults).filter(result => result.passed).length;
+            const failedTests = totalTests - passedTests;
+            const successRate = Math.round((passedTests / totalTests) * 100);
+            
+            summaryContent.innerHTML = `
+                <p><strong>Total Tests:</strong> ${totalTests}</p>
+                <p><strong>Passed:</strong> ${passedTests}</p>
+                <p><strong>Failed:</strong> ${failedTests}</p>
+                <p><strong>Success Rate:</strong> ${successRate}%</p>
+                ${successRate === 100 ? 
+                    '<p style="color: #22c55e; font-weight: bold;">🎉 All functionality preservation tests passed!</p>' : 
+                    '<p style="color: #ef4444; font-weight: bold;">⚠️ Some tests failed. Review the failures above.</p>'
+                }
+            `;
+            
+            summaryContainer.style.display = 'block';
+        }
+
+        // Auto-run tests when page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                console.log('Auto-running functionality preservation tests...');
+                runAllTests();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

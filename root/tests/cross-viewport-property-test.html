@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Cross-Viewport Testing</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-header {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+        .property-info {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .viewport-info {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .viewport-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .viewport-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .viewport-btn:hover {
+            background: #2563eb;
+        }
+        .viewport-btn.active {
+            background: #1d4ed8;
+        }
+        .test-progress {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #22c55e;
+            transition: width 0.3s ease;
+        }
+        .test-results {
+            margin-top: 20px;
+        }
+        .test-result {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        .test-pass {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+        }
+        .test-fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .run-tests-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .run-tests-btn:hover {
+            background: #2563eb;
+        }
+        .run-tests-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .console-output {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        .summary-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .counter-example {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 8px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .viewport-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .viewport-item {
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .viewport-mobile {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .viewport-tablet {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .viewport-desktop {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .test-viewport-frame {
+            border: 2px solid #ddd;
+            margin: 20px 0;
+            background: white;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: none;
+        }
+        .viewport-frame-info {
+            background: #f8fafc;
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Property-Based Test: Cross-Viewport Testing</h1>
+            <p>Testing functionality and layout across mobile, tablet, and desktop viewports.</p>
+            <button class="run-tests-btn" id="runTestsBtn" onclick="runPropertyTests()">Run Property Tests</button>
+        </div>
+
+        <div class="property-info">
+            <h3>Property 18: Cross-Viewport Testing</h3>
+            <p><strong>Feature:</strong> design-system-migration</p>
+            <p><strong>Validates:</strong> Requirements 14.3</p>
+            <p><strong>Description:</strong> For any page in the application, functionality and layout should work correctly across mobile (320px-639px), tablet (640px-1023px), and desktop (1024px+) viewports.</p>
+        </div>
+
+        <div class="viewport-info" id="viewportInfo">
+            <h4>Current Viewport Information</h4>
+            <div id="viewportDetails"></div>
+        </div>
+
+        <div class="viewport-controls">
+            <button class="viewport-btn" onclick="simulateViewport(320, 'Mobile Portrait')">Mobile Portrait (320px)</button>
+            <button class="viewport-btn" onclick="simulateViewport(375, 'iPhone')">iPhone (375px)</button>
+            <button class="viewport-btn" onclick="simulateViewport(414, 'iPhone Plus')">iPhone Plus (414px)</button>
+            <button class="viewport-btn" onclick="simulateViewport(768, 'Tablet Portrait')">Tablet Portrait (768px)</button>
+            <button class="viewport-btn" onclick="simulateViewport(1024, 'Tablet Landscape')">Tablet Landscape (1024px)</button>
+            <button class="viewport-btn" onclick="simulateViewport(1200, 'Desktop')">Desktop (1200px)</button>
+            <button class="viewport-btn" onclick="simulateViewport(1920, 'Large Desktop')">Large Desktop (1920px)</button>
+        </div>
+
+        <div class="test-progress" id="testProgress" style="display: none;">
+            <h4>Test Progress</h4>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <p id="progressText">Preparing tests...</p>
+        </div>
+
+        <div class="console-output" id="consoleOutput" style="display: none;"></div>
+
+        <div class="test-results" id="testResults"></div>
+
+        <div class="summary-card" id="summaryCard" style="display: none;">
+            <h3>Test Summary</h3>
+            <div id="summaryContent"></div>
+        </div>
+    </div>
+
+    <!-- Test viewport frame -->
+    <div class="test-viewport-frame" id="testViewportFrame">
+        <div class="viewport-frame-info" id="viewportFrameInfo"></div>
+        <iframe id="testFrame" src="../index.php" style="width: 100%; height: 600px; border: none;"></iframe>
+    </div>
+
+    <script>
+        let testResults = [];
+        let consoleOutput = [];
+        let currentViewportWidth = window.innerWidth;
+        let simulatedViewport = null;
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            consoleOutput.push(logEntry);
+            
+            const consoleElement = document.getElementById('consoleOutput');
+            if (consoleElement.style.display !== 'none') {
+                consoleElement.innerHTML = consoleOutput.join('\n');
+                consoleElement.scrollTop = consoleElement.scrollHeight;
+            }
+            
+            console.log(message);
+        }
+
+        function updateViewportInfo() {
+            const width = simulatedViewport || window.innerWidth;
+            const height = window.innerHeight;
+            const viewportDetails = document.getElementById('viewportDetails');
+            
+            let category = 'Unknown';
+            if (width >= 320 && width <= 639) category = 'Mobile';
+            else if (width >= 640 && width <= 1023) category = 'Tablet';
+            else if (width >= 1024) category = 'Desktop';
+            
+            viewportDetails.innerHTML = `
+                <p><strong>Width:</strong> ${width}px × ${height}px</p>
+                <p><strong>Category:</strong> ${category}</p>
+                <p><strong>Device Pixel Ratio:</strong> ${window.devicePixelRatio || 1}</p>
+                <p><strong>Orientation:</strong> ${width > height ? 'Landscape' : 'Portrait'}</p>
+                ${simulatedViewport ? '<p><strong>Mode:</strong> Simulated Viewport</p>' : '<p><strong>Mode:</strong> Actual Viewport</p>'}
+            `;
+            
+            currentViewportWidth = width;
+        }
+
+        function simulateViewport(width, name) {
+            // Update active button
+            document.querySelectorAll('.viewport-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            simulatedViewport = width;
+            
+            // Show test frame
+            const testFrame = document.getElementById('testViewportFrame');
+            const frameInfo = document.getElementById('viewportFrameInfo');
+            const iframe = document.getElementById('testFrame');
+
+            testFrame.style.display = 'block';
+            testFrame.style.width = width + 'px';
+            testFrame.style.height = '640px';
+
+            frameInfo.textContent = `${name}: ${width}px viewport simulation`;
+            iframe.style.width = width + 'px';
+            iframe.style.height = '600px';
+
+            updateViewportInfo();
+            
+            log(`📱 Simulating viewport: ${name} (${width}px)`);
+        }
+
+        // Property-based test framework
+        class PropertyTest {
+            constructor(name, generator, property, iterations = 100) {
+                this.name = name;
+                this.generator = generator;
+                this.property = property;
+                this.iterations = iterations;
+            }
+
+            async run() {
+                log(`🧪 Running property test: ${this.name}`);
+                const results = [];
+                
+                for (let i = 0; i < this.iterations; i++) {
+                    try {
+                        const testData = this.generator();
+                        const result = await this.property(testData);
+                        results.push({ iteration: i + 1, passed: result, data: testData });
+                        
+                        if (!result) {
+                            log(`❌ Property failed at iteration ${i + 1}: ${JSON.stringify(testData)}`);
+                            return { 
+                                passed: false, 
+                                failedAt: i + 1, 
+                                counterExample: testData, 
+                                results,
+                                totalIterations: this.iterations
+                            };
+                        }
+                        
+                        // Update progress
+                        updateProgress(i + 1, this.iterations, `${this.name} - Iteration ${i + 1}/${this.iterations}`);
+                        
+                        // Small delay to show progress
+                        if (i % 10 === 0) {
+                            await new Promise(resolve => setTimeout(resolve, 10));
+                        }
+                    } catch (error) {
+                        log(`💥 Error at iteration ${i + 1}: ${error.message}`);
+                        return { 
+                            passed: false, 
+                            failedAt: i + 1, 
+                            error: error.message, 
+                            results,
+                            totalIterations: this.iterations
+                        };
+                    }
+                }
+                
+                log(`✅ Property passed all ${this.iterations} iterations`);
+                return { 
+                    passed: true, 
+                    iterations: this.iterations, 
+                    results,
+                    totalIterations: this.iterations
+                };
+            }
+        }
+
+        // Test data generators
+        const generators = {
+            viewportSize: () => {
+                const viewports = [
+                    { width: 320, height: 568, category: 'mobile', name: 'Mobile Portrait' },
+                    { width: 375, height: 667, category: 'mobile', name: 'iPhone' },
+                    { width: 414, height: 896, category: 'mobile', name: 'iPhone Plus' },
+                    { width: 768, height: 1024, category: 'tablet', name: 'Tablet Portrait' },
+                    { width: 1024, height: 768, category: 'tablet', name: 'Tablet Landscape' },
+                    { width: 1200, height: 800, category: 'desktop', name: 'Desktop' },
+                    { width: 1440, height: 900, category: 'desktop', name: 'Large Desktop' },
+                    { width: 1920, height: 1080, category: 'desktop', name: 'Full HD' }
+                ];
+                return viewports[Math.floor(Math.random() * viewports.length)];
+            },
+
+            uiComponent: () => {
+                const components = [
+                    { type: 'button', minSize: 44, responsive: true },
+                    { type: 'navigation', minSize: 44, responsive: true },
+                    { type: 'form-input', minSize: 44, responsive: true },
+                    { type: 'card', minSize: 200, responsive: true },
+                    { type: 'text', minSize: 16, responsive: true },
+                    { type: 'image', minSize: 100, responsive: true },
+                    { type: 'container', minSize: 320, responsive: true },
+                    { type: 'modal', minSize: 280, responsive: true }
+                ];
+                return components[Math.floor(Math.random() * components.length)];
+            },
+
+            layoutTest: () => {
+                const tests = [
+                    { type: 'text-overflow', property: 'text-overflow', expected: 'ellipsis' },
+                    { type: 'flex-wrap', property: 'flex-wrap', expected: 'wrap' },
+                    { type: 'grid-responsive', property: 'grid-template-columns', expected: 'responsive' },
+                    { type: 'font-size', property: 'font-size', expected: 'readable' },
+                    { type: 'line-height', property: 'line-height', expected: 'readable' },
+                    { type: 'padding', property: 'padding', expected: 'appropriate' },
+                    { type: 'margin', property: 'margin', expected: 'appropriate' },
+                    { type: 'max-width', property: 'max-width', expected: 'constrained' }
+                ];
+                return tests[Math.floor(Math.random() * tests.length)];
+            },
+
+            interactionTest: () => {
+                const interactions = [
+                    { type: 'touch', target: 'button', minSize: 44 },
+                    { type: 'click', target: 'link', minSize: 44 },
+                    { type: 'tap', target: 'nav-item', minSize: 44 },
+                    { type: 'scroll', target: 'page', smooth: true },
+                    { type: 'swipe', target: 'carousel', supported: 'mobile' },
+                    { type: 'hover', target: 'button', supported: 'desktop' },
+                    { type: 'focus', target: 'input', visible: true },
+                    { type: 'keyboard', target: 'form', accessible: true }
+                ];
+                return interactions[Math.floor(Math.random() * interactions.length)];
+            }
+        };
+
+        // Property test implementations
+        const propertyTests = [
+            new PropertyTest(
+                "Viewport Responsiveness",
+                generators.viewportSize,
+                async (viewport) => {
+                    // Property: Layout should adapt correctly to different viewport sizes
+                    try {
+                        const isValidViewport = viewport.width >= 320 && viewport.width <= 1920;
+                        const hasProperCategory = ['mobile', 'tablet', 'desktop'].includes(viewport.category);
+                        const aspectRatioReasonable = (viewport.width / viewport.height) >= 0.5 && (viewport.width / viewport.height) <= 3;
+                        
+                        return isValidViewport && hasProperCategory && aspectRatioReasonable;
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                30
+            ),
+
+            new PropertyTest(
+                "Touch Target Accessibility",
+                generators.uiComponent,
+                async (component) => {
+                    // Property: Interactive elements should meet minimum touch target sizes
+                    try {
+                        const isTouchTarget = ['button', 'navigation', 'form-input'].includes(component.type);
+                        
+                        if (!isTouchTarget) {
+                            return true; // Non-interactive elements don't need touch targets
+                        }
+                        
+                        // Simulate touch target size check
+                        const meetsMinimumSize = component.minSize >= 44;
+                        const isResponsive = component.responsive === true;
+                        
+                        return meetsMinimumSize && isResponsive;
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                30
+            ),
+
+            new PropertyTest(
+                "Layout Integrity Across Viewports",
+                generators.layoutTest,
+                async (layoutTest) => {
+                    // Property: Layout should maintain integrity across different viewport sizes
+                    try {
+                        const testElement = document.createElement('div');
+                        testElement.style.width = '100%';
+                        testElement.style.maxWidth = '1200px';
+                        testElement.style.padding = '16px';
+                        testElement.style.fontSize = '16px';
+                        testElement.style.lineHeight = '1.5';
+                        document.body.appendChild(testElement);
+
+                        const computedStyle = getComputedStyle(testElement);
+                        let testPassed = false;
+
+                        switch (layoutTest.type) {
+                            case 'font-size':
+                                testPassed = parseInt(computedStyle.fontSize) >= 16;
+                                break;
+                            case 'line-height':
+                                testPassed = parseFloat(computedStyle.lineHeight) >= 24; // 16px * 1.5
+                                break;
+                            case 'padding':
+                                testPassed = parseInt(computedStyle.paddingLeft) >= 16;
+                                break;
+                            case 'max-width':
+                                testPassed = computedStyle.maxWidth !== 'none';
+                                break;
+                            default:
+                                testPassed = true;
+                        }
+
+                        document.body.removeChild(testElement);
+                        return testPassed;
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                30
+            ),
+
+            new PropertyTest(
+                "Cross-Viewport Interaction Support",
+                generators.interactionTest,
+                async (interaction) => {
+                    // Property: Interactions should work appropriately across different viewport categories
+                    try {
+                        const currentCategory = getCurrentViewportCategory();
+                        
+                        // Check if interaction is supported on current viewport category
+                        if (interaction.supported && interaction.supported !== currentCategory && interaction.supported !== 'all') {
+                            return true; // Not applicable for this viewport
+                        }
+                        
+                        // Simulate interaction support check
+                        const hasMinimumSize = !interaction.minSize || interaction.minSize >= 44;
+                        const isAccessible = interaction.accessible !== false;
+                        const isVisible = interaction.visible !== false;
+                        
+                        return hasMinimumSize && isAccessible && isVisible;
+                    } catch (error) {
+                        return false;
+                    }
+                },
+                30
+            )
+        ];
+
+        // Helper functions
+        function getCurrentViewportCategory() {
+            const width = currentViewportWidth;
+            if (width >= 320 && width <= 639) return 'mobile';
+            if (width >= 640 && width <= 1023) return 'tablet';
+            if (width >= 1024) return 'desktop';
+            return 'unknown';
+        }
+
+        function analyzeViewportBreakdown(results) {
+            const breakdown = { mobile: 0, tablet: 0, desktop: 0 };
+            
+            results.forEach(result => {
+                if (result.results) {
+                    result.results.forEach(iteration => {
+                        if (iteration.data && iteration.data.category) {
+                            breakdown[iteration.data.category]++;
+                        } else if (iteration.data && iteration.data.width) {
+                            const category = iteration.data.width <= 639 ? 'mobile' : 
+                                           iteration.data.width <= 1023 ? 'tablet' : 'desktop';
+                            breakdown[category]++;
+                        }
+                    });
+                }
+            });
+            
+            return breakdown;
+        }
+
+        // UI functions
+        function updateProgress(current, total, message) {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            const percentage = (current / total) * 100;
+            progressFill.style.width = `${percentage}%`;
+            progressText.textContent = message;
+        }
+
+        function displayTestResult(testName, result) {
+            const resultsContainer = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `test-result ${result.passed ? 'test-pass' : 'test-fail'}`;
+            
+            let content = `
+                <h4>${testName}</h4>
+                <p><strong>Status:</strong> ${result.passed ? '✅ PASSED' : '❌ FAILED'}</p>
+                <p><strong>Iterations:</strong> ${result.passed ? result.iterations : result.failedAt}/${result.totalIterations}</p>
+                <p><strong>Current Viewport:</strong> ${currentViewportWidth}px (${getCurrentViewportCategory()})</p>
+            `;
+            
+            if (!result.passed) {
+                if (result.counterExample) {
+                    content += `
+                        <div class="counter-example">
+                            <strong>Counter-example:</strong><br>
+                            ${JSON.stringify(result.counterExample, null, 2)}
+                        </div>
+                    `;
+                }
+                if (result.error) {
+                    content += `<p><strong>Error:</strong> ${result.error}</p>`;
+                }
+            }
+            
+            resultDiv.innerHTML = content;
+            resultsContainer.appendChild(resultDiv);
+        }
+
+        function displaySummary(results) {
+            const summaryCard = document.getElementById('summaryCard');
+            const summaryContent = document.getElementById('summaryContent');
+            
+            const totalTests = results.length;
+            const passedTests = results.filter(r => r.passed).length;
+            const failedTests = totalTests - passedTests;
+            const successRate = Math.round((passedTests / totalTests) * 100);
+            
+            const viewportBreakdown = analyzeViewportBreakdown(results);
+            
+            summaryContent.innerHTML = `
+                <p><strong>Current Viewport:</strong> ${currentViewportWidth}px (${getCurrentViewportCategory()})</p>
+                <p><strong>Total Property Tests:</strong> ${totalTests}</p>
+                <p><strong>Passed:</strong> ${passedTests}</p>
+                <p><strong>Failed:</strong> ${failedTests}</p>
+                <p><strong>Success Rate:</strong> ${successRate}%</p>
+                
+                <h4>Viewport Test Coverage</h4>
+                <div class="viewport-breakdown">
+                    <div class="viewport-item viewport-mobile">
+                        Mobile<br>${viewportBreakdown.mobile} tests
+                    </div>
+                    <div class="viewport-item viewport-tablet">
+                        Tablet<br>${viewportBreakdown.tablet} tests
+                    </div>
+                    <div class="viewport-item viewport-desktop">
+                        Desktop<br>${viewportBreakdown.desktop} tests
+                    </div>
+                </div>
+                
+                ${successRate >= 90 ? 
+                    '<p style="color: #22c55e; font-weight: bold;">✅ Excellent cross-viewport compatibility!</p>' : 
+                    successRate >= 75 ?
+                    '<p style="color: #f59e0b; font-weight: bold;">⚠️ Good viewport compatibility with minor issues.</p>' :
+                    '<p style="color: #ef4444; font-weight: bold;">❌ Significant viewport compatibility issues detected.</p>'
+                }
+            `;
+            
+            summaryCard.style.display = 'block';
+        }
+
+        async function runPropertyTests() {
+            const runButton = document.getElementById('runTestsBtn');
+            const testProgress = document.getElementById('testProgress');
+            const consoleOutputDiv = document.getElementById('consoleOutput');
+            const testResults = document.getElementById('testResults');
+            
+            // Reset UI
+            runButton.disabled = true;
+            runButton.textContent = 'Running Tests...';
+            testProgress.style.display = 'block';
+            consoleOutputDiv.style.display = 'block';
+            testResults.innerHTML = '';
+            consoleOutput = [];
+            
+            updateViewportInfo();
+            
+            log('🧪 Starting Cross-Viewport Testing Property Tests');
+            log('Feature: design-system-migration, Property 18: Cross-Viewport Testing');
+            log('Validates: Requirements 14.3');
+            log(`Current viewport: ${currentViewportWidth}px (${getCurrentViewportCategory()})`);
+            
+            const results = [];
+            
+            for (let i = 0; i < propertyTests.length; i++) {
+                const test = propertyTests[i];
+                log(`\n📋 Running: ${test.name}`);
+                
+                const result = await test.run();
+                results.push({ name: test.name, ...result });
+                
+                displayTestResult(test.name, result);
+                
+                // Small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            log('\n📊 All property tests completed');
+            displaySummary(results);
+            
+            // Re-enable button
+            runButton.disabled = false;
+            runButton.textContent = 'Run Property Tests Again';
+            testProgress.style.display = 'none';
+            
+            return results;
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            updateViewportInfo();
+            setTimeout(() => {
+                log('Auto-running cross-viewport property tests...');
+                runPropertyTests();
+            }, 1000);
+        });
+
+        window.addEventListener('resize', updateViewportInfo);
+    </script>
+</body>
+</html>

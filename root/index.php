@@ -2,18 +2,12 @@
 session_start();
 
 // Load configuration and database connection
-require_once 'includes/Config.php';
-Config::load();
+require_once 'includes/config.php';
+require_once 'includes/functions.php';
 
 // Database Connection
-$dbConfig = Config::getDatabase();
-$host = $dbConfig['host'];
-$db = $dbConfig['name'];
-$user = $dbConfig['user'];
-$pass = $dbConfig['pass'];
-
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    $pdo = new PDO("mysql:host=localhost;dbname=grenada_marketplace", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die('Database connection failed: ' . $e->getMessage());

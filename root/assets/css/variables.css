@@ -41,9 +41,17 @@
   
   /* Semantic Colors */
   --color-success: var(--color-accent-green);
+  --color-success-light: var(--color-primary-pale);
+  --color-success-dark: var(--color-primary-dark);
   --color-warning: var(--color-accent-amber);
+  --color-warning-light: rgba(217, 119, 6, 0.1);
+  --color-warning-dark: var(--color-accent-amber);
   --color-error: var(--color-accent-red);
   --color-info: var(--color-accent-blue);
+  --color-info-light: rgba(37, 99, 235, 0.1);
+  --color-info-dark: var(--color-accent-blue);
+  --color-neutral-light: var(--color-gray-100);
+  --color-neutral-dark: var(--color-gray-600);
   
   /* Background Colors */
   --bg-primary: var(--color-white);
@@ -60,6 +68,7 @@
   /* Border Colors */
   --border-primary: var(--color-gray-200);
   --border-secondary: var(--color-gray-100);
+  --border-light: var(--color-gray-200);
   --border-focus: var(--color-primary);
   
   /* ===== TYPOGRAPHY ===== */
