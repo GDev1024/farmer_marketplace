@@ -1,13 +1,14 @@
 <?php
 // Simple migration runner
-require_once 'includes/Config.php';
-Config::load();
+require_once 'includes/config.php';
 
 // Database Connection
-$dbConfig = Config::getDatabase();
-$host = $dbConfig['host'];
-$db = $dbConfig['name'];
-$user = $dbConfig['user'];
+try {
+    $pdo = Config::getDB();
+    echo "Database connection successful!\n";
+} catch (Exception $e) {
+    die("Database connection failed: " . $e->getMessage() . "\n");
+}
 $pass = $dbConfig['pass'];
 
 try {

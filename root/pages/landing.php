@@ -2,7 +2,7 @@
   <div class="hero">
     <div class="hero-content">
       <div class="hero-text">
-        <h1>Fresh Local Produce, Direct From Grenada's Farmers 🇬🇩</h1>
+        <h1>Fresh Local Produce, Direct From Grenada's Farmers</h1>
         <p class="hero-subtitle">Connect with local farmers, reduce waste, support sustainable agriculture in beautiful Grenada</p>
         <div class="hero-stats">
           <div class="stat-item">
@@ -26,6 +26,11 @@
           <a href="index.php?page=browse" class="btn btn-secondary btn-lg" aria-label="Browse available products">
             <span class="btn-icon" aria-hidden="true">🛍️</span>
             <span>Browse Products</span>
+          </a>
+        </div>
+        <div class="auth-links" style="margin-top: var(--space-4); text-align: center;">
+          <a href="index.php?page=login" class="btn btn-secondary" style="margin-right: var(--space-3);">
+            <span>Already have an account? Login</span>
           </a>
         </div>
         <p class="hero-note">

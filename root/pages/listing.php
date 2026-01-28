@@ -1,4 +1,6 @@
 <main class="page-main listing-page" id="main-content" role="main">
+    <?php include 'includes/page-navigation.php'; ?>
+    
     <header class="page-header">
         <h1 class="page-title">List Your Produce</h1>
         <p class="page-subtitle">Share your fresh produce with the community and connect with local buyers</p>

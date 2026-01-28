@@ -1,7 +1,7 @@
 <?php
 // Get user's listings
 $stmt = $pdo->prepare("SELECT * FROM listings WHERE user_id = ? ORDER BY created_at DESC");
-$stmt->execute([$_SESSION['userId']]);
+$stmt->execute([$_SESSION['user_id']]);
 $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Display message if set
@@ -13,6 +13,8 @@ if($msg['message']): ?>
 <?php endif; ?>
 
 <main class="page-main" id="main-content" role="main">
+    <?php include 'includes/page-navigation.php'; ?>
+    
     <header class="page-header">
         <div class="page-header-content">
             <div class="page-title-section">

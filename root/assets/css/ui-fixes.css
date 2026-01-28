@@ -1,0 +1,408 @@
+/**
+ * UI FIXES - Typography and Button Consistency
+ * Addresses the specific UI issues identified in the landing page
+ */
+
+/* ===== TYPOGRAPHY SYSTEM FIXES ===== */
+
+/* Unified Typography Scale */
+.hero-text h1 {
+    font-family: var(--font-primary);
+    font-size: var(--text-5xl);
+    font-weight: var(--font-bold); /* Changed from font-black to font-bold for consistency */
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-6);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    letter-spacing: var(--tracking-tight);
+    color: var(--text-inverse);
+}
+
+/* Fix hero subtitle typography */
+.hero-subtitle {
+    font-size: var(--text-lg); /* Reduced from text-xl for better hierarchy */
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-8);
+    opacity: 0.9; /* Slightly reduced for better contrast */
+    font-weight: var(--font-normal);
+    font-family: var(--font-secondary);
+    color: var(--text-inverse);
+}
+
+/* Fix stats typography consistency */
+.stat-item strong {
+    display: block;
+    font-size: var(--text-2xl); /* Reduced from text-3xl for better balance */
+    font-weight: var(--font-bold); /* Changed from font-black to font-bold */
+    color: var(--color-secondary-light);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    font-family: var(--font-primary);
+    margin-bottom: var(--space-1);
+}
+
+.stat-item span {
+    font-size: var(--text-sm);
+    opacity: 0.9;
+    font-weight: var(--font-medium);
+    color: var(--text-inverse);
+}
+
+/* ===== BUTTON SYSTEM FIXES ===== */
+
+/* Standardized button base styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border: 2px solid transparent; /* Consistent border for all buttons */
+    border-radius: var(--radius-md);
+    font-family: var(--font-secondary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    min-height: 44px; /* Consistent minimum height */
+    line-height: var(--leading-normal);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Primary button - consistent styling */
+.btn-primary {
+    background: var(--color-primary);
+    color: var(--text-inverse);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    color: var(--text-inverse);
+    text-decoration: none;
+}
+
+/* Secondary button - consistent styling */
+.btn-secondary {
+    background: transparent;
+    color: var(--text-inverse);
+    border-color: var(--text-inverse);
+}
+
+.btn-secondary:hover {
+    background: var(--text-inverse);
+    color: var(--color-primary);
+    border-color: var(--text-inverse);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+}
+
+/* Large button size - consistent */
+.btn-lg {
+    padding: var(--space-4) var(--space-8);
+    font-size: var(--text-base);
+    min-height: 52px;
+    border-radius: var(--radius-lg);
+}
+
+/* Small button size - consistent */
+.btn-sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-xs);
+    min-height: 36px;
+    border-radius: var(--radius-sm);
+}
+
+/* ===== NAVIGATION FIXES ===== */
+
+/* Fix logo text hierarchy */
+.logo-text {
+    font-family: var(--font-primary);
+    font-weight: var(--font-bold); /* Increased from previous weight */
+    letter-spacing: var(--tracking-tight);
+    font-size: var(--text-xl); /* Increased size for better hierarchy */
+    display: inline; /* Always show on larger screens */
+}
+
+/* Simplified header with only branding */
+.header-container {
+    max-width: var(--container-lg);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the logo */
+    padding: 0 var(--space-4);
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Enhanced logo styling for standalone header */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3); /* Increased gap for better spacing */
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    text-decoration: none;
+    color: var(--color-primary);
+    transition: var(--transition-fast);
+    padding: var(--space-2) var(--space-4); /* Add padding for better click area */
+    border-radius: var(--radius-md);
+}
+
+.nav-brand:hover {
+    transform: scale(1.02);
+    color: var(--color-primary-light);
+    background: var(--color-primary-pale);
+}
+
+.nav-brand-icon {
+    font-size: var(--text-2xl);
+    filter: drop-shadow(0 2px 4px rgba(61, 90, 58, 0.3));
+}
+
+/* Remove auth button styles since they're no longer needed */
+.auth-section .btn {
+    display: none;
+}
+
+/* ===== HERO SECTION ALIGNMENT FIXES ===== */
+
+/* Fix hero content vertical centering */
+.hero-content {
+    max-width: var(--container-lg);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: center; /* Ensure proper vertical alignment */
+    position: relative;
+    z-index: 1;
+    min-height: 500px; /* Ensure consistent height */
+}
+
+/* Fix hero text alignment */
+.hero-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+/* Fix CTA buttons alignment and consistency */
+.cta-buttons {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-6);
+}
+
+.cta-buttons .btn {
+    min-width: 180px; /* Consistent minimum width */
+}
+
+/* ===== DECORATIVE ELEMENTS FIXES ===== */
+
+/* Fix floating emoji positioning and animation */
+.floating-emoji {
+    position: absolute;
+    font-size: var(--text-4xl); /* Slightly reduced for better balance */
+    animation: float 8s ease-in-out infinite; /* Slower animation */
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    opacity: 0.9; /* Slightly transparent for subtlety */
+}
+
+/* Better positioning for floating elements */
+.floating-emoji:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+.floating-emoji:nth-child(2) { top: 25%; right: 20%; animation-delay: 1.5s; }
+.floating-emoji:nth-child(3) { top: 55%; left: 10%; animation-delay: 3s; }
+.floating-emoji:nth-child(4) { bottom: 25%; right: 15%; animation-delay: 4.5s; }
+.floating-emoji:nth-child(5) { bottom: 15%; left: 25%; animation-delay: 6s; }
+.floating-emoji:nth-child(6) { top: 45%; right: 35%; animation-delay: 7.5s; }
+
+/* Gentler float animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-15px) rotate(2deg); }
+    50% { transform: translateY(-8px) rotate(-2deg); }
+    75% { transform: translateY(-12px) rotate(1deg); }
+}
+
+/* ===== SECTION CONSISTENCY FIXES ===== */
+
+/* Fix section header typography */
+.section-header h2 {
+    font-family: var(--font-primary);
+    font-size: var(--text-3xl); /* Reduced from text-4xl for better hierarchy */
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+    letter-spacing: var(--tracking-tight);
+}
+
+.section-header p {
+    font-size: var(--text-lg); /* Reduced from text-xl */
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: var(--leading-relaxed);
+}
+
+/* ===== RESPONSIVE FIXES ===== */
+
+@media (max-width: 639px) {
+    /* Mobile hero fixes */
+    .hero-text h1 {
+        font-size: var(--text-3xl);
+        text-align: center;
+    }
+    
+    .hero-subtitle {
+        font-size: var(--text-base);
+        text-align: center;
+    }
+    
+    .hero-stats {
+        justify-content: center;
+        gap: var(--space-4);
+    }
+    
+    .stat-item strong {
+        font-size: var(--text-xl);
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        gap: var(--space-3);
+        align-items: center;
+    }
+    
+    .cta-buttons .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    /* Mobile logo fixes - always show on mobile since it's the only nav element */
+    .logo-text {
+        display: inline;
+        font-size: var(--text-lg);
+    }
+    
+    /* Adjust header container for mobile */
+    .header-container {
+        justify-content: center;
+        padding: 0 var(--space-3);
+    }
+    
+    .nav-brand {
+        gap: var(--space-2);
+        padding: var(--space-2) var(--space-3);
+    }
+    
+    .nav-brand-icon {
+        font-size: var(--text-xl);
+    }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    /* Tablet fixes */
+    .hero-text h1 {
+        font-size: var(--text-4xl);
+    }
+    
+    .logo-text {
+        display: inline;
+        font-size: var(--text-lg);
+    }
+    
+    .header-container {
+        justify-content: center;
+    }
+}
+
+@media (min-width: 1024px) {
+    /* Desktop fixes */
+    .logo-text {
+        display: inline;
+        font-size: var(--text-xl);
+    }
+    
+    .header-container {
+        justify-content: center;
+    }
+    
+    /* Enhanced logo on larger screens */
+    .nav-brand {
+        gap: var(--space-3);
+        padding: var(--space-3) var(--space-6);
+    }
+}
+
+/* ===== CONTRAST AND ACCESSIBILITY FIXES ===== */
+
+/* Improve contrast for better readability */
+.hero-note {
+    margin-top: var(--space-6);
+    opacity: 0.9; /* Increased from 0.8 for better contrast */
+    font-style: italic;
+    font-size: var(--text-sm);
+    color: var(--text-inverse);
+}
+
+/* Ensure sufficient contrast for stats */
+.stat-item {
+    text-align: center;
+    padding: var(--space-2);
+}
+
+/* Fix button focus states for accessibility */
+.btn:focus {
+    outline: 2px solid var(--text-inverse);
+    outline-offset: 2px;
+}
+
+.btn-primary:focus {
+    outline-color: var(--text-inverse);
+}
+
+.btn-secondary:focus {
+    outline-color: var(--color-primary);
+}
+
+/* ===== LOADING AND ANIMATION IMPROVEMENTS ===== */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    .floating-emoji {
+        animation: none;
+        transform: none;
+    }
+    
+    .btn:hover {
+        transform: none;
+    }
+    
+    .feature-card:hover {
+        transform: none;
+    }
+}
+
+/* Improve loading states */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}

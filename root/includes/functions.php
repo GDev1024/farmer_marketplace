@@ -1,5 +1,8 @@
 <?php
-session_start();
+// Start session only if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 function isLoggedIn() {
     return isset($_SESSION['user_id']);
@@ -15,6 +18,14 @@ function requireLogin() {
 function redirect($url) {
     header("Location: $url");
     exit;
+}
+
+function getAndClearMessage() {
+    $message = $_SESSION['message'] ?? null;
+    $type = $_SESSION['messageType'] ?? 'success';
+    unset($_SESSION['message']);
+    unset($_SESSION['messageType']);
+    return ['message' => $message, 'type' => $type];
 }
 
 function sanitizeInput($data) {

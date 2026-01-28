@@ -1,5 +1,7 @@
 <div class="page page--profile">
   <main class="page__main">
+    <?php include 'includes/page-navigation.php'; ?>
+    
     <div class="page__header">
       <div class="page__title-section">
         <h1 class="page__title">
@@ -60,7 +62,7 @@
                   <?php
                   // Get user's listing count
                   $stmt = $pdo->prepare("SELECT COUNT(*) FROM listings WHERE user_id = ?");
-                  $stmt->execute([$_SESSION['userId']]);
+                  $stmt->execute([$_SESSION['user_id']]);
                   echo $stmt->fetchColumn();
                   ?>
                 </div>
@@ -71,7 +73,7 @@
                   <?php
                   // Get active listings count
                   $stmt = $pdo->prepare("SELECT COUNT(*) FROM listings WHERE user_id = ? AND is_active = 1");
-                  $stmt->execute([$_SESSION['userId']]);
+                  $stmt->execute([$_SESSION['user_id']]);
                   echo $stmt->fetchColumn();
                   ?>
                 </div>
@@ -82,7 +84,7 @@
                   <?php
                   // Get orders count (as buyer)
                   $stmt = $pdo->prepare("SELECT COUNT(*) FROM orders WHERE user_id = ?");
-                  $stmt->execute([$_SESSION['userId']]);
+                  $stmt->execute([$_SESSION['user_id']]);
                   echo $stmt->fetchColumn();
                   ?>
                 </div>

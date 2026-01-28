@@ -36,11 +36,11 @@ if ($user['user_type'] === 'farmer') {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/marketplace.css">
 </head>
 <body class="app-page">
     <header>
@@ -210,7 +210,9 @@ if ($user['user_type'] === 'farmer') {
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 id="modalTitle">Add New Product</h2>
-                    <button class="modal-close" onclick="closeProductModal()">&times;</button>
+                    <button class="modal-close" onclick="closeProductModal()" aria-label="Close product modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 
                 <form id="productForm" enctype="multipart/form-data">
@@ -218,7 +220,7 @@ if ($user['user_type'] === 'farmer') {
                     <input type="hidden" name="id" id="productId">
                     
                     <div class="form-group">
-                        <label class="form-label">Product Name</label>
+                        <label for="productName" class="form-label">Product Name</label>
                         <input type="text" name="name" id="productName" class="form-input" required>
                     </div>
                     

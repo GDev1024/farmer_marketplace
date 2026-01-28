@@ -1,4 +1,6 @@
 <main class="page-main dashboard-page" id="main-content" role="main">
+  <?php include 'includes/page-navigation.php'; ?>
+  
   <header class="dashboard-header">
     <div class="welcome-section">
       <h1 class="dashboard-title">Welcome back, <?= htmlspecialchars($name) ?>!</h1>

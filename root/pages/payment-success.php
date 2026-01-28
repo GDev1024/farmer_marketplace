@@ -1,11 +1,14 @@
 <?php
-if (!$_SESSION['isLoggedIn']) {
-    redirect('login');
+require_once '../includes/config.php';
+require_once '../includes/functions.php';
+
+if (!isLoggedIn()) {
+    redirect('../login.php');
 }
 
 // Get the latest order for this user
 $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC LIMIT 1");
-$stmt->execute([$_SESSION['userId']]);
+$stmt->execute([$_SESSION['user_id']]);
 $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $msg = getAndClearMessage();
@@ -17,6 +20,8 @@ if($msg['message']): ?>
 
 <section class="payment-success">
     <div class="container">
+        <?php include 'includes/page-navigation.php'; ?>
+        
         <article class="payment-success__card">
             <header class="payment-success__header">
                 <div class="payment-success__icon">

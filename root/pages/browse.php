@@ -57,6 +57,8 @@ if($msg['message']): ?>
         <p class="page-subtitle">Discover locally grown, fresh produce from verified farmers in Grenada</p>
     </header>
 
+    <?php include 'includes/page-navigation.php'; ?>
+
     <section class="search-section" aria-labelledby="search-title">
         <h2 id="search-title" class="sr-only">Search and Filter Products</h2>
         <form method="GET" action="index.php" class="search-form" role="search" aria-label="Product search and filters">
@@ -192,7 +194,7 @@ if($msg['message']): ?>
                                     <span class="product-card-unit"><?= htmlspecialchars($product['unit']) ?> available</span>
                                 </div>
                                 
-                                <?php if($_SESSION['isLoggedIn']): ?>
+                                <?php if(isLoggedIn()): ?>
                                     <form method="POST" action="actions.php" class="product-actions" aria-label="Add <?= htmlspecialchars($product['product_name']) ?> to cart">
                                         <input type="hidden" name="listingId" value="<?= $product['id'] ?>">
                                         <input type="hidden" name="addToCart" value="1">

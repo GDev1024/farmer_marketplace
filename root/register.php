@@ -105,8 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-input" minlength="8" required>
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-input" minlength="8" required>
                         <small class="form-help">Minimum 8 characters</small>
                     </div>
                     
@@ -114,14 +114,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label class="form-label">Account Type</label>
                         <select name="user_type" class="form-input" id="userType" required>
                             <option value="">Choose your role</option>
-                            <option value="customer" <?= $userType === 'customer' ? 'selected' : '' ?>>🛒 Customer (Buy fresh produce)</option>
+                            <option value="consumer" <?= $userType === 'consumer' ? 'selected' : '' ?>>🛒 Customer (Buy fresh produce)</option>
                             <option value="farmer" <?= $userType === 'farmer' ? 'selected' : '' ?>>🌱 Farmer (Sell my produce)</option>
                         </select>
                     </div>
                     
                     <div class="form-group" id="farmerIdGroup" style="display: <?= $userType === 'farmer' ? 'block' : 'none' ?>;">
-                        <label class="form-label">Farmer ID <span class="optional">(Optional)</span></label>
-                        <input type="text" name="farmer_id" class="form-input" placeholder="Enter your Farmer ID">
+                        <label for="farmer_id" class="form-label">Farmer ID <span class="optional">(Optional)</span></label>
+                        <input type="text" name="farmer_id" id="farmer_id" class="form-input" placeholder="Enter your Farmer ID">
                         <small class="form-help">Verified farmers get a trusted badge on their listings</small>
                     </div>
                     

@@ -1,5 +1,8 @@
 <?php
-session_start();
+// Start session only if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Load configuration and database connection
 require_once 'includes/config.php';
@@ -7,34 +10,15 @@ require_once 'includes/functions.php';
 
 // Database Connection
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=grenada_marketplace", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
+    $pdo = Config::getDB();
+} catch (Exception $e) {
     die('Database connection failed: ' . $e->getMessage());
 }
 
-// Helper Functions
-function redirect($page, $message = null, $type = 'success') {
-    if($message) {
-        $_SESSION['message'] = $message;
-        $_SESSION['messageType'] = $type;
-    }
-    header("Location: index.php?page=$page");
-    exit;
-}
-
-function getAndClearMessage() {
-    $message = $_SESSION['message'] ?? null;
-    $type = $_SESSION['messageType'] ?? 'success';
-    unset($_SESSION['message']);
-    unset($_SESSION['messageType']);
-    return ['message' => $message, 'type' => $type];
-}
-
 // Session info
-$isLoggedIn = $_SESSION['isLoggedIn'] ?? false;
+$isLoggedIn = $_SESSION['user_id'] ?? false;
 $name = $_SESSION['name'] ?? 'Guest';
-$userId = $_SESSION['userId'] ?? null;
+$userId = $_SESSION['user_id'] ?? null;
 $farmerVerified = $_SESSION['farmerVerified'] ?? false;
 
 // Determine page

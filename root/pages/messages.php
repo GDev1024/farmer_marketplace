@@ -24,7 +24,7 @@ $stmt = $pdo->prepare("
     GROUP BY other_user_id, u.name, u.id
     ORDER BY last_message_time DESC
 ");
-$stmt->execute([$_SESSION['userId'], $_SESSION['userId'], $_SESSION['userId'], $_SESSION['userId']]);
+$stmt->execute([$_SESSION['user_id'], $_SESSION['user_id'], $_SESSION['user_id'], $_SESSION['user_id']]);
 $conversations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // If conversation selected, get messages
@@ -36,7 +36,7 @@ if($selectedUserId) {
         WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)
         ORDER BY m.created_at ASC
     ");
-    $stmt->execute([$_SESSION['userId'], $selectedUserId, $selectedUserId, $_SESSION['userId']]);
+    $stmt->execute([$_SESSION['user_id'], $selectedUserId, $selectedUserId, $_SESSION['user_id']]);
     $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Get other user info
@@ -46,7 +46,7 @@ if($selectedUserId) {
     
     // Mark messages as read
     $stmt = $pdo->prepare("UPDATE messages SET is_read = 1 WHERE receiver_id = ? AND sender_id = ?");
-    $stmt->execute([$_SESSION['userId'], $selectedUserId]);
+    $stmt->execute([$_SESSION['user_id'], $selectedUserId]);
 }
 
 // Display message if set
@@ -59,6 +59,8 @@ if($msg['message']): ?>
 
 <div class="page page--messages">
   <main class="page__main">
+    <?php include 'includes/page-navigation.php'; ?>
+    
     <div class="page__header">
       <div class="page__title-section">
         <h1 class="page__title">
@@ -150,7 +152,7 @@ if($msg['message']): ?>
                 </div>
               <?php else: ?>
                 <?php foreach($messages as $message): ?>
-                  <div class="message <?= $message['sender_id'] == $_SESSION['userId'] ? 'message--sent' : 'message--received' ?>">
+                  <div class="message <?= $message['sender_id'] == $_SESSION['user_id'] ? 'message--sent' : 'message--received' ?>">
                     <div class="message__bubble">
                       <p class="message__text"><?= htmlspecialchars($message['message']) ?></p>
                       <time class="message__time" datetime="<?= $message['created_at'] ?>">

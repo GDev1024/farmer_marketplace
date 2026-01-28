@@ -85,4 +85,3 @@ CREATE TABLE reviews (
     FOREIGN KEY (customer_id) REFERENCES users(id),
     INDEX idx_listing (listing_id)
 );
-*/

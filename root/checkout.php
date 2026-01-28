@@ -41,11 +41,11 @@ $totalCents = $total * 100; // Stripe uses cents
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/marketplace.css">
     <script src="https://js.stripe.com/v3/"></script>
     <script src="https://www.paypal.com/sdk/js?client-id=<?= Config::getPaypalClientId() ?>"></script>
 </head>
@@ -94,12 +94,12 @@ $totalCents = $total * 100; // Stripe uses cents
                     <h2 style="margin-bottom: 1rem;">Delivery Address</h2>
                     <form id="addressForm">
                         <div class="form-group">
-                            <label class="form-label">Street Address</label>
+                            <label for="address" class="form-label">Street Address</label>
                             <input type="text" id="address" class="form-input" required>
                         </div>
                         <div class="grid grid-2">
                             <div class="form-group">
-                                <label class="form-label">City</label>
+                                <label for="city" class="form-label">City</label>
                                 <input type="text" id="city" class="form-input" required>
                             </div>
                             <div class="form-group">
@@ -344,5 +344,3 @@ $totalCents = $total * 100; // Stripe uses cents
     </script>
 </body>
 </html>
-
-<?php

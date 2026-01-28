@@ -2,6 +2,11 @@
   <div class="auth-container">
     <div class="auth-card">
       <header class="auth-header">
+        <div style="margin-bottom: var(--space-4);">
+          <a href="index.php" class="auth-link" style="font-size: var(--text-sm); color: var(--color-primary);">
+            ← Back to Home
+          </a>
+        </div>
         <h1 id="login-title" class="auth-title">Welcome Back</h1>
         <p class="auth-subtitle">Sign in to your Grenada Farmers account</p>
       </header>

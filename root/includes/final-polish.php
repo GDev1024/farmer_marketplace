@@ -370,7 +370,7 @@ if (file_exists($maintenanceFlag)) {
         <title>Maintenance - Grenada Farmers Marketplace</title>
         <link rel="stylesheet" href="assets/css/variables.css">
         <link rel="stylesheet" href="assets/css/base.css">
-        <link rel="stylesheet" href="css/components.css">
+        <link rel="stylesheet" href="assets/css/components.css">
         <style>
             body {
                 display: flex;

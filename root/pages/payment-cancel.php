@@ -1,6 +1,9 @@
 <?php
-if (!$_SESSION['isLoggedIn']) {
-    redirect('login');
+require_once '../includes/config.php';
+require_once '../includes/functions.php';
+
+if (!isLoggedIn()) {
+    redirect('../login.php');
 }
 
 $msg = getAndClearMessage();
@@ -12,6 +15,8 @@ if($msg['message']): ?>
 
 <section class="payment-cancel">
     <div class="container">
+        <?php include 'includes/page-navigation.php'; ?>
+        
         <article class="payment-cancel__card">
             <header class="payment-cancel__header">
                 <div class="payment-cancel__icon">

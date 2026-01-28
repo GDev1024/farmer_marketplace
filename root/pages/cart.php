@@ -27,6 +27,8 @@ if($msg['message']): ?>
 <?php endif; ?>
 
 <main class="page-main cart-page" id="main-content" role="main">
+    <?php include 'includes/page-navigation.php'; ?>
+    
     <header class="page-header">
         <h1 class="page-title">Shopping Cart</h1>
         <p class="page-subtitle">Review your selected items and proceed to checkout</p>
@@ -176,7 +178,7 @@ if($msg['message']): ?>
                         </div>
                         
                         <div class="checkout-section">
-                            <?php if($_SESSION['isLoggedIn']): ?>
+                            <?php if(isLoggedIn()): ?>
                                 <a href="index.php?page=checkout" class="btn btn-primary btn-full checkout-btn">
                                     <span class="btn-icon" aria-hidden="true">💳</span>
                                     Proceed to Checkout

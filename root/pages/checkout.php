@@ -1,11 +1,11 @@
 <?php
 // Include payment handler
-require_once 'includes/PaymentHandler.php';
-require_once 'includes/Config.php';
-Config::load();
+require_once '../includes/PaymentHandler.php';
+require_once '../includes/config.php';
+require_once '../includes/functions.php';
 
-if (!$_SESSION['isLoggedIn']) {
-    redirect('login');
+if (!isLoggedIn()) {
+    redirect('login.php');
 }
 
 if (empty($_SESSION['cart'])) {
@@ -48,6 +48,8 @@ if($msg['message']): ?>
 <?php endif; ?>
 
 <main class="page-main checkout-page" id="main-content" role="main">
+    <?php include 'includes/page-navigation.php'; ?>
+    
     <header class="page-header">
         <h1 class="page-title">Secure Checkout</h1>
         <p class="page-subtitle">Review your order and complete your purchase securely</p>

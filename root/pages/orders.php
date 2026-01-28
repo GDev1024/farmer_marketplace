@@ -1,7 +1,7 @@
 <?php
 // Get user's orders
 $stmt = $pdo->prepare("SELECT o.*, COUNT(oi.id) as item_count FROM orders o LEFT JOIN order_items oi ON o.id = oi.order_id WHERE o.user_id = ? GROUP BY o.id ORDER BY o.created_at DESC");
-$stmt->execute([$_SESSION['userId']]);
+$stmt->execute([$_SESSION['user_id']]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Display message if set
@@ -13,6 +13,8 @@ if($msg['message']): ?>
 <?php endif; ?>
 
 <main class="page-main orders-page" id="main-content" role="main">
+    <?php include 'includes/page-navigation.php'; ?>
+    
     <header class="page-header">
         <h1 class="page-title">My Orders</h1>
         <p class="page-subtitle">Track and manage your order history</p>
