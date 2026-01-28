@@ -122,7 +122,7 @@ The application uses a normalized relational database following Third Normal For
 
 ### Local Development Setup
 1. **Prerequisites**: PHP 8.1+, MySQL, XAMPP/WAMP
-2. **Clone Repository**: `git clone [repository-url]`
+2. **Clone Repository**: `git clone https://github.com/GDev1024/farmer_marketplace.git`
 3. **Database Setup**: Import `includes/grenada_marketplace.sql`
 4. **Configuration**: Update `includes/config.php` with your database credentials
 5. **Launch**: Start Apache and MySQL, navigate to `localhost/farmer_marketplace`
