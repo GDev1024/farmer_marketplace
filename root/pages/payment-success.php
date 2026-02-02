@@ -20,7 +20,7 @@ if($msg['message']): ?>
 
 <section class="payment-success">
     <div class="container">
-        <?php include 'includes/page-navigation.php'; ?>
+        <?php include '../includes/page-navigation.php'; ?>
         
         <article class="payment-success__card">
             <header class="payment-success__header">
@@ -61,10 +61,10 @@ if($msg['message']): ?>
             <?php endif; ?>
             
             <nav class="payment-success__actions" aria-label="Next steps">
-                <a href="index.php?page=orders" class="btn btn-primary">
+                <a href="../index.php?page=orders" class="btn btn-primary">
                     <span aria-hidden="true">📋</span> View My Orders
                 </a>
-                <a href="index.php?page=browse" class="btn btn-secondary">
+                <a href="../index.php?page=browse" class="btn btn-secondary">
                     <span aria-hidden="true">🛒</span> Continue Shopping
                 </a>
             </nav>

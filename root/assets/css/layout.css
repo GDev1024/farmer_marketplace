@@ -83,11 +83,19 @@ header {
     background: var(--bg-muted);
 }
 
-/* Navigation */
+/* Ensure the nav spreads across the header */
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Pushes Logo to left, Links to right */
+    padding: 1rem 0;
+}
+
+/* Group the links together */
 .nav-links {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: 20px; /* Space between links */
     list-style: none;
     margin: 0;
     padding: 0;
@@ -301,7 +309,8 @@ footer {
 }
 
 /* Mobile Responsive Design */
-@media (max-width: 639px) {
+/* Responsive: Hide links on mobile unless toggled */
+@media (max-width: 768px) {
     .nav-toggle {
         display: flex;
     }
@@ -311,23 +320,20 @@ footer {
     }
     
     .nav-links {
-        position: fixed;
-        top: 56px;
+        display: none; /* Switch to flex when 'active' class is added via JS */
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
         left: 0;
         width: 100%;
-        background: var(--color-primary);
-        flex-direction: column;
-        padding: var(--space-8) var(--space-6);
-        gap: var(--space-4);
-        transform: translateY(-100%);
-        opacity: 0;
-        visibility: hidden;
-        transition: var(--transition-base);
+        background: white;
+        padding: 20px;
         box-shadow: var(--shadow-lg);
         z-index: var(--z-dropdown);
     }
     
     .nav-links.is-active {
+        display: flex;
         transform: translateY(0);
         opacity: 1;
         visibility: visible;

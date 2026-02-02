@@ -1,7 +1,7 @@
 <?php
 require_once '../includes/config.php';
 require_once '../includes/functions.php';
-require_once '../includes/aws-image-handler.php';
+require_once '../includes/aws/aws-image-handler.php';
 
 requireLogin();
 $user = getCurrentUser();

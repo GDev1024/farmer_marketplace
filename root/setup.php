@@ -1,7 +1,6 @@
 <?php
 /**
  * XAMPP Setup Script for Grenada Farmer Marketplace
- * Run this file once to set up the database and initial configuration
  */
 
 // Prevent function redeclaration errors

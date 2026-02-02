@@ -13,7 +13,7 @@ if($msg['message']): ?>
 <?php endif; ?>
 
 <main class="page-main orders-page" id="main-content" role="main">
-    <?php include 'includes/page-navigation.php'; ?>
+    <?php include '../includes/page-navigation.php'; ?>
     
     <header class="page-header">
         <h1 class="page-title">My Orders</h1>
@@ -27,7 +27,7 @@ if($msg['message']): ?>
                     <div class="empty-icon" aria-hidden="true">📭</div>
                     <h2 id="empty-orders-title" class="empty-title">No orders yet</h2>
                     <p class="empty-description">Start shopping to see your orders here</p>
-                    <a href="index.php?page=browse" class="btn btn-primary" aria-label="Browse products to start shopping">
+                    <a href="../index.php?page=browse" class="btn btn-primary" aria-label="Browse products to start shopping">
                         <span class="btn-icon" aria-hidden="true">🌾</span>
                         Browse Products
                     </a>
@@ -121,7 +121,7 @@ if($msg['message']): ?>
                         </div>
 
                         <footer class="order-actions">
-                            <a href="index.php?page=messages" 
+                            <a href="../index.php?page=messages" 
                                class="btn btn-secondary order-action-btn"
                                aria-label="Contact seller about order #<?= str_pad($order['id'], 6, '0', STR_PAD_LEFT) ?>">
                                 <span class="btn-icon" aria-hidden="true">💬</span>

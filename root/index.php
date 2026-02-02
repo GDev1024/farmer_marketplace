@@ -1,10 +1,6 @@
 <?php
-// Start session only if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
-// Load configuration and database connection
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
@@ -19,11 +15,25 @@ try {
 $isLoggedIn = $_SESSION['user_id'] ?? false;
 $name = $_SESSION['name'] ?? 'Guest';
 $userId = $_SESSION['user_id'] ?? null;
-$farmerVerified = $_SESSION['farmerVerified'] ?? false;
+
+// If no page specified and user is logged in, go to home
+// If no page specified and user is not logged in, show landing
+if (!isset($_GET['page'])) {
+    if ($isLoggedIn) {
+        header('Location: dashboard.php');
+        exit;
+    } else {
+        // Show landing page directly
+        include 'includes/header.php';
+        include 'pages/landing.php';
+        include 'includes/footer.php';
+        exit;
+    }
+}
 
 // Determine page
-$page = $_GET['page'] ?? 'landing';
-$protectedPages = ['home','browse','sell','listing','orders','messages','profile','cart','checkout','payment-success','payment-cancel'];
+$page = $_GET['page'];
+$protectedPages = ['home', 'browse', 'sell', 'listing', 'orders', 'messages', 'profile', 'cart', 'checkout', 'payment-success', 'payment-cancel'];
 
 // Redirect unauthenticated users
 if (!$isLoggedIn && in_array($page, $protectedPages)) {
@@ -31,23 +41,24 @@ if (!$isLoggedIn && in_array($page, $protectedPages)) {
 }
 
 // Redirect logged-in users from login/register
-if ($isLoggedIn && in_array($page,['login','register'])) {
-    $page = 'home';
+if ($isLoggedIn && in_array($page, ['login', 'register'])) {
+    header('Location: dashboard.php');
+    exit;
 }
 
 // Logout handler
-if($page === 'logout') {
+if ($page === 'logout') {
     session_destroy();
-    header('Location: index.php?page=landing');
+    header('Location: index.php');
     exit;
 }
 
 // Load the page
 $pageFile = "pages/{$page}.php";
-if(!file_exists($pageFile)){
+if (!file_exists($pageFile)) {
     $pageFile = "pages/landing.php";
 }
 
-include 'header.php';
+include 'includes/header.php';
 include $pageFile;
-include 'footer.php';
+include 'includes/footer.php';

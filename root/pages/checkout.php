@@ -48,7 +48,7 @@ if($msg['message']): ?>
 <?php endif; ?>
 
 <main class="page-main checkout-page" id="main-content" role="main">
-    <?php include 'includes/page-navigation.php'; ?>
+    <?php include '../includes/page-navigation.php'; ?>
     
     <header class="page-header">
         <h1 class="page-title">Secure Checkout</h1>

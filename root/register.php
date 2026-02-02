@@ -8,148 +8,99 @@ if (isLoggedIn()) {
 
 $error = '';
 $success = '';
-$userType = isset($_GET['type']) ? $_GET['type'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = sanitizeInput($_POST['username']);
     $email = sanitizeInput($_POST['email']);
     $password = $_POST['password'];
-    $userType = sanitizeInput($_POST['user_type']);
-    $farmerId = isset($_POST['farmer_id']) ? sanitizeInput($_POST['farmer_id']) : null;
+    $user_type = $_POST['user_type'] ?? 'customer';
     
-    // Validation
-    if (strlen($password) < 8) {
-        $error = 'Password must be at least 8 characters';
+    if (strlen($password) < 6) {
+        $error = 'Password must be at least 6 characters';
     } else {
         $db = Config::getDB();
         
         // Check if email exists
         $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
+        
         if ($stmt->fetch()) {
-            $error = 'Email already registered';
+            $error = 'Email already exists';
         } else {
-            // Hash password with bcrypt
-            $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+            // Create user
+            $password_hash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $db->prepare("INSERT INTO users (username, email, password_hash, user_type) VALUES (?, ?, ?, ?)");
             
-            // Insert user
-            $stmt = $db->prepare("INSERT INTO users (username, email, password_hash, user_type, farmer_id) VALUES (?, ?, ?, ?, ?)");
-            if ($stmt->execute([$username, $email, $passwordHash, $userType, $farmerId])) {
-                $success = 'Registration successful! You can now login.';
+            if ($stmt->execute([$username, $email, $password_hash, $user_type])) {
+                $success = 'Account created successfully! You can now login.';
             } else {
-                $error = 'Registration failed. Please try again.';
+                $error = 'Registration failed';
             }
         }
     }
 }
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account - <?= Config::getSiteName() ?></title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/variables.css">
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/layout.css">
-    <link rel="stylesheet" href="assets/css/marketplace.css">
-</head>
-<body class="auth-page">
-    <header>
-        <nav>
-            <a href="index.php" class="logo">
-                <span class="logo-icon">🌾</span>
-                <span><?= Config::getSiteName() ?></span>
-            </a>
-            <div class="nav-links">
-                <a href="index.php">Home</a>
-            </div>
-        </nav>
-    </header>
 
-    <main class="auth-main">
-        <div class="auth-container">
+include 'includes/header.php';
+?>
+
+<main class="auth-main">
+    <div class="container">
+        <div class="auth-wrapper">
             <div class="auth-card">
                 <div class="auth-header">
-                    <h1>Join Our Community</h1>
-                    <p>Create your account to get started</p>
+                    <a href="index.php" class="auth-back-link">← Back to Home</a>
+                    <h1 class="auth-title">Join Our Community</h1>
+                    <p class="auth-subtitle">Create your account</p>
                 </div>
                 
                 <?php if ($error): ?>
-                    <div class="alert alert-error">
-                        <?= $error ?>
-                    </div>
+                    <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
                 <?php endif; ?>
                 
                 <?php if ($success): ?>
-                    <div class="alert alert-success">
-                        <?= $success ?> <a href="login.php">Sign in now</a>
-                    </div>
+                    <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
                 <?php endif; ?>
                 
-                <form method="POST" action="" class="auth-form" id="registerForm">
+                <form method="POST" action="" class="auth-form">
                     <div class="form-group">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" name="username" class="form-input" required 
-                               value="<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>">
+                        <label for="username" class="form-label">Full Name</label>
+                        <input type="text" id="username" name="username" class="form-input" placeholder="Enter your full name" required>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" name="email" class="form-input" required 
-                               value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" name="password" id="password" class="form-input" minlength="8" required>
-                        <small class="form-help">Minimum 8 characters</small>
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Create a password" required>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">Account Type</label>
-                        <select name="user_type" class="form-input" id="userType" required>
-                            <option value="">Choose your role</option>
-                            <option value="consumer" <?= $userType === 'consumer' ? 'selected' : '' ?>>🛒 Customer (Buy fresh produce)</option>
-                            <option value="farmer" <?= $userType === 'farmer' ? 'selected' : '' ?>>🌱 Farmer (Sell my produce)</option>
+                        <label for="user_type" class="form-label">Account Type</label>
+                        <select id="user_type" name="user_type" class="form-input">
+                            <option value="customer">Customer</option>
+                            <option value="farmer">Farmer</option>
                         </select>
                     </div>
                     
-                    <div class="form-group" id="farmerIdGroup" style="display: <?= $userType === 'farmer' ? 'block' : 'none' ?>;">
-                        <label for="farmer_id" class="form-label">Farmer ID <span class="optional">(Optional)</span></label>
-                        <input type="text" name="farmer_id" id="farmer_id" class="form-input" placeholder="Enter your Farmer ID">
-                        <small class="form-help">Verified farmers get a trusted badge on their listings</small>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="terms" class="checkbox-input" required>
+                            I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a>
+                        </label>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Create Account</button>
+                    <button type="submit" class="btn btn-primary btn-full">Create Account</button>
                 </form>
                 
                 <div class="auth-footer">
-                    <p>Already have an account? <a href="login.php">Sign in here</a></p>
+                    <p>Already have an account? <a href="login.php" class="auth-link">Sign in</a></p>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <footer class="app-footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <span class="logo-icon">🌾</span>
-                <span><?= Config::getSiteName() ?></span>
-            </div>
-            <p class="footer-tagline">Supporting local agriculture in Grenada</p>
-        </div>
-    </footer>
-
-    <script>
-        document.getElementById('userType').addEventListener('change', function() {
-            const farmerIdGroup = document.getElementById('farmerIdGroup');
-            farmerIdGroup.style.display = this.value === 'farmer' ? 'block' : 'none';
-        });
-    </script>
-</body>
-</html>
+<?php include 'includes/footer.php'; ?>

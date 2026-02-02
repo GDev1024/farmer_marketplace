@@ -9,7 +9,7 @@ require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
 // Include AWS-compatible ImageHandler class
-require_once 'includes/AWSImageHandler.php';
+require_once 'includes/aws/AWSImageHandler.php';
 
 // Include Payment Handler
 require_once 'includes/PaymentHandler.php';

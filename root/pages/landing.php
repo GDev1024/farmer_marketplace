@@ -4,20 +4,6 @@
       <div class="hero-text">
         <h1>Fresh Local Produce, Direct From Grenada's Farmers</h1>
         <p class="hero-subtitle">Connect with local farmers, reduce waste, support sustainable agriculture in beautiful Grenada</p>
-        <div class="hero-stats">
-          <div class="stat-item">
-            <strong>500+</strong>
-            <span>Fresh Products</span>
-          </div>
-          <div class="stat-item">
-            <strong>100+</strong>
-            <span>Local Farmers</span>
-          </div>
-          <div class="stat-item">
-            <strong>50+</strong>
-            <span>Happy Customers</span>
-          </div>
-        </div>
         <div class="cta-buttons">
           <a href="index.php?page=register" class="btn btn-primary btn-lg" aria-label="Create account to start shopping">
             <span class="btn-icon" aria-hidden="true">🚀</span>
@@ -146,64 +132,10 @@
     </div>
   </section>
 
-  <section class="testimonials" aria-labelledby="testimonials-title">
-    <div class="section-header">
-      <h2 id="testimonials-title">What Our Community Says</h2>
-      <p>Real feedback from farmers and customers</p>
-    </div>
-    
-    <div class="testimonial-grid" role="list">
-      <article class="testimonial-card" role="listitem">
-        <div class="testimonial-content">
-          <blockquote>
-            <p>"This platform has transformed how I sell my produce. I can reach customers directly and get fair prices for my hard work."</p>
-          </blockquote>
-        </div>
-        <div class="testimonial-author">
-          <div class="author-info">
-            <strong>Maria Rodriguez</strong>
-            <span>Verified Farmer • St. George's</span>
-          </div>
-          <div class="author-rating" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
-        </div>
-      </article>
-      
-      <article class="testimonial-card" role="listitem">
-        <div class="testimonial-content">
-          <blockquote>
-            <p>"The freshest mangoes and vegetables I've ever bought! Love supporting local farmers and knowing where my food comes from."</p>
-          </blockquote>
-        </div>
-        <div class="testimonial-author">
-          <div class="author-info">
-            <strong>James Thompson</strong>
-            <span>Customer • St. Andrew's</span>
-          </div>
-          <div class="author-rating" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
-        </div>
-      </article>
-      
-      <article class="testimonial-card" role="listitem">
-        <div class="testimonial-content">
-          <blockquote>
-            <p>"Easy to use, great communication with farmers, and the quality is outstanding. This is the future of local food!"</p>
-          </blockquote>
-        </div>
-        <div class="testimonial-author">
-          <div class="author-info">
-            <strong>Sarah Williams</strong>
-            <span>Customer • St. John's</span>
-          </div>
-          <div class="author-rating" aria-label="5 out of 5 stars">⭐⭐⭐⭐⭐</div>
-        </div>
-      </article>
-    </div>
-  </section>
-
   <section class="cta-section" aria-labelledby="cta-title">
     <div class="cta-content">
       <h2 id="cta-title">Ready to Get Started?</h2>
-      <p>Join hundreds of farmers and customers already using our platform</p>
+      <p>Join our community of farmers and customers</p>
       <div class="cta-buttons">
         <a href="index.php?page=register" class="btn btn-primary btn-lg" aria-label="Register as a farmer to start selling">
           <span class="btn-icon" aria-hidden="true">🌾</span>

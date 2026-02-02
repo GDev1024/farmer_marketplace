@@ -1,5 +1,5 @@
 <main class="page-main dashboard-page" id="main-content" role="main">
-  <?php include 'includes/page-navigation.php'; ?>
+  <?php include '../includes/page-navigation.php'; ?>
   
   <header class="dashboard-header">
     <div class="welcome-section">
@@ -13,14 +13,14 @@
           <span class="status-badge status-unverified" aria-label="Unverified account">
             <span aria-hidden="true">⏳</span> Not Verified
           </span>
-          <a href="index.php?page=profile" class="verification-link" aria-label="Complete verification process">
+          <a href="../index.php?page=profile" class="verification-link" aria-label="Complete verification process">
             Complete verification →
           </a>
         <?php endif; ?>
       </div>
     </div>
     <div class="dashboard-actions">
-      <a href="index.php?page=listing" class="btn btn-primary" aria-label="Add new product listing">
+      <a href="../index.php?page=listing" class="btn btn-primary" aria-label="Add new product listing">
         <span class="btn-icon" aria-hidden="true">➕</span>
         Add Product
       </a>
@@ -75,7 +75,7 @@
             <p>Add your fresh produce to the marketplace and reach local customers</p>
           </div>
           <div class="action-footer">
-            <a href="index.php?page=listing" class="btn btn-primary" aria-label="Create new product listing">
+            <a href="../index.php?page=listing" class="btn btn-primary" aria-label="Create new product listing">
               Start Listing
             </a>
           </div>
@@ -88,7 +88,7 @@
             <p>Manage your active products, update prices, and track inventory</p>
           </div>
           <div class="action-footer">
-            <a href="index.php?page=sell" class="btn btn-secondary" aria-label="View and manage product listings">
+            <a href="../index.php?page=sell" class="btn btn-secondary" aria-label="View and manage product listings">
               View Listings
             </a>
           </div>
@@ -101,7 +101,7 @@
             <p>Check new orders, manage deliveries, and track your sales</p>
           </div>
           <div class="action-footer">
-            <a href="index.php?page=orders" class="btn btn-secondary" aria-label="View order history and manage deliveries">
+            <a href="../index.php?page=orders" class="btn btn-secondary" aria-label="View order history and manage deliveries">
               View Orders
             </a>
           </div>
@@ -114,7 +114,7 @@
             <p>Communicate with customers, answer questions, and build relationships</p>
           </div>
           <div class="action-footer">
-            <a href="index.php?page=messages" class="btn btn-secondary" aria-label="View and respond to customer messages">
+            <a href="../index.php?page=messages" class="btn btn-secondary" aria-label="View and respond to customer messages">
               View Messages
             </a>
           </div>
@@ -127,7 +127,7 @@
             <p>Explore what other farmers are selling and discover market trends</p>
           </div>
           <div class="action-footer">
-            <a href="index.php?page=browse" class="btn btn-secondary" aria-label="Browse marketplace products">
+            <a href="../index.php?page=browse" class="btn btn-secondary" aria-label="Browse marketplace products">
               Browse Products
             </a>
           </div>
@@ -140,7 +140,7 @@
             <p>Update your information, manage verification, and customize preferences</p>
           </div>
           <div class="action-footer">
-            <a href="index.php?page=profile" class="btn btn-secondary" aria-label="Edit profile and account settings">
+            <a href="../index.php?page=profile" class="btn btn-secondary" aria-label="Edit profile and account settings">
               Edit Profile
             </a>
           </div>

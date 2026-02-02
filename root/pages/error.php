@@ -104,11 +104,11 @@
             <a href="javascript:history.back()" class="btn btn-secondary">
                 <span>← Go Back</span>
             </a>
-            <a href="index.php" class="btn btn-primary">
+            <a href="../index.php" class="btn btn-primary">
                 <span>🏠 Home</span>
             </a>
             <?php if ($errorCode === 404): ?>
-                <a href="index.php?page=browse" class="btn btn-secondary">
+                <a href="../index.php?page=browse" class="btn btn-secondary">
                     <span>🛍️ Browse Products</span>
                 </a>
             <?php endif; ?>

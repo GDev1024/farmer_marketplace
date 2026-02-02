@@ -27,79 +27,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Invalid email or password';
     }
 }
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - <?= Config::getSiteName() ?></title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/variables.css">
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/layout.css">
-    <link rel="stylesheet" href="assets/css/marketplace.css">
-</head>
-<body class="auth-page">
-    <header>
-        <nav>
-            <a href="index.php" class="logo">
-                <span class="logo-icon">🌾</span>
-                <span><?= Config::getSiteName() ?></span>
-            </a>
-            <div class="nav-links">
-                <a href="index.php">Home</a>
-            </div>
-        </nav>
-    </header>
 
-    <main class="auth-main">
-        <div class="auth-container">
+include 'includes/header.php';
+?>
+
+<main class="auth-main">
+    <div class="container">
+        <div class="auth-wrapper">
             <div class="auth-card">
                 <div class="auth-header">
-                    <h1>Welcome Back</h1>
-                    <p>Sign in to your account</p>
+                    <a href="index.php" class="auth-back-link">← Back to Home</a>
+                    <h1 class="auth-title">Welcome Back</h1>
+                    <p class="auth-subtitle">Sign in to your account</p>
                 </div>
                 
                 <?php if ($error): ?>
-                    <div class="alert alert-error">
-                        <?= $error ?>
-                    </div>
+                    <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
                 <?php endif; ?>
                 
                 <form method="POST" action="" class="auth-form">
                     <div class="form-group">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" name="email" class="form-input" required 
-                               value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="login-password" class="form-label">Password</label>
-                        <input type="password" name="password" id="login-password" class="form-input" required>
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign In</button>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="remember" class="checkbox-input">
+                            Remember me
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">Sign In</button>
                 </form>
                 
                 <div class="auth-footer">
-                    <p>Don't have an account? <a href="register.php">Create one here</a></p>
+                    <p>Don't have an account? <a href="register.php" class="auth-link">Sign up</a></p>
+                    <p><a href="#" class="auth-link">Forgot your password?</a></p>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <footer class="app-footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <span class="logo-icon">🌾</span>
-                <span><?= Config::getSiteName() ?></span>
-            </div>
-            <p class="footer-tagline">Supporting local agriculture in Grenada</p>
-        </div>
-    </footer>
-</body>
-</html>
+<?php include 'includes/footer.php'; ?>

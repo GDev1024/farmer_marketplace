@@ -1,6 +1,6 @@
 <?php
 // Get user's listings
-$stmt = $pdo->prepare("SELECT * FROM listings WHERE user_id = ? ORDER BY created_at DESC");
+$stmt = $pdo->prepare("SELECT * FROM listings WHERE farmer_id = ? ORDER BY created_at DESC");
 $stmt->execute([$_SESSION['user_id']]);
 $listings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -13,7 +13,7 @@ if($msg['message']): ?>
 <?php endif; ?>
 
 <main class="page-main" id="main-content" role="main">
-    <?php include 'includes/page-navigation.php'; ?>
+    <?php include '../includes/page-navigation.php'; ?>
     
     <header class="page-header">
         <div class="page-header-content">
@@ -27,7 +27,7 @@ if($msg['message']): ?>
                 </p>
             </div>
             <div class="page-actions">
-                <a href="index.php?page=listing" class="btn btn-primary">
+                <a href="../index.php?page=listing" class="btn btn-primary">
                     <span class="btn-icon" aria-hidden="true">+</span>
                     <span class="btn-text">Add Product</span>
                 </a>
@@ -43,7 +43,7 @@ if($msg['message']): ?>
                 <p class="empty-description">
                     Start selling your fresh produce to the community. It's easy to get started!
                 </p>
-                <a href="index.php?page=listing" class="btn btn-primary btn-lg">
+                <a href="../index.php?page=listing" class="btn btn-primary btn-lg">
                     <span class="btn-icon" aria-hidden="true">🌾</span>
                     <span class="btn-text">List Your First Product</span>
                 </a>
@@ -56,7 +56,7 @@ if($msg['message']): ?>
                             <div class="listing-card__media">
                                 <?php if (!empty($listing['thumbnail_path']) && file_exists($listing['thumbnail_path'])): ?>
                                     <img src="<?= htmlspecialchars($listing['thumbnail_path']) ?>" 
-                                         alt="<?= htmlspecialchars($listing['product_name']) ?>"
+                                         alt="<?= htmlspecialchars($listing['name']) ?>"
                                          class="listing-card__image"
                                          loading="lazy">
                                 <?php else: ?>
@@ -70,16 +70,16 @@ if($msg['message']): ?>
                             </div>
                             
                             <div class="listing-card__content">
-                                <h3 class="listing-card__title"><?= htmlspecialchars($listing['product_name']) ?></h3>
+                                <h3 class="listing-card__title"><?= htmlspecialchars($listing['name']) ?></h3>
                                 <div class="listing-card__price">EC$<?= number_format($listing['price'], 2) ?> / <?= htmlspecialchars($listing['unit']) ?></div>
                                 
                                 <div class="listing-card__status">
-                                    <?php if ($listing['is_active'] && $listing['quantity'] > 0): ?>
+                                    <?php if ($listing['status'] === 'active' && $listing['quantity'] > 0): ?>
                                         <span class="status-badge status-badge--active">
                                             <span class="status-badge__icon" aria-hidden="true">✅</span>
                                             <span class="status-badge__text">Active</span>
                                         </span>
-                                    <?php elseif ($listing['is_active'] && $listing['quantity'] == 0): ?>
+                                    <?php elseif ($listing['status'] === 'active' && $listing['quantity'] == 0): ?>
                                         <span class="status-badge status-badge--out-of-stock">
                                             <span class="status-badge__icon" aria-hidden="true">📦</span>
                                             <span class="status-badge__text">Out of Stock</span>
@@ -115,30 +115,30 @@ if($msg['message']): ?>
                         <footer class="listing-card__actions">
                             <button onclick="editListing(<?= $listing['id'] ?>)" 
                                     class="btn btn-secondary btn-sm"
-                                    aria-label="Edit <?= htmlspecialchars($listing['product_name']) ?>">
+                                    aria-label="Edit <?= htmlspecialchars($listing['name']) ?>">
                                 <span class="btn-icon" aria-hidden="true">✏️</span>
                                 <span class="btn-text">Edit</span>
                             </button>
                             
-                            <?php if ($listing['is_active']): ?>
-                                <form method="POST" action="actions.php" class="listing-card__action-form">
+                            <?php if ($listing['status'] === 'active'): ?>
+                                <form method="POST" action="../actions.php" class="listing-card__action-form">
                                     <input type="hidden" name="listingId" value="<?= $listing['id'] ?>">
                                     <input type="hidden" name="deactivateListing" value="1">
                                     <button type="submit" 
                                             class="btn btn-warning btn-sm" 
                                             onclick="return confirm('Deactivate this listing?')"
-                                            aria-label="Pause <?= htmlspecialchars($listing['product_name']) ?>">
+                                            aria-label="Pause <?= htmlspecialchars($listing['name']) ?>">
                                         <span class="btn-icon" aria-hidden="true">⏸️</span>
                                         <span class="btn-text">Pause</span>
                                     </button>
                                 </form>
                             <?php else: ?>
-                                <form method="POST" action="actions.php" class="listing-card__action-form">
+                                <form method="POST" action="../actions.php" class="listing-card__action-form">
                                     <input type="hidden" name="listingId" value="<?= $listing['id'] ?>">
                                     <input type="hidden" name="activateListing" value="1">
                                     <button type="submit" 
                                             class="btn btn-success btn-sm"
-                                            aria-label="Activate <?= htmlspecialchars($listing['product_name']) ?>">
+                                            aria-label="Activate <?= htmlspecialchars($listing['name']) ?>">
                                         <span class="btn-icon" aria-hidden="true">▶️</span>
                                         <span class="btn-text">Activate</span>
                                     </button>
@@ -148,7 +148,7 @@ if($msg['message']): ?>
                             <?php if ($listing['quantity'] == 0): ?>
                                 <button onclick="restockListing(<?= $listing['id'] ?>)" 
                                         class="btn btn-primary btn-sm"
-                                        aria-label="Restock <?= htmlspecialchars($listing['product_name']) ?>">
+                                        aria-label="Restock <?= htmlspecialchars($listing['name']) ?>">
                                     <span class="btn-icon" aria-hidden="true">📦</span>
                                     <span class="btn-text">Restock</span>
                                 </button>
@@ -156,7 +156,7 @@ if($msg['message']): ?>
                             
                             <button onclick="deleteListing(<?= $listing['id'] ?>)" 
                                     class="btn btn-danger btn-sm"
-                                    aria-label="Delete <?= htmlspecialchars($listing['product_name']) ?>">
+                                    aria-label="Delete <?= htmlspecialchars($listing['name']) ?>">
                                 <span class="btn-icon" aria-hidden="true">🗑️</span>
                                 <span class="btn-text">Delete</span>
                             </button>
@@ -179,7 +179,7 @@ if($msg['message']): ?>
                     </div>
                     <div class="sell-stats__item">
                         <div class="sell-stats__value sell-stats__value--success">
-                            <?= count(array_filter($listings, function($l) { return $l['is_active'] && $l['quantity'] > 0; })) ?>
+                            <?= count(array_filter($listings, function($l) { return $l['status'] === 'active' && $l['quantity'] > 0; })) ?>
                         </div>
                         <div class="sell-stats__label">Active</div>
                     </div>
@@ -206,7 +206,7 @@ if($msg['message']): ?>
       </button>
     </header>
     
-    <form id="editForm" method="POST" action="actions.php" enctype="multipart/form-data" class="modal-form">
+    <form id="editForm" method="POST" action="../actions.php" enctype="multipart/form-data" class="modal-form">
       <input type="hidden" name="editListing" value="1">
       <input type="hidden" name="listingId" id="editListingId">
       
@@ -335,7 +335,7 @@ if($msg['message']): ?>
       </button>
     </header>
     
-    <form method="POST" action="actions.php" class="modal-form">
+    <form method="POST" action="../actions.php" class="modal-form">
       <input type="hidden" name="restockListing" value="1">
       <input type="hidden" name="listingId" id="restockListingId">
       
@@ -368,7 +368,7 @@ function editListing(listingId) {
   
   if (listing) {
     document.getElementById('editListingId').value = listing.id;
-    document.getElementById('editProductName').value = listing.product_name;
+    document.getElementById('editProductName').value = listing.name;
     document.getElementById('editCategory').value = listing.category;
     document.getElementById('editPrice').value = listing.price;
     document.getElementById('editUnit').value = listing.unit;

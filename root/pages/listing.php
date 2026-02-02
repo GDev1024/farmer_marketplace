@@ -1,5 +1,5 @@
 <main class="page-main listing-page" id="main-content" role="main">
-    <?php include 'includes/page-navigation.php'; ?>
+    <?php include '../includes/page-navigation.php'; ?>
     
     <header class="page-header">
         <h1 class="page-title">List Your Produce</h1>
@@ -17,7 +17,7 @@
             </header>
             
             <div class="card-body">
-                <form method="POST" action="actions.php" enctype="multipart/form-data" class="listing-form" aria-label="Product listing form">
+                <form method="POST" action="../actions.php" enctype="multipart/form-data" class="listing-form" aria-label="Product listing form">
                     <div class="form-group">
                         <label for="productName" class="form-label">Product Name</label>
                         <input type="text" 

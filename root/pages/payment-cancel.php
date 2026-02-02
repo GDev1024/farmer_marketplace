@@ -15,7 +15,7 @@ if($msg['message']): ?>
 
 <section class="payment-cancel">
     <div class="container">
-        <?php include 'includes/page-navigation.php'; ?>
+        <?php include '../includes/page-navigation.php'; ?>
         
         <article class="payment-cancel__card">
             <header class="payment-cancel__header">
@@ -54,13 +54,13 @@ if($msg['message']): ?>
             </section>
             
             <nav class="payment-cancel__actions" aria-label="Recovery options">
-                <a href="index.php?page=checkout" class="btn btn-primary">
+                <a href="../index.php?page=checkout" class="btn btn-primary">
                     <span aria-hidden="true">💳</span> Try Payment Again
                 </a>
-                <a href="index.php?page=cart" class="btn btn-secondary">
+                <a href="../index.php?page=cart" class="btn btn-secondary">
                     <span aria-hidden="true">🛒</span> Review Cart
                 </a>
-                <a href="index.php?page=browse" class="btn btn-secondary">
+                <a href="../index.php?page=browse" class="btn btn-secondary">
                     <span aria-hidden="true">🔍</span> Continue Shopping
                 </a>
             </nav>

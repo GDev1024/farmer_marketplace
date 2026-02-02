@@ -1,15 +1,22 @@
 <?php
+// Include required files
+require_once '../includes/config.php';
+require_once '../includes/functions.php';
+
+// Get database connection
+$pdo = Config::getDB();
+
 // Get search parameters
 $search = $_GET['search'] ?? '';
 $category = $_GET['category'] ?? '';
 $sortBy = $_GET['sort'] ?? 'newest';
 
-// Build query
-$query = "SELECT l.*, u.name as seller_name, u.farmer_verified FROM listings l JOIN users u ON l.user_id = u.id WHERE l.quantity > 0 AND l.is_active = 1";
+// Build query - fix column names to match database schema
+$query = "SELECT l.*, u.username as seller_name, u.verified as farmer_verified FROM listings l JOIN users u ON l.farmer_id = u.id WHERE l.quantity > 0 AND l.status = 'active'";
 $params = [];
 
 if(!empty($search)) {
-    $query .= " AND (l.product_name LIKE ? OR l.description LIKE ?)";
+    $query .= " AND (l.name LIKE ? OR l.description LIKE ?)";
     $searchTerm = "%$search%";
     $params[] = $searchTerm;
     $params[] = $searchTerm;
@@ -57,11 +64,11 @@ if($msg['message']): ?>
         <p class="page-subtitle">Discover locally grown, fresh produce from verified farmers in Grenada</p>
     </header>
 
-    <?php include 'includes/page-navigation.php'; ?>
+    <?php include '../includes/page-navigation.php'; ?>
 
     <section class="search-section" aria-labelledby="search-title">
         <h2 id="search-title" class="sr-only">Search and Filter Products</h2>
-        <form method="GET" action="index.php" class="search-form" role="search" aria-label="Product search and filters">
+        <form method="GET" action="../index.php" class="search-form" role="search" aria-label="Product search and filters">
             <input type="hidden" name="page" value="browse">
             <div class="search-controls">
                 <div class="form-group">
@@ -121,7 +128,7 @@ if($msg['message']): ?>
                         <?= !empty($search) || !empty($category) ? 'Try adjusting your search filters or browse all categories.' : 'Check back soon as farmers add their fresh produce to the marketplace.' ?>
                     </p>
                     <?php if(!empty($search) || !empty($category)): ?>
-                        <a href="index.php?page=browse" class="btn btn-secondary" aria-label="Clear all filters and view all products">
+                        <a href="../index.php?page=browse" class="btn btn-secondary" aria-label="Clear all filters and view all products">
                             <span class="btn-icon" aria-hidden="true">🔄</span>
                             View All Products
                         </a>
@@ -143,7 +150,7 @@ if($msg['message']): ?>
                         <div class="product-card-image">
                             <?php if (!empty($product['thumbnail_path']) && file_exists($product['thumbnail_path'])): ?>
                                 <img src="<?= htmlspecialchars($product['thumbnail_path']) ?>" 
-                                     alt="<?= htmlspecialchars($product['product_name']) ?>"
+                                     alt="<?= htmlspecialchars($product['name']) ?>"
                                      loading="lazy"
                                      class="product-image">
                             <?php else: ?>
@@ -166,7 +173,7 @@ if($msg['message']): ?>
                             <header class="product-card-header">
                                 <div class="product-info">
                                     <h3 id="product-<?= $product['id'] ?>-title" class="product-card-title">
-                                        <?= htmlspecialchars($product['product_name']) ?>
+                                        <?= htmlspecialchars($product['name']) ?>
                                     </h3>
                                     <span class="product-card-category" aria-label="Category: <?= ucfirst($product['category']) ?>">
                                         <?= ucfirst($product['category']) ?>
@@ -195,12 +202,12 @@ if($msg['message']): ?>
                                 </div>
                                 
                                 <?php if(isLoggedIn()): ?>
-                                    <form method="POST" action="actions.php" class="product-actions" aria-label="Add <?= htmlspecialchars($product['product_name']) ?> to cart">
+                                    <form method="POST" action="../actions.php" class="product-actions" aria-label="Add <?= htmlspecialchars($product['name']) ?> to cart">
                                         <input type="hidden" name="listingId" value="<?= $product['id'] ?>">
                                         <input type="hidden" name="addToCart" value="1">
                                         <div class="quantity-input">
                                             <label for="quantity-<?= $product['id'] ?>" class="sr-only">
-                                                Quantity for <?= htmlspecialchars($product['product_name']) ?>
+                                                Quantity for <?= htmlspecialchars($product['name']) ?>
                                             </label>
                                             <input type="number" 
                                                    id="quantity-<?= $product['id'] ?>"
@@ -221,7 +228,7 @@ if($msg['message']): ?>
                                     </form>
                                 <?php else: ?>
                                     <div class="product-actions">
-                                        <a href="index.php?page=login" class="btn btn-primary login-to-purchase-btn">
+                                        <a href="../index.php?page=login" class="btn btn-primary login-to-purchase-btn">
                                             <span class="btn-icon" aria-hidden="true">🔐</span>
                                             Login to Purchase
                                         </a>
@@ -237,7 +244,7 @@ if($msg['message']): ?>
                 <div class="card results-footer">
                     <div class="card-body">
                         <div class="results-actions">
-                            <a href="index.php?page=browse" class="btn btn-secondary" aria-label="Clear all filters and view all products">
+                            <a href="../index.php?page=browse" class="btn btn-secondary" aria-label="Clear all filters and view all products">
                                 <span class="btn-icon" aria-hidden="true">🔄</span>
                                 Clear Filters
                             </a>

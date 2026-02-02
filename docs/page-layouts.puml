@@ -4,152 +4,304 @@ skinparam backgroundColor #f8f9fa
 skinparam defaultFontName Arial
 skinparam defaultFontSize 10
 
-title Page Layout Structures
+title Page Layout Structures - Updated Architecture
 
 ' Landing Page Layout
 package "🏠 Landing Page Layout" as landing_layout {
-    rectangle "Navigation Bar" as landing_nav {
+    rectangle "Header" as landing_header {
         rectangle "🌾 Logo" as landing_logo
+        rectangle "Navigation" as landing_nav
     }
     
     rectangle "Hero Section" as hero {
         rectangle "Hero Content" as hero_content {
-            rectangle "Site Title" as title
-            rectangle "Tagline" as tagline
+            rectangle "Main Title" as main_title
+            rectangle "Subtitle" as subtitle
             rectangle "CTA Buttons" as cta {
-                rectangle "Log In" as login_btn
-                rectangle "Sign Up" as signup_btn
+                rectangle "Start Shopping" as start_shopping
+                rectangle "Browse Products" as browse_products
             }
         }
-        rectangle "Hero Media" as hero_media {
-            rectangle "Video Container" as video
+        rectangle "Auth Links" as auth_links {
+            rectangle "Login Link" as login_link
         }
     }
     
-    rectangle "How It Works" as how_it_works {
-        rectangle "Section Title" as section_title
-        rectangle "User Paths" as user_paths {
-            rectangle "I Am a Seller" as seller_path
-            rectangle "I Am a Buyer" as buyer_path
+    rectangle "Features Section" as features {
+        rectangle "Feature Grid" as feature_grid {
+            rectangle "Support Local Farmers" as feature1
+            rectangle "Fresh & Organic" as feature2
+            rectangle "Direct Communication" as feature3
+            rectangle "Easy to Use" as feature4
         }
     }
     
-    rectangle "Landing Footer" as landing_footer
+    rectangle "Call to Action" as final_cta {
+        rectangle "Join as Farmer" as farmer_cta
+        rectangle "Start Shopping" as shopping_cta
+    }
+    
+    rectangle "Footer" as landing_footer
 }
 
-' Auth Page Layout
-package "🔐 Auth Page Layout" as auth_layout {
+' Authentication Pages Layout
+package "🔐 Authentication Layout" as auth_layout {
     rectangle "Header" as auth_header {
-        rectangle "🌾 Logo Link" as auth_logo
-        rectangle "Navigation Links" as auth_nav
+        rectangle "Back to Home Link" as back_link
+        rectangle "🌾 Logo" as auth_logo
     }
     
-    rectangle "Auth Main" as auth_main {
+    rectangle "Main Content" as auth_main {
         rectangle "Auth Container" as auth_container {
             rectangle "Auth Card" as auth_card {
-                rectangle "Auth Header" as card_header
-                rectangle "Form" as auth_form
-                rectangle "Auth Footer" as card_footer
-            }
-        }
-    }
-    
-    rectangle "App Footer" as auth_app_footer
-}
-
-' App Page Layout (Dashboard, Cart, Orders)
-package "📱 App Page Layout" as app_layout {
-    rectangle "Header" as app_header {
-        rectangle "🌾 Logo Link" as app_logo
-        rectangle "Navigation Links" as app_nav {
-            rectangle "Browse/Dashboard" as nav_browse
-            rectangle "Cart/Orders" as nav_cart
-            rectangle "Mobile Toggle" as mobile_toggle
-            rectangle "Logout" as nav_logout
-        }
-    }
-    
-    rectangle "Main Content" as main_content {
-        rectangle "Container" as app_container {
-            rectangle "Page Header" as page_header
-            rectangle "Content Area" as content_area
-        }
-    }
-    
-    rectangle "App Footer" as app_footer
-}
-
-' Product Detail Layout
-package "📦 Product Detail Layout" as product_layout {
-    rectangle "Header" as product_header {
-        rectangle "🌾 Logo Link" as product_logo
-        rectangle "Navigation" as product_nav
-    }
-    
-    rectangle "Main Content" as product_main {
-        rectangle "Container" as product_container {
-            rectangle "Product Detail Layout" as detail_layout {
-                rectangle "Image Section" as image_section {
-                    rectangle "Product Image" as product_image
+                rectangle "Auth Header" as card_header {
+                    rectangle "Title" as auth_title
+                    rectangle "Subtitle" as auth_subtitle
                 }
-                rectangle "Info Section" as info_section {
-                    rectangle "Category Badge" as category
-                    rectangle "Product Title" as product_title
-                    rectangle "Farmer Info" as farmer_info
-                    rectangle "Rating" as rating
-                    rectangle "Price" as price
-                    rectangle "Stock Status" as stock
-                    rectangle "Description" as description
-                    rectangle "Add to Cart Form" as add_cart
+                rectangle "Auth Form" as auth_form {
+                    rectangle "Form Fields" as form_fields
+                    rectangle "Submit Button" as submit_btn
+                }
+                rectangle "Auth Footer" as card_footer {
+                    rectangle "Alternative Links" as alt_links
                 }
             }
-            rectangle "Reviews Section" as reviews {
-                rectangle "Reviews Grid" as reviews_grid
+        }
+    }
+}
+
+' Dashboard/Home Layout
+package "📊 Dashboard Layout" as dashboard_layout {
+    rectangle "Header" as dash_header {
+        rectangle "🌾 Logo" as dash_logo
+        rectangle "Navigation" as dash_nav
+    }
+    
+    rectangle "Page Navigation" as page_nav {
+        rectangle "Breadcrumb Links" as breadcrumbs
+        rectangle "User Actions" as user_actions
+    }
+    
+    rectangle "Main Content" as dash_main {
+        rectangle "Verification Banner" as verification {
+            rectangle "Status Message" as status_msg
+            rectangle "Complete Verification Link" as verify_link
+        }
+        rectangle "Dashboard Actions" as dash_actions {
+            rectangle "Add Product" as add_product
+        }
+        rectangle "Action Cards Grid" as action_grid {
+            rectangle "List Products" as list_card
+            rectangle "Manage Listings" as manage_card
+            rectangle "View Orders" as orders_card
+            rectangle "Messages" as messages_card
+            rectangle "Browse Products" as browse_card
+            rectangle "Edit Profile" as profile_card
+        }
+    }
+    
+    rectangle "Footer" as dash_footer
+}
+
+' Browse/Products Layout
+package "🛍️ Browse Layout" as browse_layout {
+    rectangle "Header" as browse_header
+    rectangle "Page Navigation" as browse_page_nav
+    
+    rectangle "Page Header" as browse_page_header {
+        rectangle "Page Title" as browse_title
+        rectangle "Page Subtitle" as browse_subtitle
+    }
+    
+    rectangle "Search Section" as search_section {
+        rectangle "Search Form" as search_form {
+            rectangle "Search Input" as search_input
+            rectangle "Category Filter" as category_filter
+            rectangle "Sort Options" as sort_options
+            rectangle "Search Button" as search_btn
+        }
+    }
+    
+    rectangle "Products Section" as products_section {
+        rectangle "Products Header" as products_header {
+            rectangle "Results Count" as results_count
+        }
+        rectangle "Product Grid" as product_grid {
+            rectangle "Product Cards" as product_cards {
+                rectangle "Product Image" as prod_image
+                rectangle "Product Info" as prod_info
+                rectangle "Price" as prod_price
+                rectangle "Seller Info" as seller_info
+                rectangle "Add to Cart" as add_to_cart
+            }
+        }
+        rectangle "Filter Actions" as filter_actions {
+            rectangle "Clear Filters" as clear_filters
+        }
+    }
+}
+
+' Seller/Manage Products Layout
+package "📦 Seller Layout" as seller_layout {
+    rectangle "Header" as seller_header
+    rectangle "Page Navigation" as seller_page_nav
+    
+    rectangle "Page Header" as seller_page_header {
+        rectangle "Page Title" as seller_title
+        rectangle "Add Product Button" as add_prod_btn
+    }
+    
+    rectangle "Empty State" as empty_state {
+        rectangle "Empty Message" as empty_msg
+        rectangle "List First Product" as first_product
+    }
+    
+    rectangle "Listings Grid" as listings_grid {
+        rectangle "Listing Cards" as listing_cards {
+            rectangle "Product Image" as listing_image
+            rectangle "Product Details" as listing_details
+            rectangle "Status Badge" as status_badge
+            rectangle "Action Buttons" as action_buttons {
+                rectangle "Edit" as edit_btn
+                rectangle "Pause/Activate" as toggle_btn
+                rectangle "Restock" as restock_btn
+                rectangle "Delete" as delete_btn
             }
         }
     }
     
-    rectangle "Footer" as product_footer
+    rectangle "Stats Section" as stats_section {
+        rectangle "Active Listings" as active_stats
+        rectangle "Total Revenue" as revenue_stats
+    }
+    
+    rectangle "Modals" as modals {
+        rectangle "Edit Product Modal" as edit_modal
+        rectangle "Restock Modal" as restock_modal
+    }
 }
 
-' Shopping Flow Layout
-package "🛒 Shopping Flow Layout" as shopping_layout {
-    rectangle "Cart Layout" as cart_layout_detail {
-        rectangle "Cart Items" as cart_items {
-            rectangle "Item Cards" as item_cards
+' Cart Layout
+package "🛒 Cart Layout" as cart_layout {
+    rectangle "Header" as cart_header
+    rectangle "Page Navigation" as cart_page_nav
+    
+    rectangle "Empty Cart State" as empty_cart {
+        rectangle "Empty Message" as cart_empty_msg
+        rectangle "Browse Products Link" as browse_link
+    }
+    
+    rectangle "Cart Content" as cart_content {
+        rectangle "Cart Form" as cart_form {
+            rectangle "Cart Items List" as cart_items {
+                rectangle "Item Cards" as cart_item_cards {
+                    rectangle "Item Image" as item_image
+                    rectangle "Item Details" as item_details
+                    rectangle "Quantity Controls" as quantity_controls
+                    rectangle "Remove Button" as remove_btn
+                }
+            }
+            rectangle "Cart Actions" as cart_actions {
+                rectangle "Update Cart" as update_cart
+                rectangle "Continue Shopping" as continue_shopping
+            }
         }
         rectangle "Cart Summary" as cart_summary {
-            rectangle "Order Summary" as order_summary
-            rectangle "Checkout Button" as checkout_btn
+            rectangle "Total Amount" as total_amount
+            rectangle "Checkout Section" as checkout_section {
+                rectangle "Checkout Button" as checkout_button
+                rectangle "Login to Checkout" as login_checkout
+            }
+        }
+    }
+}
+
+' Profile Layout
+package "👤 Profile Layout" as profile_layout {
+    rectangle "Header" as profile_header
+    rectangle "Page Navigation" as profile_page_nav
+    
+    rectangle "Profile Header" as profile_page_header {
+        rectangle "Profile Title" as profile_title
+        rectangle "User Avatar" as user_avatar
+    }
+    
+    rectangle "Profile Content" as profile_content {
+        rectangle "Profile Info Card" as profile_info {
+            rectangle "User Details" as user_details
+            rectangle "Verification Status" as verification_status
+            rectangle "Active Listings Count" as listings_count
+        }
+        rectangle "Profile Actions" as profile_actions {
+            rectangle "Action Cards Grid" as profile_action_grid {
+                rectangle "Manage Products" as manage_products
+                rectangle "View Orders" as view_orders
+                rectangle "Messages" as view_messages
+            }
+        }
+        rectangle "Account Actions" as account_actions {
+            rectangle "Logout Button" as logout_btn
         }
     }
     
-    rectangle "Checkout Layout" as checkout_layout {
-        rectangle "Order Details" as order_details
-        rectangle "Payment Methods" as payment_methods {
-            rectangle "Stripe Payment" as stripe
-            rectangle "PayPal Payment" as paypal
+    rectangle "Modals" as profile_modals {
+        rectangle "Farmer Verification Modal" as verification_modal
+        rectangle "Update Profile Modal" as update_profile_modal
+    }
+}
+
+' Error Page Layout
+package "❌ Error Layout" as error_layout {
+    rectangle "Header" as error_header
+    
+    rectangle "Error Content" as error_content {
+        rectangle "Error Icon" as error_icon
+        rectangle "Error Title" as error_title
+        rectangle "Error Message" as error_message
+        rectangle "Error Actions" as error_actions {
+            rectangle "Go Back" as go_back
+            rectangle "Home" as home_link
+            rectangle "Browse Products" as error_browse
         }
     }
 }
 
 ' Layout Relationships
-landing_nav --> hero : "Below"
-hero --> how_it_works : "Below"
-how_it_works --> landing_footer : "Below"
+landing_header --> hero : "Below"
+hero --> features : "Below"
+features --> final_cta : "Below"
+final_cta --> landing_footer : "Below"
 
 auth_header --> auth_main : "Below"
-auth_main --> auth_app_footer : "Below"
 
-app_header --> main_content : "Below"
-main_content --> app_footer : "Below"
+dash_header --> page_nav : "Below"
+page_nav --> dash_main : "Below"
+dash_main --> dash_footer : "Below"
 
-product_header --> product_main : "Below"
-product_main --> product_footer : "Below"
+browse_header --> browse_page_nav : "Below"
+browse_page_nav --> browse_page_header : "Below"
+browse_page_header --> search_section : "Below"
+search_section --> products_section : "Below"
 
-note right of landing_layout : "Conversion-focused\nMinimal navigation\nHero-driven design"
-note right of auth_layout : "Clean & simple\nCentered form\nMinimal distractions"
-note right of app_layout : "Full navigation\nUser-specific content\nMobile responsive"
-note right of product_layout : "Two-column layout\nSticky image\nDetailed product info"
+seller_header --> seller_page_nav : "Below"
+seller_page_nav --> seller_page_header : "Below"
+seller_page_header --> listings_grid : "Below"
+listings_grid --> stats_section : "Below"
+
+cart_header --> cart_page_nav : "Below"
+cart_page_nav --> cart_content : "Below"
+
+profile_header --> profile_page_nav : "Below"
+profile_page_nav --> profile_page_header : "Below"
+profile_page_header --> profile_content : "Below"
+
+note right of landing_layout : "Marketing focused\nClear value proposition\nMultiple CTAs"
+note right of auth_layout : "Simple & clean\nMinimal distractions\nClear navigation back"
+note right of dashboard_layout : "User-specific content\nAction-oriented cards\nVerification prompts"
+note right of browse_layout : "Search & filter focused\nProduct discovery\nGrid layout"
+note right of seller_layout : "Product management\nStatus indicators\nBulk actions"
+note right of cart_layout : "Shopping cart flow\nQuantity management\nCheckout process"
+note right of profile_layout : "Account management\nVerification status\nQuick actions"
+note right of error_layout : "Error handling\nRecovery options\nClear navigation"
 
 @enduml

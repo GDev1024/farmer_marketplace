@@ -59,7 +59,7 @@ if($msg['message']): ?>
 
 <div class="page page--messages">
   <main class="page__main">
-    <?php include 'includes/page-navigation.php'; ?>
+    <?php include '../includes/page-navigation.php'; ?>
     
     <div class="page__header">
       <div class="page__title-section">
@@ -101,7 +101,7 @@ if($msg['message']): ?>
           <?php else: ?>
             <div class="conversations-list" role="list">
               <?php foreach($conversations as $conv): ?>
-                <a href="index.php?page=messages&user=<?= $conv['id'] ?>" 
+                <a href="../index.php?page=messages&user=<?= $conv['id'] ?>" 
                    class="conversation-item <?= $selectedUserId == $conv['id'] ? 'conversation-item--active' : '' ?>"
                    role="listitem"
                    aria-label="Conversation with <?= htmlspecialchars($conv['name']) ?>">
@@ -166,7 +166,7 @@ if($msg['message']): ?>
             
             <!-- Message Input -->
             <footer class="chat-input">
-              <form method="POST" action="actions.php" class="chat-input__form" onsubmit="return handleMessageSubmit(event)">
+              <form method="POST" action="../actions.php" class="chat-input__form" onsubmit="return handleMessageSubmit(event)">
                 <input type="hidden" name="receiverId" value="<?= $selectedConversation['id'] ?>">
                 <div class="chat-input__field">
                   <label for="messageInput" class="sr-only">Type your message</label>

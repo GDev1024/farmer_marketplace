@@ -1,206 +1,56 @@
-<main class="auth-page" role="main" aria-labelledby="register-title">
-  <div class="auth-container">
-    <div class="auth-card">
-      <header class="auth-header">
-        <div style="margin-bottom: var(--space-4);">
-          <a href="index.php" class="auth-link" style="font-size: var(--text-sm); color: var(--color-primary);">
-            ← Back to Home
-          </a>
-        </div>
-        <h1 id="register-title" class="auth-title">Join Our Community</h1>
-        <p class="auth-subtitle">Create your Grenada Farmers account and start connecting with local farmers</p>
-      </header>
-      
-      <form method="POST" action="actions.php" class="auth-form" role="form" aria-labelledby="register-title" novalidate>
-        <div class="form-group">
-          <label for="name" class="form-label">Full Name</label>
-          <input 
-            type="text" 
-            id="name" 
-            name="name" 
-            class="form-input" 
-            placeholder="Enter your full name"
-            required 
-            aria-describedby="name-help name-error"
-            autocomplete="name"
-            minlength="2"
-          >
-          <small id="name-help" class="form-help">Your name as it will appear to other users</small>
-          <div id="name-error" class="form-error" role="alert" aria-live="polite"></div>
-        </div>
+<section class="auth-section">
+  <div class="container">
+    <div class="auth-wrapper">
+      <div class="auth-card">
+        <header class="auth-header">
+          <a href="../index.php" class="auth-back-link">← Back to Home</a>
+          <h1 class="auth-title">Join Our Community</h1>
+          <p class="auth-subtitle">Create your account</p>
+        </header>
         
-        <div class="form-group">
-          <label for="email" class="form-label">Email Address</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            class="form-input" 
-            placeholder="Enter your email address"
-            required 
-            aria-describedby="email-help email-error"
-            autocomplete="email"
-            spellcheck="false"
-          >
-          <small id="email-help" class="form-help">We'll use this to send you order updates and notifications</small>
-          <div id="email-error" class="form-error" role="alert" aria-live="polite"></div>
-        </div>
-        
-        <div class="form-group">
-          <label for="password" class="form-label">Password</label>
-          <div class="password-input-wrapper">
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              class="form-input" 
-              placeholder="Create a secure password"
-              required 
-              aria-describedby="password-help password-error"
-              autocomplete="new-password"
-              minlength="8"
-            >
-            <button 
-              type="button" 
-              class="password-toggle" 
-              aria-label="Show password"
-              onclick="togglePasswordVisibility('password')"
-            >
-              <span class="password-toggle-icon" aria-hidden="true">👁️</span>
-            </button>
+        <form method="POST" action="../actions.php" class="auth-form">
+          <div class="form-group">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
           </div>
-          <small id="password-help" class="form-help">Minimum 8 characters with at least one number and special character</small>
-          <div id="password-error" class="form-error" role="alert" aria-live="polite"></div>
-        </div>
-        
-        <div class="form-group">
-          <label for="confirm" class="form-label">Confirm Password</label>
-          <div class="password-input-wrapper">
-            <input 
-              type="password" 
-              id="confirm" 
-              name="confirm" 
-              class="form-input" 
-              placeholder="Confirm your password"
-              required 
-              aria-describedby="confirm-help confirm-error"
-              autocomplete="new-password"
-            >
-            <button 
-              type="button" 
-              class="password-toggle" 
-              aria-label="Show confirm password"
-              onclick="togglePasswordVisibility('confirm')"
-            >
-              <span class="password-toggle-icon" aria-hidden="true">👁️</span>
-            </button>
+          
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required>
           </div>
-          <small id="confirm-help" class="form-help">Re-enter your password to confirm</small>
-          <div id="confirm-error" class="form-error" role="alert" aria-live="polite"></div>
-        </div>
-        
-        <div class="form-group">
-          <label for="farmerID" class="form-label">Farmer ID <span class="optional-label">(Optional)</span></label>
-          <input 
-            type="text" 
-            id="farmerID" 
-            name="farmerID" 
-            class="form-input" 
-            placeholder="Enter your Farmer ID for verification"
-            aria-describedby="farmerID-help farmerID-error"
-            autocomplete="off"
-          >
-          <small id="farmerID-help" class="form-help">If you're a registered farmer, enter your ID to get verified status and access to seller features</small>
-          <div id="farmerID-error" class="form-error" role="alert" aria-live="polite"></div>
-        </div>
-        
-        <div class="form-group">
-          <div class="form-checkbox">
-            <input type="checkbox" id="terms" name="terms" class="checkbox-input" required aria-describedby="terms-error">
-            <label for="terms" class="checkbox-label">
-              <span class="checkbox-indicator" aria-hidden="true"></span>
-              I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-input" placeholder="Create a password" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="confirm" class="form-label">Confirm Password</label>
+            <input type="password" id="confirm" name="confirm" class="form-input" placeholder="Confirm your password" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="farmerID" class="form-label">Farmer ID (Optional)</label>
+            <input type="text" id="farmerID" name="farmerID" class="form-input" placeholder="Enter your Farmer ID if you have one">
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="terms" class="checkbox-input" required>
+              I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
             </label>
           </div>
-          <div id="terms-error" class="form-error" role="alert" aria-live="polite"></div>
-        </div>
+          
+          <button type="submit" name="register" class="btn btn-primary btn-full">Create Account</button>
+        </form>
         
-        <div class="form-group">
-          <div class="form-checkbox">
-            <input type="checkbox" id="newsletter" name="newsletter" class="checkbox-input">
-            <label for="newsletter" class="checkbox-label">
-              <span class="checkbox-indicator" aria-hidden="true"></span>
-              Send me updates about new farmers, seasonal produce, and special offers
-            </label>
-          </div>
+        <div class="auth-footer">
+          <p>Already have an account? <a href="../index.php?page=login">Sign in</a></p>
         </div>
-        
-        <div class="form-actions">
-          <button type="submit" name="register" class="btn btn-primary btn-full" aria-describedby="register-help">
-            <span class="btn-icon" aria-hidden="true">🌾</span>
-            Create Account
-          </button>
-          <small id="register-help" class="form-help">By creating an account, you're joining our community of local food enthusiasts</small>
-        </div>
-      </form>
-      
-      <footer class="auth-footer">
-        <div class="auth-links">
-          <a href="index.php?page=login" class="auth-link" aria-label="Sign in to existing account">
-            Already have an account? <strong>Sign in</strong>
-          </a>
-        </div>
-        
-        <div class="auth-divider">
-          <span class="divider-text">or</span>
-        </div>
-        
-        <div class="auth-guest">
-          <a href="index.php?page=browse" class="btn btn-secondary btn-full" aria-label="Browse products without creating account">
-            <span class="btn-icon" aria-hidden="true">🛍️</span>
-            Continue as Guest
-          </a>
-        </div>
-      </footer>
-    </div>
-    
-    <aside class="auth-sidebar" role="complementary" aria-labelledby="farmer-benefits-title">
-      <div class="benefits-card">
-        <h2 id="farmer-benefits-title" class="benefits-title">For Farmers & Buyers</h2>
-        <ul class="benefits-list" role="list">
-          <li class="benefit-item" role="listitem">
-            <span class="benefit-icon" aria-hidden="true">👨‍🌾</span>
-            <div class="benefit-content">
-              <h3 class="benefit-title">Sell Your Produce</h3>
-              <p class="benefit-description">List your fresh produce and reach local customers directly</p>
-            </div>
-          </li>
-          <li class="benefit-item" role="listitem">
-            <span class="benefit-icon" aria-hidden="true">🛒</span>
-            <div class="benefit-content">
-              <h3 class="benefit-title">Easy Shopping</h3>
-              <p class="benefit-description">Browse and order fresh produce from verified local farmers</p>
-            </div>
-          </li>
-          <li class="benefit-item" role="listitem">
-            <span class="benefit-icon" aria-hidden="true">💬</span>
-            <div class="benefit-content">
-              <h3 class="benefit-title">Direct Communication</h3>
-              <p class="benefit-description">Message farmers directly about products and availability</p>
-            </div>
-          </li>
-          <li class="benefit-item" role="listitem">
-            <span class="benefit-icon" aria-hidden="true">✅</span>
-            <div class="benefit-content">
-              <h3 class="benefit-title">Verified Quality</h3>
-              <p class="benefit-description">All farmers are verified for quality and authenticity</p>
-            </div>
-          </li>
-        </ul>
       </div>
-    </aside>
+    </div>
   </div>
-</main>
+</section>
 
 <script>
 // Enhanced registration form validation with accessibility

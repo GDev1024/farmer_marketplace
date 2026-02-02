@@ -27,7 +27,7 @@ if($msg['message']): ?>
 <?php endif; ?>
 
 <main class="page-main cart-page" id="main-content" role="main">
-    <?php include 'includes/page-navigation.php'; ?>
+    <?php include '../includes/page-navigation.php'; ?>
     
     <header class="page-header">
         <h1 class="page-title">Shopping Cart</h1>
@@ -41,7 +41,7 @@ if($msg['message']): ?>
                     <div class="empty-icon" aria-hidden="true">🛒</div>
                     <h2 id="empty-cart-title" class="empty-title">Your cart is empty</h2>
                     <p class="empty-description">Start shopping to add fresh produce to your cart</p>
-                    <a href="index.php?page=browse" class="btn btn-primary" aria-label="Browse products to add to cart">
+                    <a href="../index.php?page=browse" class="btn btn-primary" aria-label="Browse products to add to cart">
                         <span class="btn-icon" aria-hidden="true">🌾</span>
                         Browse Products
                     </a>
@@ -60,7 +60,7 @@ if($msg['message']): ?>
                     </header>
                     
                     <div class="card-body">
-                        <form method="POST" action="actions.php" class="cart-form" aria-label="Update cart quantities">
+                        <form method="POST" action="../actions.php" class="cart-form" aria-label="Update cart quantities">
                             <div class="cart-items-list">
                                 <?php foreach($cartItems as $item): ?>
                                     <article class="cart-item" aria-labelledby="item-<?= $item['id'] ?>-title">
@@ -123,7 +123,7 @@ if($msg['message']): ?>
                                         </div>
                                         
                                         <div class="cart-item-actions">
-                                            <form method="POST" action="actions.php" class="remove-form" aria-label="Remove <?= htmlspecialchars($item['product_name']) ?> from cart">
+                                            <form method="POST" action="../actions.php" class="remove-form" aria-label="Remove <?= htmlspecialchars($item['product_name']) ?> from cart">
                                                 <input type="hidden" name="listingId" value="<?= $item['id'] ?>">
                                                 <button type="submit" name="removeFromCart" class="btn btn-danger btn-sm remove-btn">
                                                     <span class="btn-icon" aria-hidden="true">🗑️</span>
@@ -141,7 +141,7 @@ if($msg['message']): ?>
                                     <span class="btn-icon" aria-hidden="true">📝</span>
                                     Update Cart
                                 </button>
-                                <a href="index.php?page=browse" class="btn btn-secondary">
+                                <a href="../index.php?page=browse" class="btn btn-secondary">
                                     <span class="btn-icon" aria-hidden="true">🛍️</span>
                                     Continue Shopping
                                 </a>
@@ -179,7 +179,7 @@ if($msg['message']): ?>
                         
                         <div class="checkout-section">
                             <?php if(isLoggedIn()): ?>
-                                <a href="index.php?page=checkout" class="btn btn-primary btn-full checkout-btn">
+                                <a href="../index.php?page=checkout" class="btn btn-primary btn-full checkout-btn">
                                     <span class="btn-icon" aria-hidden="true">💳</span>
                                     Proceed to Checkout
                                 </a>
@@ -198,7 +198,7 @@ if($msg['message']): ?>
                                     </div>
                                 </div>
                             <?php else: ?>
-                                <a href="index.php?page=login" class="btn btn-primary btn-full">
+                                <a href="../index.php?page=login" class="btn btn-primary btn-full">
                                     <span class="btn-icon" aria-hidden="true">🔐</span>
                                     Login to Checkout
                                 </a>
